@@ -5,6 +5,7 @@ import 'package:flutter/src/services/asset_manifest.dart';
 
 
 
+import 'Menu/CycleMenu.dart';
 import 'Menu/Manu.dart';
 
 void main() {
@@ -26,7 +27,8 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         //home: LoginPage(),
-        home: MainMenuPage(),
+        //home: MainMenuPage(),
+        home: CycleMenuPage(),
       ),
     );
   }
