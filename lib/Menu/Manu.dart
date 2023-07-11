@@ -1,7 +1,7 @@
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:intern_yellow_box/utils.dart';
-import 'package:intern_yellow_box/Menu/CycleMenu.dart';
+import 'package:flutter/src/services/asset_manifest.dart';
+import 'package:google_fonts/src/asset_manifest.dart';
 
 class MainMenuPage extends StatefulWidget {
   const MainMenuPage({Key? key}) : super(key: key);
