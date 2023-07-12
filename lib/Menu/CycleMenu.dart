@@ -49,7 +49,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
-    //final List<CycleBlock> cycleBlocks = parseJson(jsonString); // jsonString คือ JSON ที่ได้รับมา
 
     return Scaffold(
       appBar: PreferredSize(
@@ -960,5 +959,5 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
         ),
       ),
     );
-  }
+  }//
 }
