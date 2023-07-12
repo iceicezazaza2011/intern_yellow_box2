@@ -5,7 +5,7 @@ import 'package:intern_yellow_box/Domain/component_cycle.dart';
 
 
 import 'dart:convert';
-import 'dart:developer';//
+import 'dart:developer';
 
 class CycleService{
   Future<List<CycleBlock>> getCycleBlock() async{
