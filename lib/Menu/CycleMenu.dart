@@ -3,8 +3,6 @@ import 'package:intern_yellow_box/utils.dart';
 import 'dart:convert';
 import '../Domain/component_cycle.dart';
 
-
-
 class CycleMenuPage extends StatefulWidget {
   //const CycleMenuPage({required Key key}) : super(key: key);
 
@@ -22,17 +20,9 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     super.dispose();
   }
 
-  List<CycleBlock> parseJson(String jsonString) {
-    final jsonData = json.decode(jsonString);
-    List<CycleBlock> blocks = [];
+  List<CycleBlock> cycleBlocks = []; // สร้างรายการข้อมูลสำหรับ CycleBlock
 
-    for (var item in jsonData) {
-      CycleBlock block = CycleBlock.fromJson(item);
-      blocks.add(block);
-    }
 
-    return blocks;
-  }
   List<String> filter1Options = [
     'Option 1',
     'Option 2',
@@ -434,17 +424,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                           children: [
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -486,17 +476,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -537,17 +527,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -588,17 +578,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -639,17 +629,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -676,7 +666,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                               color: Color(0xff717171),
                                             ),
                                           ),
-                                        ],//
+                                        ], //
                                       ),
                                       Image.asset(
                                         'assets/images/cancel.png',
@@ -736,105 +726,95 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: DataTable(
-                            //columnSpacing: 5,
-                            dataRowHeight: 60,
-                            columns: [
+                            columns:  [
+                              // DataColumn(
+                              //   label: Text('No'),
+                              // ),
                               DataColumn(
-                                label: Text(
-                                  'No',
-                                  style: SafeGoogleFont(
-                                    'Kanit',
-                                    fontSize: 20 * ffem,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.495 * ffem / fem,
-                                    color: Colors.black,
+                                label: SizedBox(
+                                  width: 300 * fem,
+                                  child: Text(
+                                      'Cycle',
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 20 * ffem,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.495 * ffem / fem,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
                               DataColumn(
-                                label: Text(
-                                  'Cycle',
-                                  style: SafeGoogleFont(
-                                    'Kanit',
-                                    fontSize: 20 * ffem,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.495 * ffem / fem,
-                                    color: Colors.black,
+                                label: SizedBox(
+                                  width: 200*fem,
+                                  child: Text(
+                                      'Audit',
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 20 * ffem,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.495 * ffem / fem,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
                               DataColumn(
-                                label: Text(
-                                  'Audit',
-                                  style: SafeGoogleFont(
-                                    'Kanit',
-                                    fontSize: 20 * ffem,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.495 * ffem / fem,
-                                    color: Colors.black,
+                                label: SizedBox(
+                                  width: 300*fem,
+                                  child: Text(
+                                      'StartDate',
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 20 * ffem,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.495 * ffem / fem,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
                               DataColumn(
-                                label: Text(
-                                  'StartDate',
-                                  style: SafeGoogleFont(
-                                    'Kanit',
-                                    fontSize: 20 * ffem,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.495 * ffem / fem,
-                                    color: Colors.black,
+                                label: SizedBox(
+                                  width: 300*fem,
+                                  child: Text(
+                                      'EndDate',
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 20 * ffem,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.495 * ffem / fem,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
                               DataColumn(
-                                label: Text(
-                                  'EndDate',
-                                  style: SafeGoogleFont(
-                                    'Kanit',
-                                    fontSize: 20 * ffem,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.495 * ffem / fem,
-                                    color: Colors.black,
-                                  ),
-                                ),
-                              ),
-                              DataColumn(
-                                label: Text(
-                                  'Status',
-                                  style: SafeGoogleFont(
-                                    'Kanit',
-                                    fontSize: 20 * ffem,
-                                    fontWeight: FontWeight.bold,
-                                    height: 1.495 * ffem / fem,
-                                    color: Colors.black,
+                                label: SizedBox(
+                                  width: 300*fem,
+                                  child: Text(
+                                      'Status',
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 20 * ffem,
+                                      fontWeight: FontWeight.bold,
+                                      height: 1.495 * ffem / fem,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),
                             ],
-                            rows: [
-                              DataRow(
+                            rows: cycleBlocks.map((cycleBlock) {
+                              return DataRow(
                                 cells: [
+                                  //DataCell(Text(cycleBlock.numberID.toString())),
                                   DataCell(
                                     SizedBox(
-                                      width: 50*fem,
+                                      width: 300 * fem,
                                       child: Text(
-                                        '1',
-                                        style: SafeGoogleFont(
-                                          'Kanit',
-                                          fontSize: 16 * ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.495 * ffem / fem,
-                                          color: Color(0xff717171),
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    SizedBox(
-                                      width: 300*fem,
-                                      child: Text(
-                                        'QA Template 1',
+                                        cycleBlock.cycle!,
                                         style: SafeGoogleFont(
                                           'Kanit',
                                           fontSize: 16 * ffem,
@@ -846,68 +826,68 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                     ),
                                   ),
                                   DataCell(
-                                    SizedBox(
-                                      width: 200*fem,
-                                      child: Text(
-                                        'Auditor 1',
-                                        style: SafeGoogleFont(
-                                          'Kanit',
-                                          fontSize: 16 * ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.495 * ffem / fem,
-                                          color: Color(0xff717171),
-                                        ),
+                                      SizedBox(
+                                        width: 200*fem,
+                                          child: Text(
+                                              cycleBlock.orgID!,
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 16 * ffem,
+                                              fontWeight: FontWeight.w400,
+                                              height: 1.495 * ffem / fem,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                       ),
-                                    ),
                                   ),
                                   DataCell(
-                                    SizedBox(
-                                      width: 300*fem,
-                                      child: Text(
-                                        'Start Date 1',
-                                        style: SafeGoogleFont(
-                                          'Kanit',
-                                          fontSize: 16 * ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.495 * ffem / fem,
-                                          color: Color(0xff717171),
-                                        ),
+                                      SizedBox(
+                                        width: 300*fem,
+                                          child: Text(
+                                              cycleBlock.startDate!,
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 16 * ffem,
+                                              fontWeight: FontWeight.w400,
+                                              height: 1.495 * ffem / fem,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                       ),
-                                    ),
                                   ),
                                   DataCell(
-                                    SizedBox(
-                                      width: 300*fem,
-                                      child: Text(
-                                        'End Date 1',
-                                        style: SafeGoogleFont(
-                                          'Kanit',
-                                          fontSize: 16 * ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.495 * ffem / fem,
-                                          color: Color(0xff717171),
-                                        ),
+                                      SizedBox(
+                                        width: 300*fem,
+                                          child: Text(
+                                              cycleBlock.endDate!,
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 16 * ffem,
+                                              fontWeight: FontWeight.w400,
+                                              height: 1.495 * ffem / fem,
+                                              color: Colors.black,
+                                            ),
+                                          ),
                                       ),
-                                    ),
                                   ),
                                   DataCell(
-                                    SizedBox(
-                                      width: 300*fem,
-                                      child: Text(
-                                        'Status 1',
-                                        style: SafeGoogleFont(
-                                          'Kanit',
-                                          fontSize: 16 * ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.495 * ffem / fem,
-                                          color: Color(0xff717171),
-                                        ),
+                                      SizedBox(
+                                        width: 300*fem,
+                                          child: Text(
+                                              cycleBlock.status!,
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 16 * ffem,
+                                              fontWeight: FontWeight.w400,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xff717171),
+                                            ),
+                                          ),
                                       ),
-                                    ),
                                   ),
                                 ],
-                              ),
-                            ],
+                              );
+                            }).toList(),
                           ),
                         ),
                       ],
@@ -922,4 +902,3 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     );
   }
 }
-

@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class CycleBlock {
-  int? numberID;
+ // int? numberID;
   String? orgID;
   String? cycle;
   String? startDate;
@@ -10,7 +9,7 @@ class CycleBlock {
   String? status;
 
   CycleBlock({
-    this.numberID,
+   // this.numberID,
     this.orgID,
     this.cycle,
     this.startDate,//
