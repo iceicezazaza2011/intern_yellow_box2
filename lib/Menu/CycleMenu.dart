@@ -791,6 +791,9 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                       scrollDirection: Axis.horizontal,
                       controller: _horizontalScrollController,
                       child: DataTable(
+                        headingRowHeight: 44.0 * fem,
+                        headingRowColor:
+                        MaterialStateColor.resolveWith((states) => Color.fromRGBO(249, 225, 185, 1)),
                         columns: [
                           DataColumn(
                             label: SizedBox(
