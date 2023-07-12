@@ -55,7 +55,7 @@ class _LoginPageState extends State<LoginPage> {
             'กรุณากรอก  ชื่อผู้ใช้ หรือ รหัสผ่าน', Colors.red);
       });
     } else if (name != 'admin' || password != '1234' ) {
-      setState(() {
+      setState(() {//
         _messageWidget = buildMessageWidget(
             'ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง', Colors.red);
       });

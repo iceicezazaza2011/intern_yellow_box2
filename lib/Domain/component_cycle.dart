@@ -13,7 +13,7 @@ class CycleBlock {
     this.numberID,
     this.orgID,
     this.cycle,
-    this.startDate,
+    this.startDate,//
     this.endDate,
     this.status,
   });

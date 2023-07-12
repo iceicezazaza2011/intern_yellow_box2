@@ -24,7 +24,7 @@ class CycleService{
         List<CycleBlock> result = list.map((e) => CycleBlock.fromJson(e)).toList();
         print(result);
         return result;
-      }
+      }//
       else
       {
         throw Exception("Error Occur");

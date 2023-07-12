@@ -8,7 +8,7 @@ class MyCustomScrollBehavior extends MaterialScrollBehavior {
     PointerDeviceKind.touch,
     PointerDeviceKind.mouse,
   };
-}
+}//
 
 TextStyle SafeGoogleFont(
     String fontFamily, {

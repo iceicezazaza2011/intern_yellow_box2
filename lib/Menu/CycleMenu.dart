@@ -676,7 +676,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                               color: Color(0xff717171),
                                             ),
                                           ),
-                                        ],
+                                        ],//
                                       ),
                                       Image.asset(
                                         'assets/images/cancel.png',

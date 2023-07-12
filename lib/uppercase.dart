@@ -7,4 +7,4 @@ class UpperCaseTxt extends TextInputFormatter {
       TextEditingValue txtOld, TextEditingValue txtNew){
     return txtNew.copyWith(text: txtNew.text.toUpperCase());
   }
-}
+}//
