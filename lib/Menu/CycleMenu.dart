@@ -4,8 +4,6 @@ import 'dart:convert';
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
 
-
-
 class CycleMenuPage extends StatefulWidget {
   //const CycleMenuPage({required Key key}) : super(key: key);
 
@@ -15,22 +13,22 @@ class CycleMenuPage extends StatefulWidget {
 
 class _CycleMenuPageState extends State<CycleMenuPage> {
   List<CycleBlock> CycleBlocks = [];
+  final List<int> availableRowsPerPage = [2, 5, 10, 20, 50];
   TextEditingController _searchController = TextEditingController();
   String _selectedMenu = 'home'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
-  DTS dts = DTS();
+  DTS dts = DTS([]);
   int _rowPerPage = PaginatedDataTable.defaultRowsPerPage;
   final CycleService cycleService = CycleService(); // ฟิวเจอร์บิวเดอร์
 
-
   @override
-  void initState(){
+  void initState() {
     super.initState();
     cyclef();
   }
 
   void cyclef() async {
     final CycleBlocks = await CycleService().getCycleBlock();
-    dts.updateReports((CycleBlocks));
+    dts.updateCycleBlocks((CycleBlocks));
   }
 
   @override
@@ -38,7 +36,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     _searchController.dispose();
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -432,17 +429,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                           children: [
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -484,17 +481,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -535,17 +532,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -586,17 +583,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -637,17 +634,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136* fem,
+                              height: 136 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                            CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -660,7 +657,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                                 fontSize: 20 * ffem,
                                                 fontWeight: FontWeight.w400,
                                                 height: 1.495 * ffem / fem,
-                                                  color: Color(0xffdc2529),
+                                                color: Color(0xffdc2529),
                                               ),
                                             ),
                                           ),
@@ -700,11 +697,11 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                           ),
                         ),
                         SizedBox(height: 20 * fem),
-                         SingleChildScrollView(
+                        SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
                           child: PaginatedDataTable(
-                             //columnSpacing: 5,
-                             dataRowHeight: 60,
+                            //columnSpacing: 5,
+                            //dataRowHeight: 60,
                             columns: [
                               // DataColumn(
                               //   label: Text(
@@ -782,7 +779,9 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             source: dts,
                             onRowsPerPageChanged: (r) {
                               setState(() {
-                                _rowPerPage = r!;
+                                if (availableRowsPerPage.contains(r)) {
+                                  _rowPerPage = r!;
+                                }
                               });
                             },
                             rowsPerPage: _rowPerPage,
@@ -803,8 +802,8 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
 
 class DTS extends DataTableSource {
   List<CycleBlock> CycleBlocks = [];
-
-  void updateReports(List<CycleBlock> newCycleBlocks) {
+  DTS(this.CycleBlocks);
+  void updateCycleBlocks(List<CycleBlock> newCycleBlocks) {
     CycleBlocks.clear();
     CycleBlocks.addAll(newCycleBlocks);
     notifyListeners();
@@ -812,100 +811,90 @@ class DTS extends DataTableSource {
 
   @override
   DataRow? getRow(int index) {
-    final CycleBlock = CycleBlocks[index];
-    return DataRow(
-          cells: [
-            // DataCell(
-            //   SizedBox(
-            //     width: 50,
-            //     child: Text(
-            //       (CycleBlock.numberID != null? CycleBlock.numberID.toString(): ''),
-            //       style: SafeGoogleFont(
-            //         'Kanit',
-            //         fontSize: 16,
-            //         fontWeight: FontWeight.w400,
-            //         height: 1.495,
-            //         color: Color(0xff717171),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            DataCell(
-              SizedBox(
-                width: 300,
-                child: Text((CycleBlock.cycle?? ''),
-                  style: SafeGoogleFont(
-                    'Kanit',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    height: 1.495,
-                    color: Colors.black,
-                  ),
+    final CycleBlock cycleBlock = CycleBlocks[index];
+    if (index < CycleBlocks.length) {
+      return DataRow(
+        cells: [
+          DataCell(
+            SizedBox(
+              width: 300,
+              child: Text(
+                (cycleBlock.cycle!),
+                style: SafeGoogleFont(
+                  'Kanit',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  height: 1.495,
+                  color: Colors.black,
                 ),
               ),
             ),
-            DataCell(
-              SizedBox(
-                width: 200,
-                child: Text((CycleBlock.orgID?? ''),
-                  style: SafeGoogleFont(
-                    'Kanit',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    height: 1.495,
-                    color: Color(0xff717171),
-                  ),
+          ),
+          DataCell(
+            SizedBox(
+              width: 200,
+              child: Text(
+                (cycleBlock.orgID!),
+                style: SafeGoogleFont(
+                  'Kanit',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  height: 1.495,
+                  color: Color(0xff717171),
                 ),
               ),
             ),
-            DataCell(
-              SizedBox(
-                width: 300,
-                child: Text(
-                  (CycleBlock.startDate?? ''),
-                  style: SafeGoogleFont(
-                    'Kanit',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    height: 1.495,
-                    color: Color(0xff717171),
-                  ),
+          ),
+          DataCell(
+            SizedBox(
+              width: 300,
+              child: Text(
+                (cycleBlock.startDate!),
+                style: SafeGoogleFont(
+                  'Kanit',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  height: 1.495,
+                  color: Color(0xff717171),
                 ),
               ),
             ),
-            DataCell(
-              SizedBox(
-                width: 300,
-                child: Text(
-                  (CycleBlock.endDate?? ''),
-                  style: SafeGoogleFont(
-                    'Kanit',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    height: 1.495,
-                    color: Color(0xff717171),
-                  ),
+          ),
+          DataCell(
+            SizedBox(
+              width: 300,
+              child: Text(
+                (cycleBlock.endDate!),
+                style: SafeGoogleFont(
+                  'Kanit',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  height: 1.495,
+                  color: Color(0xff717171),
                 ),
               ),
             ),
-            DataCell(
-              SizedBox(
-                width: 300,
-                child: Text(
-                  (CycleBlock.status?? ''),
-                  style: SafeGoogleFont(
-                    'Kanit',
-                    fontSize: 16,
-                    fontWeight: FontWeight.w400,
-                    height: 1.495,
-                    color: Colors.white,
-
-                  ),
+          ),
+          DataCell(
+            SizedBox(
+              width: 300,
+              child: Text(
+                (cycleBlock.status!),
+                style: SafeGoogleFont(
+                  'Kanit',
+                  fontSize: 16,
+                  fontWeight: FontWeight.w400,
+                  height: 1.495,
+                  color: Colors.white,
                 ),
               ),
             ),
-          ],
-        );
+          ),
+        ],
+      );
+    } else {
+      return null;
+    }
   }
 
   @override
