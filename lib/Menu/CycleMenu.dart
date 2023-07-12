@@ -4,6 +4,26 @@ import 'package:intern_yellow_box/utils.dart';
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
 
+class FilterOption {
+  final String title;
+  final List<SubFilterOption> subFilters;
+
+  FilterOption({
+    required this.title,
+    required this.subFilters,
+  });
+}
+
+class SubFilterOption {
+  final String title;
+  bool isSelected;
+
+  SubFilterOption({
+    required this.title,
+    this.isSelected = false,
+  });
+}
+
 class CycleMenuPage extends StatefulWidget {
   //const CycleMenuPage({required Key key}) : super(key: key);
 
@@ -36,13 +56,44 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
 
 
 
-  List<String> filter1Options = [
-    'Option 1',
-    'Option 2',
-    'Option 3',
-    'Option 4',
+  List<FilterOption> filters = [
+    FilterOption(
+      title: 'Filter By Cycle',
+      subFilters: [
+        SubFilterOption(title: 'IN PROGRESS', isSelected: false),
+        SubFilterOption(title: 'CANCEL', isSelected: false),
+        SubFilterOption(title: 'DONE', isSelected: false),
+        SubFilterOption(title: 'NEW', isSelected: false),
+      ],
+    ),
+    FilterOption(
+      title: 'Filter By StartDate',
+      subFilters: [
+        SubFilterOption(title: 'IN PROGRESS', isSelected: false),
+        SubFilterOption(title: 'CANCEL', isSelected: false),
+        SubFilterOption(title: 'DONE', isSelected: false),
+        SubFilterOption(title: 'NEW', isSelected: false),
+      ],
+    ),
+    FilterOption(
+      title: 'Filter By EndDate',
+      subFilters: [
+        SubFilterOption(title: 'IN PROGRESS', isSelected: false),
+        SubFilterOption(title: 'CANCEL', isSelected: false),
+        SubFilterOption(title: 'DONE', isSelected: false),
+        SubFilterOption(title: 'NEW', isSelected: false),
+      ],
+    ),
+    FilterOption(
+      title: 'Filter By Status',
+      subFilters: [
+        SubFilterOption(title: 'IN PROGRESS', isSelected: false),
+        SubFilterOption(title: 'CANCEL', isSelected: false),
+        SubFilterOption(title: 'DONE', isSelected: false),
+        SubFilterOption(title: 'NEW', isSelected: false),
+      ],
+    ),
   ];
-  String? selectedFilter1Option;
 
   @override
   Widget build(BuildContext context) {
@@ -705,32 +756,29 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                 color: Color(0xff717171),
                               ),
                             ),
-                            Container(
-                              width: 200,
-                              child: DropdownButtonFormField<String>(
-                                value: selectedFilter1Option,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedFilter1Option = newValue;
-                                  });
-                                },
-                                items: filter1Options.map((option) {
-                                  return DropdownMenuItem<String>(
-                                    value: option,
-                                    child: Text(
-                                      option,
-                                      style: SafeGoogleFont(
-                                        'Kanit',
-                                        fontSize: 16 * ffem,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1.495 * ffem / fem,
-                                        color: Color(0xff717171),
-                                      ),
-                                    ),
+                            Expanded(
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: filters.length,
+                                itemBuilder: (BuildContext context, int index) {
+                                  final filter = filters[index];
+                                  return ExpansionTile(
+                                    title: Text(filter.title),
+                                    children: filter.subFilters.map((subFilter) {
+                                      return CheckboxListTile(
+                                        title: Text(subFilter.title),
+                                        value: subFilter.isSelected,
+                                        onChanged: (value) {
+                                          setState(() {
+                                            subFilter.isSelected = value ?? false;
+                                          });
+                                        },
+                                      );
+                                    }).toList(),
                                   );
-                                }).toList(),
+                                },
                               ),
-                            ),
+                            )
                           ],
                         ),
                         SizedBox(height: 20 * fem),
