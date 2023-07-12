@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intern_yellow_box/utils.dart';
-import 'dart:convert';
 import '../Domain/component_cycle.dart';
+import '../Domain/service_cycle.dart';
 
 class CycleMenuPage extends StatefulWidget {
   //const CycleMenuPage({required Key key}) : super(key: key);
@@ -13,14 +14,26 @@ class CycleMenuPage extends StatefulWidget {
 class _CycleMenuPageState extends State<CycleMenuPage> {
   TextEditingController _searchController = TextEditingController();
   String _selectedMenu = 'home'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+  List<CycleBlock> cycleBlocks = []; // สร้างรายการข้อมูลสำหรับ CycleBlock
+  final _horizontalScrollController = ScrollController();
+  final CycleService cycleService = CycleService();
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
+  @override
+  void initState() {
+    super.initState();
+    cyclef();
+  }
 
-  List<CycleBlock> cycleBlocks = []; // สร้างรายการข้อมูลสำหรับ CycleBlock
+  void cyclef() async {
+    cycleBlocks = await CycleService().getCycleBlock();
+  }
+
+
 
 
   List<String> filter1Options = [
@@ -33,7 +46,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
@@ -723,174 +735,222 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                           ],
                         ),
                         SizedBox(height: 20 * fem),
-                        SingleChildScrollView(
-                          scrollDirection: Axis.horizontal,
-                          child: DataTable(
-                            columns:  [
-                              // DataColumn(
-                              //   label: Text('No'),
-                              // ),
-                              DataColumn(
-                                label: SizedBox(
+              FutureBuilder<List<CycleBlock>>(
+                future: cycleService.getCycleBlock(),
+                builder: (context, snapshot) {
+                  if (snapshot.hasData) {
+                    List<CycleBlock> cycleBlocks = snapshot.data!;
+                    return SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      controller: _horizontalScrollController,
+                      child: DataTable(
+                        columns: [
+                          DataColumn(
+                            label: SizedBox(
+                              width: 50 * fem,
+                              child: Text(
+                                'No',
+                                style: SafeGoogleFont(
+                                  'Kanit',
+                                  fontSize: 20 * ffem,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.495 * ffem / fem,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: 300 * fem,
+                              child: Text(
+                                'Cycle',
+                                style: SafeGoogleFont(
+                                  'Kanit',
+                                  fontSize: 20 * ffem,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.495 * ffem / fem,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: 200 * fem,
+                              child: Text(
+                                'Audit',
+                                style: SafeGoogleFont(
+                                  'Kanit',
+                                  fontSize: 20 * ffem,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.495 * ffem / fem,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: 300 * fem,
+                              child: Text(
+                                'StartDate',
+                                style: SafeGoogleFont(
+                                  'Kanit',
+                                  fontSize: 20 * ffem,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.495 * ffem / fem,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: 300 * fem,
+                              child: Text(
+                                'EndDate',
+                                style: SafeGoogleFont(
+                                  'Kanit',
+                                  fontSize: 20 * ffem,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.495 * ffem / fem,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                          DataColumn(
+                            label: SizedBox(
+                              width: 300 * fem,
+                              child: Text(
+                                'Status',
+                                style: SafeGoogleFont(
+                                  'Kanit',
+                                  fontSize: 20 * ffem,
+                                  fontWeight: FontWeight.bold,
+                                  height: 1.495 * ffem / fem,
+                                  color: Colors.black,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                        rows: List<DataRow>.generate(cycleBlocks.length, (index) {
+                          CycleBlock cycleBlock = cycleBlocks[index];
+                          int rowNumber = index + 1;
+                          return DataRow(
+                            cells: [
+                              DataCell(
+                                SizedBox(
+                                  width: 50 * fem,
+                                  child: Text(
+                                    '$rowNumber',
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 16 * ffem,
+                                      fontWeight: FontWeight.w400,
+                                      height: 1.495 * ffem / fem,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+
+                              DataCell(
+                                SizedBox(
                                   width: 300 * fem,
                                   child: Text(
-                                      'Cycle',
+                                    cycleBlock.cycle!,
                                     style: SafeGoogleFont(
                                       'Kanit',
-                                      fontSize: 20 * ffem,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16 * ffem,
+                                      fontWeight: FontWeight.w400,
                                       height: 1.495 * ffem / fem,
                                       color: Colors.black,
                                     ),
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: SizedBox(
-                                  width: 200*fem,
+                              DataCell(
+                                SizedBox(
+                                  width: 200 * fem,
                                   child: Text(
-                                      'Audit',
+                                    cycleBlock.orgID!,
                                     style: SafeGoogleFont(
                                       'Kanit',
-                                      fontSize: 20 * ffem,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16 * ffem,
+                                      fontWeight: FontWeight.w400,
                                       height: 1.495 * ffem / fem,
                                       color: Colors.black,
                                     ),
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: SizedBox(
-                                  width: 300*fem,
+                              DataCell(
+                                SizedBox(
+                                  width: 300 * fem,
                                   child: Text(
-                                      'StartDate',
+                                    cycleBlock.startDate!,
                                     style: SafeGoogleFont(
                                       'Kanit',
-                                      fontSize: 20 * ffem,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16 * ffem,
+                                      fontWeight: FontWeight.w400,
                                       height: 1.495 * ffem / fem,
                                       color: Colors.black,
                                     ),
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: SizedBox(
-                                  width: 300*fem,
+                              DataCell(
+                                SizedBox(
+                                  width: 300 * fem,
                                   child: Text(
-                                      'EndDate',
+                                    cycleBlock.endDate!,
                                     style: SafeGoogleFont(
                                       'Kanit',
-                                      fontSize: 20 * ffem,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16 * ffem,
+                                      fontWeight: FontWeight.w400,
                                       height: 1.495 * ffem / fem,
                                       color: Colors.black,
                                     ),
                                   ),
                                 ),
                               ),
-                              DataColumn(
-                                label: SizedBox(
-                                  width: 300*fem,
+                              DataCell(
+                                SizedBox(
+                                  width: 300 * fem,
                                   child: Text(
-                                      'Status',
+                                    cycleBlock.status!,
                                     style: SafeGoogleFont(
                                       'Kanit',
-                                      fontSize: 20 * ffem,
-                                      fontWeight: FontWeight.bold,
+                                      fontSize: 16 * ffem,
+                                      fontWeight: FontWeight.w400,
                                       height: 1.495 * ffem / fem,
-                                      color: Colors.black,
+                                      color: Color(0xff717171),
                                     ),
                                   ),
                                 ),
                               ),
                             ],
-                            rows: cycleBlocks.map((cycleBlock) {
-                              return DataRow(
-                                cells: [
-                                  //DataCell(Text(cycleBlock.numberID.toString())),
-                                  DataCell(
-                                    SizedBox(
-                                      width: 300 * fem,
-                                      child: Text(
-                                        cycleBlock.cycle!,
-                                        style: SafeGoogleFont(
-                                          'Kanit',
-                                          fontSize: 16 * ffem,
-                                          fontWeight: FontWeight.w400,
-                                          height: 1.495 * ffem / fem,
-                                          color: Colors.black,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                  DataCell(
-                                      SizedBox(
-                                        width: 200*fem,
-                                          child: Text(
-                                              cycleBlock.orgID!,
-                                            style: SafeGoogleFont(
-                                              'Kanit',
-                                              fontSize: 16 * ffem,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1.495 * ffem / fem,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                      ),
-                                  ),
-                                  DataCell(
-                                      SizedBox(
-                                        width: 300*fem,
-                                          child: Text(
-                                              cycleBlock.startDate!,
-                                            style: SafeGoogleFont(
-                                              'Kanit',
-                                              fontSize: 16 * ffem,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1.495 * ffem / fem,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                      ),
-                                  ),
-                                  DataCell(
-                                      SizedBox(
-                                        width: 300*fem,
-                                          child: Text(
-                                              cycleBlock.endDate!,
-                                            style: SafeGoogleFont(
-                                              'Kanit',
-                                              fontSize: 16 * ffem,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1.495 * ffem / fem,
-                                              color: Colors.black,
-                                            ),
-                                          ),
-                                      ),
-                                  ),
-                                  DataCell(
-                                      SizedBox(
-                                        width: 300*fem,
-                                          child: Text(
-                                              cycleBlock.status!,
-                                            style: SafeGoogleFont(
-                                              'Kanit',
-                                              fontSize: 16 * ffem,
-                                              fontWeight: FontWeight.w400,
-                                              height: 1.495 * ffem / fem,
-                                              color: Color(0xff717171),
-                                            ),
-                                          ),
-                                      ),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
-                          ),
-                        ),
-                      ],
+                          );
+                        }).toList(),
+                      ),
+                    );
+                  } else if (snapshot.hasError) {
+                    return Text("Error: ${snapshot.error}");
+                  } else {
+                    return const Center(
+                      child: SpinKitDualRing(
+                        color: Colors.orange,
+                        size: 60.0,
+                      ),
+                    );
+                  }
+                },
+              )
+              ],
                     ),
                   ],
                 ),
