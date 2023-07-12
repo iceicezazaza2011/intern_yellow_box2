@@ -1,22 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:intern_yellow_box/utils.dart';
+import 'dart:convert';
+import '../Domain/component_cycle.dart';
+import '../Domain/service_cycle.dart';
+
+
+
 class CycleMenuPage extends StatefulWidget {
-  const CycleMenuPage({super.key});
+  //const CycleMenuPage({required Key key}) : super(key: key);
 
   @override
   State<CycleMenuPage> createState() => _CycleMenuPageState();
-
 }
 
 class _CycleMenuPageState extends State<CycleMenuPage> {
+  List<CycleBlock> CycleBlocks = [];
   TextEditingController _searchController = TextEditingController();
   String _selectedMenu = 'home'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+  DTS dts = DTS();
+  int _rowPerPage = PaginatedDataTable.defaultRowsPerPage;
+  final CycleService cycleService = CycleService(); // ฟิวเจอร์บิวเดอร์
+
+
+  @override
+  void initState(){
+    super.initState();
+    cyclef();
+  }
+
+  void cyclef() async {
+    final CycleBlocks = await CycleService().getCycleBlock();
+    dts.updateReports((CycleBlocks));
+  }
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -188,8 +210,8 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                         });
                       },
                       child: Container(
-                        padding:
-                        EdgeInsets.fromLTRB(9 * fem, 9 * fem, 0 * fem, 9 * fem),
+                        padding: EdgeInsets.fromLTRB(
+                            9 * fem, 9 * fem, 0 * fem, 9 * fem),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           border: Border.all(color: Color(0xff717171)),
@@ -198,7 +220,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                               : Color(0xff323131),
                         ),
                         child: FittedBox(
-                          fit: BoxFit.scaleDown,
+                          fit: BoxFit.cover,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -251,7 +273,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                               : Color(0xff323131),
                         ),
                         child: FittedBox(
-                          fit: BoxFit.scaleDown,
+                          fit: BoxFit.cover,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -299,7 +321,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                               : Color(0xff323131),
                         ),
                         child: FittedBox(
-                          fit: BoxFit.scaleDown,
+                          fit: BoxFit.cover,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -337,8 +359,8 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                         });
                       },
                       child: Container(
-                        padding:
-                        EdgeInsets.fromLTRB(14 * fem, 9 * fem, 80 * fem, 9 * fem),
+                        padding: EdgeInsets.fromLTRB(
+                            14 * fem, 9 * fem, 80 * fem, 9 * fem),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           border: Border.all(color: Color(0xff717171)),
@@ -347,7 +369,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                               : Color(0xff323131),
                         ),
                         child: FittedBox(
-                          fit: BoxFit.scaleDown,
+                          fit: BoxFit.cover,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -382,19 +404,393 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
               ),
             ),
             Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 740 * fem),
-                  width: 220 * fem,
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Add your content here
-                    ],
-                  ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+                child: ListView(
+                  children: [
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(right: 10),
+                          child: Text(
+                            'OVERVIEW',
+                            style: SafeGoogleFont(
+                              'Kanit',
+                              fontSize: 32 * ffem,
+                              fontWeight: FontWeight.bold,
+                              height: 1.495 * ffem / fem,
+                              color: Color(0xff717171),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 20),
+                        Wrap(
+                          spacing: 10,
+                          runSpacing: 10,
+                          children: [
+                            Container(
+                              width: 312 * fem,
+                              height: 136* fem,
+                              child: Card(
+                                child: Padding(
+                                  padding: EdgeInsets.all(18.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              bottom: 2 * fem,
+                                            ),
+                                            child: Text(
+                                              "ALL CYCLE",
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 20 * ffem,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.495 * ffem / fem,
+                                                color: Color.fromRGBO(
+                                                    93, 176, 243, 1),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            "325",
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 34 * ffem,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xff717171),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Image.asset(
+                                        'assets/images/CYCLE.png',
+                                        width: 88 * ffem,
+                                        height: 88 * ffem,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 312 * fem,
+                              height: 136* fem,
+                              child: Card(
+                                child: Padding(
+                                  padding: EdgeInsets.all(18.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              bottom: 2 * fem,
+                                            ),
+                                            child: Text(
+                                              "IN PROGRESS",
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 20 * ffem,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.495 * ffem / fem,
+                                                color: Color(0xfffa7003),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            "325",
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 34 * ffem,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xff717171),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Image.asset(
+                                        'assets/images/inprogress.png',
+                                        width: 88 * ffem,
+                                        height: 88 * ffem,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 312 * fem,
+                              height: 136* fem,
+                              child: Card(
+                                child: Padding(
+                                  padding: EdgeInsets.all(18.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              bottom: 2 * fem,
+                                            ),
+                                            child: Text(
+                                              "NEW CYCLE",
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 20 * ffem,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.495 * ffem / fem,
+                                                color: Color(0xffffbe52),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            "325",
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 34 * ffem,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xff717171),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Image.asset(
+                                        'assets/images/new.png',
+                                        width: 88 * ffem,
+                                        height: 88 * ffem,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 312 * fem,
+                              height: 136* fem,
+                              child: Card(
+                                child: Padding(
+                                  padding: EdgeInsets.all(18.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              bottom: 2 * fem,
+                                            ),
+                                            child: Text(
+                                              "DONE",
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 20 * ffem,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.495 * ffem / fem,
+                                                color: Color(0xff00c981),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            "325",
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 34 * ffem,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xff717171),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Image.asset(
+                                        'assets/images/done.png',
+                                        width: 88 * ffem,
+                                        height: 88 * ffem,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              width: 312 * fem,
+                              height: 136* fem,
+                              child: Card(
+                                child: Padding(
+                                  padding: EdgeInsets.all(18.0),
+                                  child: Row(
+                                    mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                              bottom: 2 * fem,
+                                            ),
+                                            child: Text(
+                                              "INCORRECT",
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 20 * ffem,
+                                                fontWeight: FontWeight.w400,
+                                                height: 1.495 * ffem / fem,
+                                                  color: Color(0xffdc2529),
+                                              ),
+                                            ),
+                                          ),
+                                          Text(
+                                            "325",
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 34 * ffem,
+                                              fontWeight: FontWeight.bold,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xff717171),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                      Image.asset(
+                                        'assets/images/cancel.png',
+                                        width: 88 * ffem,
+                                        height: 88 * ffem,
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        SizedBox(height: 40 * fem),
+                        Text(
+                          'CYCLE',
+                          style: SafeGoogleFont(
+                            'Kanit',
+                            fontSize: 32 * ffem,
+                            fontWeight: FontWeight.bold,
+                            height: 1.495 * ffem / fem,
+                            color: Color(0xff717171),
+                          ),
+                        ),
+                        SizedBox(height: 20 * fem),
+                         SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: PaginatedDataTable(
+                             //columnSpacing: 5,
+                             dataRowHeight: 60,
+                            columns: [
+                              // DataColumn(
+                              //   label: Text(
+                              //     'No',
+                              //     style: SafeGoogleFont(
+                              //       'Kanit',
+                              //       fontSize: 20 * ffem,
+                              //       fontWeight: FontWeight.bold,
+                              //       height: 1.495 * ffem / fem,
+                              //       color: Colors.black,
+                              //     ),
+                              //   ),
+                              // ),
+                              DataColumn(
+                                label: Text(
+                                  'Cycle',
+                                  style: SafeGoogleFont(
+                                    'Kanit',
+                                    fontSize: 20 * ffem,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.495 * ffem / fem,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Audit',
+                                  style: SafeGoogleFont(
+                                    'Kanit',
+                                    fontSize: 20 * ffem,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.495 * ffem / fem,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'StartDate',
+                                  style: SafeGoogleFont(
+                                    'Kanit',
+                                    fontSize: 20 * ffem,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.495 * ffem / fem,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'EndDate',
+                                  style: SafeGoogleFont(
+                                    'Kanit',
+                                    fontSize: 20 * ffem,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.495 * ffem / fem,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                              DataColumn(
+                                label: Text(
+                                  'Status',
+                                  style: SafeGoogleFont(
+                                    'Kanit',
+                                    fontSize: 20 * ffem,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.495 * ffem / fem,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                            source: dts,
+                            onRowsPerPageChanged: (r) {
+                              setState(() {
+                                _rowPerPage = r!;
+                              });
+                            },
+                            rowsPerPage: _rowPerPage,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -404,4 +800,121 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     );
   }
 }
-//
+
+class DTS extends DataTableSource {
+  List<CycleBlock> CycleBlocks = [];
+
+  void updateReports(List<CycleBlock> newCycleBlocks) {
+    CycleBlocks.clear();
+    CycleBlocks.addAll(newCycleBlocks);
+    notifyListeners();
+  }
+
+  @override
+  DataRow? getRow(int index) {
+    final CycleBlock = CycleBlocks[index];
+    return DataRow(
+          cells: [
+            // DataCell(
+            //   SizedBox(
+            //     width: 50,
+            //     child: Text(
+            //       (CycleBlock.numberID != null? CycleBlock.numberID.toString(): ''),
+            //       style: SafeGoogleFont(
+            //         'Kanit',
+            //         fontSize: 16,
+            //         fontWeight: FontWeight.w400,
+            //         height: 1.495,
+            //         color: Color(0xff717171),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+            DataCell(
+              SizedBox(
+                width: 300,
+                child: Text((CycleBlock.cycle?? ''),
+                  style: SafeGoogleFont(
+                    'Kanit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    height: 1.495,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+            ),
+            DataCell(
+              SizedBox(
+                width: 200,
+                child: Text((CycleBlock.orgID?? ''),
+                  style: SafeGoogleFont(
+                    'Kanit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    height: 1.495,
+                    color: Color(0xff717171),
+                  ),
+                ),
+              ),
+            ),
+            DataCell(
+              SizedBox(
+                width: 300,
+                child: Text(
+                  (CycleBlock.startDate?? ''),
+                  style: SafeGoogleFont(
+                    'Kanit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    height: 1.495,
+                    color: Color(0xff717171),
+                  ),
+                ),
+              ),
+            ),
+            DataCell(
+              SizedBox(
+                width: 300,
+                child: Text(
+                  (CycleBlock.endDate?? ''),
+                  style: SafeGoogleFont(
+                    'Kanit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    height: 1.495,
+                    color: Color(0xff717171),
+                  ),
+                ),
+              ),
+            ),
+            DataCell(
+              SizedBox(
+                width: 300,
+                child: Text(
+                  (CycleBlock.status?? ''),
+                  style: SafeGoogleFont(
+                    'Kanit',
+                    fontSize: 16,
+                    fontWeight: FontWeight.w400,
+                    height: 1.495,
+                    color: Colors.white,
+
+                  ),
+                ),
+              ),
+            ),
+          ],
+        );
+  }
+
+  @override
+  bool get isRowCountApproximate => true;
+
+  @override
+  int get rowCount => CycleBlocks.length;
+
+  @override
+  int get selectedRowCount => 0;
+}
+
