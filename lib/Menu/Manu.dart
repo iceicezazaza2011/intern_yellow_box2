@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intern_yellow_box/utils.dart';
-import 'package:flutter/src/services/asset_manifest.dart';
-import 'package:google_fonts/src/asset_manifest.dart';
+
 
 class MainMenuPage extends StatefulWidget {
   const MainMenuPage({Key? key}) : super(key: key);
@@ -383,26 +382,10 @@ class _MainMenuPageState extends State<MainMenuPage> {
                 ),
               ),
             ),
-            Expanded(
-              child: SingleChildScrollView(
-                child: Container(
-                  padding: EdgeInsets.fromLTRB(0, 0, 0, 740 * fem),
-                  width: 220 * fem,
-                  decoration: BoxDecoration(
-                    color: Colors.orange,
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Add your content here
-                    ],
-                  ),
-                ),
-              ),
-            ),
           ],
         ),
       ),
     );
   }
 }
+//
