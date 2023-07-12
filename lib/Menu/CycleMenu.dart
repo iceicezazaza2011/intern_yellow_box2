@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intern_yellow_box/utils.dart';
 import 'dart:convert';
 import '../Domain/component_cycle.dart';
-import '../Domain/service_cycle.dart';
+
+
 
 class CycleMenuPage extends StatefulWidget {
   //const CycleMenuPage({required Key key}) : super(key: key);
@@ -12,24 +13,8 @@ class CycleMenuPage extends StatefulWidget {
 }
 
 class _CycleMenuPageState extends State<CycleMenuPage> {
-  List<CycleBlock> CycleBlocks = [];
-  final List<int> availableRowsPerPage = [2, 5, 10, 20, 50];
   TextEditingController _searchController = TextEditingController();
   String _selectedMenu = 'home'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
-  DTS dts = DTS([]);
-  int _rowPerPage = PaginatedDataTable.defaultRowsPerPage;
-  final CycleService cycleService = CycleService(); // ฟิวเจอร์บิวเดอร์
-
-  @override
-  void initState() {
-    super.initState();
-    cyclef();
-  }
-
-  void cyclef() async {
-    final CycleBlocks = await CycleService().getCycleBlock();
-    dts.updateCycleBlocks((CycleBlocks));
-  }
 
   @override
   void dispose() {
@@ -37,12 +22,32 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     super.dispose();
   }
 
+  List<CycleBlock> parseJson(String jsonString) {
+    final jsonData = json.decode(jsonString);
+    List<CycleBlock> blocks = [];
+
+    for (var item in jsonData) {
+      CycleBlock block = CycleBlock.fromJson(item);
+      blocks.add(block);
+    }
+
+    return blocks;
+  }
+  List<String> filter1Options = [
+    'Option 1',
+    'Option 2',
+    'Option 3',
+    'Option 4',
+  ];
+  String? selectedFilter1Option;
+
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
     final double screenWidth = MediaQuery.of(context).size.width;
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
+    //final List<CycleBlock> cycleBlocks = parseJson(jsonString); // jsonString คือ JSON ที่ได้รับมา
 
     return Scaffold(
       appBar: PreferredSize(
@@ -429,17 +434,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                           children: [
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 136* fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -481,17 +486,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 136* fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -532,17 +537,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 136* fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -583,17 +588,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 136* fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -634,17 +639,17 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 136* fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
                                   child: Row(
                                     mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
+                                    MainAxisAlignment.spaceBetween,
                                     children: [
                                       Column(
                                         crossAxisAlignment:
-                                            CrossAxisAlignment.start,
+                                        CrossAxisAlignment.start,
                                         children: [
                                           Container(
                                             margin: EdgeInsets.only(
@@ -685,36 +690,67 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 40 * fem),
-                        Text(
-                          'CYCLE',
-                          style: SafeGoogleFont(
-                            'Kanit',
-                            fontSize: 32 * ffem,
-                            fontWeight: FontWeight.bold,
-                            height: 1.495 * ffem / fem,
-                            color: Color(0xff717171),
-                          ),
+                        SizedBox(height: 40),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'CYCLE',
+                              style: SafeGoogleFont(
+                                'Kanit',
+                                fontSize: 32 * ffem,
+                                fontWeight: FontWeight.bold,
+                                height: 1.495 * ffem / fem,
+                                color: Color(0xff717171),
+                              ),
+                            ),
+                            Container(
+                              width: 200,
+                              child: DropdownButtonFormField<String>(
+                                value: selectedFilter1Option,
+                                onChanged: (newValue) {
+                                  setState(() {
+                                    selectedFilter1Option = newValue;
+                                  });
+                                },
+                                items: filter1Options.map((option) {
+                                  return DropdownMenuItem<String>(
+                                    value: option,
+                                    child: Text(
+                                      option,
+                                      style: SafeGoogleFont(
+                                        'Kanit',
+                                        fontSize: 16 * ffem,
+                                        fontWeight: FontWeight.w400,
+                                        height: 1.495 * ffem / fem,
+                                        color: Color(0xff717171),
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+                            ),
+                          ],
                         ),
                         SizedBox(height: 20 * fem),
                         SingleChildScrollView(
                           scrollDirection: Axis.horizontal,
-                          child: PaginatedDataTable(
+                          child: DataTable(
                             //columnSpacing: 5,
-                            //dataRowHeight: 60,
+                            dataRowHeight: 60,
                             columns: [
-                              // DataColumn(
-                              //   label: Text(
-                              //     'No',
-                              //     style: SafeGoogleFont(
-                              //       'Kanit',
-                              //       fontSize: 20 * ffem,
-                              //       fontWeight: FontWeight.bold,
-                              //       height: 1.495 * ffem / fem,
-                              //       color: Colors.black,
-                              //     ),
-                              //   ),
-                              // ),
+                              DataColumn(
+                                label: Text(
+                                  'No',
+                                  style: SafeGoogleFont(
+                                    'Kanit',
+                                    fontSize: 20 * ffem,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.495 * ffem / fem,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
                               DataColumn(
                                 label: Text(
                                   'Cycle',
@@ -776,15 +812,102 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                 ),
                               ),
                             ],
-                            source: dts,
-                            onRowsPerPageChanged: (r) {
-                              setState(() {
-                                if (availableRowsPerPage.contains(r)) {
-                                  _rowPerPage = r!;
-                                }
-                              });
-                            },
-                            rowsPerPage: _rowPerPage,
+                            rows: [
+                              DataRow(
+                                cells: [
+                                  DataCell(
+                                    SizedBox(
+                                      width: 50*fem,
+                                      child: Text(
+                                        '1',
+                                        style: SafeGoogleFont(
+                                          'Kanit',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.495 * ffem / fem,
+                                          color: Color(0xff717171),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 300*fem,
+                                      child: Text(
+                                        'QA Template 1',
+                                        style: SafeGoogleFont(
+                                          'Kanit',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.495 * ffem / fem,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 200*fem,
+                                      child: Text(
+                                        'Auditor 1',
+                                        style: SafeGoogleFont(
+                                          'Kanit',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.495 * ffem / fem,
+                                          color: Color(0xff717171),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 300*fem,
+                                      child: Text(
+                                        'Start Date 1',
+                                        style: SafeGoogleFont(
+                                          'Kanit',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.495 * ffem / fem,
+                                          color: Color(0xff717171),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 300*fem,
+                                      child: Text(
+                                        'End Date 1',
+                                        style: SafeGoogleFont(
+                                          'Kanit',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.495 * ffem / fem,
+                                          color: Color(0xff717171),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  DataCell(
+                                    SizedBox(
+                                      width: 300*fem,
+                                      child: Text(
+                                        'Status 1',
+                                        style: SafeGoogleFont(
+                                          'Kanit',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.495 * ffem / fem,
+                                          color: Color(0xff717171),
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
@@ -800,110 +923,3 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
   }
 }
 
-class DTS extends DataTableSource {
-  List<CycleBlock> CycleBlocks = [];
-  DTS(this.CycleBlocks);
-  void updateCycleBlocks(List<CycleBlock> newCycleBlocks) {
-    CycleBlocks.clear();
-    CycleBlocks.addAll(newCycleBlocks);
-    notifyListeners();
-  }
-
-  @override
-  DataRow? getRow(int index) {
-    final CycleBlock cycleBlock = CycleBlocks[index];
-    if (index < CycleBlocks.length) {
-      return DataRow(
-        cells: [
-          DataCell(
-            SizedBox(
-              width: 300,
-              child: Text(
-                (cycleBlock.cycle!),
-                style: SafeGoogleFont(
-                  'Kanit',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  height: 1.495,
-                  color: Colors.black,
-                ),
-              ),
-            ),
-          ),
-          DataCell(
-            SizedBox(
-              width: 200,
-              child: Text(
-                (cycleBlock.orgID!),
-                style: SafeGoogleFont(
-                  'Kanit',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  height: 1.495,
-                  color: Color(0xff717171),
-                ),
-              ),
-            ),
-          ),
-          DataCell(
-            SizedBox(
-              width: 300,
-              child: Text(
-                (cycleBlock.startDate!),
-                style: SafeGoogleFont(
-                  'Kanit',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  height: 1.495,
-                  color: Color(0xff717171),
-                ),
-              ),
-            ),
-          ),
-          DataCell(
-            SizedBox(
-              width: 300,
-              child: Text(
-                (cycleBlock.endDate!),
-                style: SafeGoogleFont(
-                  'Kanit',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  height: 1.495,
-                  color: Color(0xff717171),
-                ),
-              ),
-            ),
-          ),
-          DataCell(
-            SizedBox(
-              width: 300,
-              child: Text(
-                (cycleBlock.status!),
-                style: SafeGoogleFont(
-                  'Kanit',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                  height: 1.495,
-                  color: Colors.white,
-                ),
-              ),
-            ),
-          ),
-        ],
-      );
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  bool get isRowCountApproximate => true;
-
-  @override
-  int get rowCount => CycleBlocks.length;
-
-  @override
-  int get selectedRowCount => 0;
-}
-//
