@@ -744,41 +744,47 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                         ),
                         SizedBox(height: 40),
                         Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              'CYCLE',
-                              style: SafeGoogleFont(
-                                'Kanit',
-                                fontSize: 32 * ffem,
-                                fontWeight: FontWeight.bold,
-                                height: 1.495 * ffem / fem,
-                                color: Color(0xff717171),
+                            Container(
+                              width: 200,
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'CYCLE',
+                                  style: SafeGoogleFont(
+                                    'Kanit',
+                                    fontSize: 32 * ffem,
+                                    fontWeight: FontWeight.bold,
+                                    height: 1.495 * ffem / fem,
+                                    color: Color(0xff717171),
+                                  ),
+                                ),
                               ),
                             ),
                             Expanded(
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: filters.length,
-                                itemBuilder: (BuildContext context, int index) {
-                                  final filter = filters[index];
-                                  return ExpansionTile(
-                                    title: Text(filter.title),
-                                    children: filter.subFilters.map((subFilter) {
-                                      return CheckboxListTile(
-                                        title: Text(subFilter.title),
-                                        value: subFilter.isSelected,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            subFilter.isSelected = value ?? false;
-                                          });
-                                        },
-                                      );
-                                    }).toList(),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: filters.map((filter) {
+                                  return Container(
+                                    width: 200,
+                                    child: ExpansionTile(
+                                      title: Text(filter.title),
+                                      children: filter.subFilters.map((subFilter) {
+                                        return CheckboxListTile(
+                                          title: Text(subFilter.title),
+                                          value: subFilter.isSelected,
+                                          onChanged: (value) {
+                                            setState(() {
+                                              subFilter.isSelected = value ?? false;
+                                            });
+                                          },
+                                        );
+                                      }).toList(),
+                                    ),
                                   );
-                                },
+                                }).toList(),
                               ),
-                            )
+                            ),
                           ],
                         ),
                         SizedBox(height: 20 * fem),
