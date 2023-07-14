@@ -4,25 +4,25 @@ import 'package:intern_yellow_box/utils.dart';
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
 
-class FilterOption {
-  final String title;
-  final List<SubFilterOption> subFilters;
-
-  FilterOption({
-    required this.title,
-    required this.subFilters,
-  });
-}
-
-class SubFilterOption {
-  final String title;
-  bool isSelected;
-
-  SubFilterOption({
-    required this.title,
-    this.isSelected = false,
-  });
-}
+// class FilterOption {
+//   final String title;
+//   final List<SubFilterOption> subFilters;
+//
+//   FilterOption({
+//     required this.title,
+//     required this.subFilters,
+//   });
+// }
+//
+// class SubFilterOption {
+//   final String title;
+//   bool isSelected;
+//
+//   SubFilterOption({
+//     required this.title,
+//     this.isSelected = false,
+//   });
+// }
 
 class CycleMenuPage extends StatefulWidget {
   //const CycleMenuPage({required Key key}) : super(key: key);
@@ -33,10 +33,20 @@ class CycleMenuPage extends StatefulWidget {
 
 class _CycleMenuPageState extends State<CycleMenuPage> {
   TextEditingController _searchController = TextEditingController();
-  String _selectedMenu = 'home'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+  String _selectedMenu = 'cycle'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
   List<CycleBlock> cycleBlocks = []; // สร้างรายการข้อมูลสำหรับ CycleBlock
   final _horizontalScrollController = ScrollController();
   final CycleService cycleService = CycleService();
+  List<CycleBlock> filteredCycleBlocks = [];
+  TextEditingController _cycleController = TextEditingController();
+  List<String> _items = ['DONE', 'IN PROGRESS', 'NEW CYCLE', 'CANCLE'];
+  List<bool> _selectedItems = List.filled(4, false);
+  DateTime? selectedStartDate;
+  DateTime? selectedDateEnd;
+  
+
+
+
 
   @override
   void dispose() {
@@ -46,60 +56,95 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
   @override
   void initState() {
     super.initState();
+    filteredCycleBlocks = [];
     cyclef();
   }
 
-  void cyclef() async {
-    cycleBlocks = await CycleService().getCycleBlock();
+  // void cyclef() async {
+  //   cycleBlocks = await CycleService().getCycleBlock();
+  // }
+
+  Future<void> cyclef() async {
+    try {
+      List<CycleBlock> data = await cycleService.getCycleBlock();
+      setState(() {
+        cycleBlocks = data; // กำหนดค่าข้อมูลให้กับตัวแปร cycleBlocks
+        filteredCycleBlocks = cycleBlocks; // กำหนดค่าข้อมูลเริ่มต้นให้กับตัวแปร filteredCycleBlocks
+      });
+    } catch (error) {
+      print("Error: $error");
+    }
   }
 
+  void filterDataByDate1(DateTime startDate) {
+    setState(() {
+      filteredCycleBlocks = filteredCycleBlocks.where((cycle) {
+        if (cycle.startDate != null) {
+          DateTime cycleStartDate = DateTime.parse(cycle.startDate!);
+          return cycleStartDate.isAtSameMomentAs(startDate);
+        }
+        return false;
+      }).toList();
+    });
+  }
+  Future<void> _selectDateStart(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedStartDate ?? DateTime.now(),
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2025),
+    );
 
+    if (pickedDate != null) {
+      setState(() {
+        selectedStartDate = pickedDate;
+        print(pickedDate);
+      });
+      filterDataByDate1(selectedStartDate!);
+    }
+  }
 
+  void filterDataByDate2(DateTime startDate) {
+    setState(() {
+      filteredCycleBlocks = filteredCycleBlocks.where((cycle) {
+        if (cycle.startDate != null) {
+          DateTime cycleStartDate = DateTime.parse(cycle.startDate!);
+          return cycleStartDate.isAtSameMomentAs(startDate);
+        }
+        return false;
+      }).toList();
+    });
+  }
+  Future<void> _selectDateEnd(BuildContext context) async {
+    final DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDateEnd ?? DateTime.now(),
+      firstDate: DateTime(2021),
+      lastDate: DateTime(2025),
+    );
 
-  List<FilterOption> filters = [
-    FilterOption(
-      title: 'Filter By Cycle',
-      subFilters: [
-        SubFilterOption(title: 'IN PROGRESS', isSelected: false),
-        SubFilterOption(title: 'CANCEL', isSelected: false),
-        SubFilterOption(title: 'DONE', isSelected: false),
-        SubFilterOption(title: 'NEW', isSelected: false),
-      ],
-    ),
-    FilterOption(
-      title: 'Filter By StartDate',
-      subFilters: [
-        SubFilterOption(title: 'IN PROGRESS', isSelected: false),
-        SubFilterOption(title: 'CANCEL', isSelected: false),
-        SubFilterOption(title: 'DONE', isSelected: false),
-        SubFilterOption(title: 'NEW', isSelected: false),
-      ],
-    ),
-    FilterOption(
-      title: 'Filter By EndDate',
-      subFilters: [
-        SubFilterOption(title: 'IN PROGRESS', isSelected: false),
-        SubFilterOption(title: 'CANCEL', isSelected: false),
-        SubFilterOption(title: 'DONE', isSelected: false),
-        SubFilterOption(title: 'NEW', isSelected: false),
-      ],
-    ),
-    FilterOption(
-      title: 'Filter By Status',
-      subFilters: [
-        SubFilterOption(title: 'IN PROGRESS', isSelected: false),
-        SubFilterOption(title: 'CANCEL', isSelected: false),
-        SubFilterOption(title: 'DONE', isSelected: false),
-        SubFilterOption(title: 'NEW', isSelected: false),
-      ],
-    ),
-  ];
+    if (pickedDate != null) {
+      setState(() {
+        selectedDateEnd = pickedDate;
+        print(pickedDate);
+      });
+      filterDataByDate2(selectedDateEnd!);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
+
+    int totalCycleBlocks = filteredCycleBlocks.length;
+    int inProgressCount = filteredCycleBlocks.where((block) => block.status == "IN_PROGRESS").length;
+    int newCycleCount = filteredCycleBlocks.where((block) => block.status == "NEW_CYCLE").length;
+    int doneCount = filteredCycleBlocks.where((block) => block.status == "DONE").length;
+    int incorrectCount = filteredCycleBlocks.where((block) => block.status == "CANCEL").length;
+
 
     return Scaffold(
       appBar: PreferredSize(
@@ -486,7 +531,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                           children: [
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 140 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
@@ -515,7 +560,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                             ),
                                           ),
                                           Text(
-                                            "325",
+                                            "$totalCycleBlocks",
                                             style: SafeGoogleFont(
                                               'Kanit',
                                               fontSize: 34 * ffem,
@@ -526,11 +571,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                           ),
                                         ],
                                       ),
-                                      Image.asset(
-                                        'assets/images/CYCLE.png',
-                                        width: 88 * ffem,
-                                        height: 88 * ffem,
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -538,7 +578,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 140 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
@@ -566,7 +606,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                             ),
                                           ),
                                           Text(
-                                            "325",
+                                            "$inProgressCount",
                                             style: SafeGoogleFont(
                                               'Kanit',
                                               fontSize: 34 * ffem,
@@ -577,11 +617,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                           ),
                                         ],
                                       ),
-                                      Image.asset(
-                                        'assets/images/inprogress.png',
-                                        width: 88 * ffem,
-                                        height: 88 * ffem,
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -589,7 +624,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 140 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
@@ -617,7 +652,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                             ),
                                           ),
                                           Text(
-                                            "325",
+                                            "$newCycleCount",
                                             style: SafeGoogleFont(
                                               'Kanit',
                                               fontSize: 34 * ffem,
@@ -628,11 +663,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                           ),
                                         ],
                                       ),
-                                      Image.asset(
-                                        'assets/images/new.png',
-                                        width: 88 * ffem,
-                                        height: 88 * ffem,
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -640,7 +670,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 140 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
@@ -668,7 +698,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                             ),
                                           ),
                                           Text(
-                                            "325",
+                                            "$doneCount",
                                             style: SafeGoogleFont(
                                               'Kanit',
                                               fontSize: 34 * ffem,
@@ -679,11 +709,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                           ),
                                         ],
                                       ),
-                                      Image.asset(
-                                        'assets/images/done.png',
-                                        width: 88 * ffem,
-                                        height: 88 * ffem,
-                                      ),
                                     ],
                                   ),
                                 ),
@@ -691,7 +716,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                             Container(
                               width: 312 * fem,
-                              height: 136 * fem,
+                              height: 140 * fem,
                               child: Card(
                                 child: Padding(
                                   padding: EdgeInsets.all(18.0),
@@ -719,7 +744,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                             ),
                                           ),
                                           Text(
-                                            "325",
+                                            "$incorrectCount",
                                             style: SafeGoogleFont(
                                               'Kanit',
                                               fontSize: 34 * ffem,
@@ -729,11 +754,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                             ),
                                           ),
                                         ], //
-                                      ),
-                                      Image.asset(
-                                        'assets/images/cancel.png',
-                                        width: 88 * ffem,
-                                        height: 88 * ffem,
                                       ),
                                     ],
                                   ),
@@ -764,27 +784,132 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             Expanded(
                               child: Row(
                                 mainAxisAlignment: MainAxisAlignment.end,
-                                children: filters.map((filter) {
-                                  return Container(
+                                children: [
+                                  Container(
                                     width: 200,
-                                    child: ExpansionTile(
-                                      title: Text(filter.title),
-                                      children: filter.subFilters.map((subFilter) {
-                                        return CheckboxListTile(
-                                          title: Text(subFilter.title),
-                                          value: subFilter.isSelected,
-                                          onChanged: (value) {
-                                            setState(() {
-                                              subFilter.isSelected = value ?? false;
-                                            });
-                                          },
+                                    child: TextField(
+                                      controller: _cycleController,
+                                      decoration: InputDecoration(
+                                        hintText: 'Search By Cycle',
+                                        contentPadding: EdgeInsets.fromLTRB(12, 12, 44, 12),
+                                        suffixIcon: IconButton(
+                                          onPressed: () {},
+                                          icon: Icon(
+                                            Icons.search,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ),
+                                      onChanged: (value) {
+                                        setState(() {
+                                          filteredCycleBlocks = cycleBlocks.where((block) {
+                                            return block.cycle!.toLowerCase().contains(value.toLowerCase());
+                                          }).toList();
+                                        });
+                                      },
+                                    ),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 8.0),
+                                    child: ElevatedButton(
+                                      onPressed: () => _selectDateStart(context),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                      ),
+                                      child: const Row(
+                                        children: [
+                                          SizedBox(width: 4),
+                                          Text('Filtter By StartDate',style: TextStyle(color: Colors.black),),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  Container(
+                                    margin: EdgeInsets.only(left: 8.0),
+                                    child: ElevatedButton(
+                                      onPressed: () => _selectDateEnd(context),
+                                      style: ElevatedButton.styleFrom(
+                                        backgroundColor: Colors.white,
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                      ),
+                                      child: const Row(
+                                        children: [
+                                          SizedBox(width: 4),
+                                          Text('Filtter By EndDate',style: TextStyle(color: Colors.black),),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+
+                                  Container(
+                                    margin: EdgeInsets.only(left: 8.0),
+                                    width: 200,
+                                    height: 30,
+                                    decoration: BoxDecoration(
+                                      color: Colors.white, // สีพื้นหลัง
+                                      borderRadius: BorderRadius.circular(6), // กำหนดรูปร่างเป็นวงกลม
+                                      boxShadow: [
+                                        BoxShadow(
+                                          color: Colors.grey.withOpacity(0.5), // สีเงา
+                                          spreadRadius: 2, // การกระจายของเงา
+                                          blurRadius: 4, // ความกว้างของเงา
+                                          offset: Offset(0, 2), // ตำแหน่งเงาแนวแกน x, y
+                                        ),
+                                      ],
+                                    ),
+                                    child: DropdownButton(
+                                      isExpanded: true,
+                                      hint: Text('Filter By Status'),
+                                      items: _items.map((String item) {
+                                        return DropdownMenuItem(
+                                          value: item,
+                                          child: Row(
+                                            children: [
+                                              Checkbox(
+                                                value: _selectedItems[_items.indexOf(item)],
+                                                onChanged: (bool? value) {
+                                                  setState(() {
+                                                    _selectedItems[_items.indexOf(item)] = value ?? false;
+                                                  });
+                                                },
+                                              ),
+                                              Text(item),
+                                            ],
+                                          ),
                                         );
                                       }).toList(),
+                                      onChanged: (value) {
+                                        // No action required when an item in the multiselect dropdown is selected
+                                      },
+                                      icon: Icon(Icons.arrow_drop_down),
+                                      iconSize: 24,
+                                      elevation: 16,
+                                      style: TextStyle(color: Colors.black),
                                     ),
-                                  );
-                                }).toList(),
+                                  ),
+                                  Container(
+                                    margin: EdgeInsets.only(left: 8.0),
+                                    child: ElevatedButton(
+                                      onPressed: () {
+                                        // ทำสิ่งที่ต้องการเมื่อปุ่ม submit ถูกคลิก
+                                        // เช่น ประมวลผลการกรองข้อมูล
+                                        // หรือแสดงผลลัพธ์ที่กรองแล้ว
+                                      },
+                                      child: Text('Submit'),
+                                    ),
+                                  ),
+
+                                ],
                               ),
                             ),
+
+
                           ],
                         ),
                         SizedBox(height: 20 * fem),
@@ -792,7 +917,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                 future: cycleService.getCycleBlock(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
-                    List<CycleBlock> cycleBlocks = snapshot.data!;
+                     //List<CycleBlock> filteredCycleBlocks = snapshot.data!;
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       controller: _horizontalScrollController,
@@ -892,16 +1017,16 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                           ),
                         ],
-                        rows: List<DataRow>.generate(cycleBlocks.length, (index) {
-                          CycleBlock cycleBlock = cycleBlocks[index];
-                          int rowNumber = index + 1;
+                        rows: List<DataRow>.generate(filteredCycleBlocks.length, (index) {
+                          CycleBlock cycleBlock = filteredCycleBlocks[index];
+                          int Number = index + 1;
                           return DataRow(
                             cells: [
                               DataCell(
                                 SizedBox(
                                   width: 50 * fem,
                                   child: Text(
-                                    '$rowNumber',
+                                    '$Number',
                                     style: SafeGoogleFont(
                                       'Kanit',
                                       fontSize: 16 * ffem,
