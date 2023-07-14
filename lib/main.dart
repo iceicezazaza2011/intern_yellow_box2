@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/src/asset_manifest.dart';
 import 'package:intern_yellow_box/Menu/CycleMenu.dart';
+import 'package:intern_yellow_box/reportMenu.dart';
 import 'Menu/Manu.dart';
 
 void main() {
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(1280 , 832),
+      designSize: const Size(1920,1080),
       builder: (context, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Yellow Box',
@@ -24,7 +25,8 @@ class MyApp extends StatelessWidget {
         ),
         //home: LoginPage(),//
         //home: MainMenuPage(),
-        home: CycleMenuPage(),
+        //home: CycleMenuPage(),
+        home: ReportPage(),
       ),
     );
   }
