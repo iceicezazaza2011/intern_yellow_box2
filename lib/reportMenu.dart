@@ -10,7 +10,13 @@ class ReportPage extends StatefulWidget {
 
 class _ReportPageState extends State<ReportPage> {
   TextEditingController _searchController = TextEditingController();
-  String _selectedMenu = 'home'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+  String _selectedMenu = 'report'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+  String _selectedReport = 'Audit Result'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+  TextEditingController searchController = TextEditingController();
+  String searchText = '';
+  Color backgroundColor = Color(0xfffca316);
+  Color textColor = Color(0xffffffff);
+  Color borderColor = Color(0xfffca316);
 
   @override
   void dispose() {
@@ -188,8 +194,8 @@ class _ReportPageState extends State<ReportPage> {
                         });
                       },
                       child: Container(
-                        padding:
-                        EdgeInsets.fromLTRB(9 * fem, 9 * fem, 0 * fem, 9 * fem),
+                        padding: EdgeInsets.fromLTRB(
+                            9 * fem, 9 * fem, 0 * fem, 9 * fem),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           border: Border.all(color: Color(0xff717171)),
@@ -337,8 +343,8 @@ class _ReportPageState extends State<ReportPage> {
                         });
                       },
                       child: Container(
-                        padding:
-                        EdgeInsets.fromLTRB(14 * fem, 9 * fem, 80 * fem, 9 * fem),
+                        padding: EdgeInsets.fromLTRB(
+                            14 * fem, 9 * fem, 80 * fem, 9 * fem),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           border: Border.all(color: Color(0xff717171)),
@@ -381,9 +387,536 @@ class _ReportPageState extends State<ReportPage> {
                 ),
               ),
             ),
+            Container(
+              // autogroupfx1bF4d (Q5RuU29MZHLT2yQDo5fX1B)
+              padding:
+                  EdgeInsets.fromLTRB(8 * fem, 16 * fem, 0 * fem, 20 * fem),
+              height: double.infinity,
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Container(
+                    // autogroupusdpNf3 (Q5RpQAazQLr5nSTAqSuSdP)
+                    margin:
+                        EdgeInsets.fromLTRB(0 * fem, 0 * fem, 8 * fem, 0 * fem),
+                    width: 216 * fem,
+                    height: double.infinity,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          // reportuQ5 (1:143)
+                          margin: EdgeInsets.fromLTRB(
+                              16 * fem, 0 * fem, 0 * fem, 16 * fem),
+                          child: Text(
+                            'REPORT',
+                            style: SafeGoogleFont(
+                              'Kanit',
+                              fontSize: 32 * ffem,
+                              fontWeight: FontWeight.w600,
+                              height: 1.495 * ffem / fem,
+                              color: Color(0xff323131),
+                            ),
+                          ),
+                        ),
+                        Container(
+                          // cycleEBT (1:144)
+                          padding: EdgeInsets.fromLTRB(
+                              0 * fem, 0 * fem, 0 * fem, 12 * fem),
+                          width: double.infinity,
+                          decoration: BoxDecoration(
+                            color: Color(0xffffffff),
+                            borderRadius: BorderRadius.circular(5 * fem),
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Container(
+                                // group46VdB (1:217)
+                                width: double.infinity,
+                                height: 40 * fem,
+                                decoration: BoxDecoration(
+                                  color: Color(0xfffca316),
+                                  borderRadius: BorderRadius.only(
+                                    topLeft: Radius.circular(5 * fem),
+                                    topRight: Radius.circular(5 * fem),
+                                  ),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'Cycle',
+                                    textAlign: TextAlign.center,
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 24 * ffem,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.495 * ffem / fem,
+                                      color: Color(0xffffffff),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                width: double.infinity,
+                                height: 32 * fem,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Color(0xffe5e5e5)),
+                                  color: Color(0xffffffff),
+                                ),
+                                child: TextField(
+                                  controller: searchController,
+                                  //textAlignVertical: TextAlignVertical.center, // แสดงข้อความตรงกลางแนวตั้ง
+                                  decoration: InputDecoration(
+                                    hintText: 'Search',
+                                    border: InputBorder.none,
+                                    contentPadding: EdgeInsets.only(left: 44),
+                                    // ย้ายแถบไปทางด้านซ้าย
+                                    suffixIcon: IconButton(
+                                      onPressed: () {
+                                        // คำสั่งที่ต้องการเมื่อกดปุ่มค้นหา
+                                        // ...
+                                      },
+                                      icon: Icon(
+                                        Icons.search,
+                                        size: 16,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                // c1dmK (1:212)
+                                width: double.infinity,
+                                height: 36 * fem,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Color(0xffe5e5e5)),
+                                  color: Color(0xffffe5bb),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'FMGT_2023_01_01',
+                                    textAlign: TextAlign.center,
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 16 * ffem,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.495 * ffem / fem,
+                                      color: Color(0xff323131),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                              Container(
+                                // c38CH (1:209)
+                                width: double.infinity,
+                                height: 36 * fem,
+                                decoration: BoxDecoration(
+                                  border: Border.all(color: Color(0xffe5e5e5)),
+                                  color: Color(0xffffffff),
+                                ),
+                                child: Center(
+                                  child: Text(
+                                    'FMGT_2023_01_01',
+                                    textAlign: TextAlign.center,
+                                    style: SafeGoogleFont(
+                                      'Kanit',
+                                      fontSize: 16 * ffem,
+                                      fontWeight: FontWeight.w600,
+                                      height: 1.495 * ffem / fem,
+                                      color: Color(0xff717171),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    // autogroupx7eyQ6V (Q5RqaYniP5wXuPXXmAX7ey)
+                    margin: EdgeInsets.fromLTRB(
+                        0 * fem, 66 * fem, 0 * fem, 0 * fem),
+                    width: 1452 * fem,
+                    height: 910 * fem,
+                    child: Stack(
+                      children: [
+                        Positioned(
+                          // frame12icy (1:224)
+                          left: 0 * fem,
+                          top: 39 * fem,
+                          child: Container(
+                            padding: EdgeInsets.fromLTRB(
+                                4 * fem, 82 * fem, 0 * fem, 4 * fem),
+                            width: 1452 * fem,
+                            height: 871 * fem,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Color(0xff717171)),
+                              color: Color(0xffffffff),
+                            ),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  // autogroupwrffaQH (Q5RqixiN3S5Uq5zz17wRff)
+                                  margin: EdgeInsets.fromLTRB(
+                                      0 * fem, 0 * fem, 0 * fem, 315 * fem),
+                                  width: 1660 * fem,
+                                  height: 460 * fem,
+                                  child: Stack(
+                                    children: [
+                                      ///// ใส่ข้อมูล Datatable /////
+                                    ],
+                                  ),
+                                ),
+                                Container(
+                                  // autogrouphfnyQfK (Q5RsHan2nhSCNGTxR7hfNy)
+                                  margin: EdgeInsets.fromLTRB(
+                                      10.99 * fem, 0 * fem, 0 * fem, 0 * fem),
+                                  width: 401.01 * fem,
+                                  height: 10 * fem,
+                                  child: Stack(
+                                    children: [
+                                      Positioned(
+                                        // rectangle88LYy (1:225)
+                                        left: 0 * fem,
+                                        top: 0 * fem,
+                                        child: Align(
+                                          child: SizedBox(
+                                            width: 399.76 * fem,
+                                            height: 10 * fem,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        10 * fem),
+                                                color: Color(0xffd9d9d9),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      Positioned(
+                                        // rectangle92FA9 (1:533)
+                                        left: 1.009765625 * fem,
+                                        top: 0 * fem,
+                                        child: Align(
+                                          child: SizedBox(
+                                            width: 400 * fem,
+                                            height: 10 * fem,
+                                            child: Container(
+                                              decoration: BoxDecoration(
+                                                borderRadius:
+                                                    BorderRadius.circular(
+                                                        5 * fem),
+                                                color: Color(0xffd9d9d9),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Positioned(
+                          // group52YQ9 (1:534)
+                          left: 0 * fem,
+                          top: 0 * fem,
+                          child: Container(
+                            width: 848 * fem,
+                            height: 40 * fem,
+                            child: Row(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                InkWell(
+                                  onTap: () {
+                                    setState(() {
+                                      backgroundColor = Colors.white;
+                                      textColor = Colors.black;
+                                      borderColor = Colors.black;
+                                      _selectedReport = 'Audit Result';
+                                    });
+                                  },
+                                  child: Container(
+                                    width: 107 * fem,
+                                    height: double.infinity,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: borderColor),
+                                      color: backgroundColor,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(5 * fem),
+                                        topRight: Radius.circular(5 * fem),
+                                      ),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        'Audit Result',
+                                        textAlign: TextAlign.center,
+                                        style: SafeGoogleFont(
+                                          'Kanit',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w600,
+                                          height: 1.495 * ffem / fem,
+                                          color: textColor,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                                Container(
+                                  padding: EdgeInsets.fromLTRB(8 * fem, 0 * fem, 0 * fem, 0 * fem),
+                                  height: double.infinity,
+                                  child: Row(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            backgroundColor = Colors.white;
+                                            textColor = Colors.black;
+                                            borderColor = Colors.black;
+                                            _selectedReport = 'Audit Overview';
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 130 * fem,
+                                          height: 39 * fem,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: borderColor),
+                                            color: backgroundColor,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(5 * fem),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              'Audit Overview',
+                                              textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 16 * ffem,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.495 * ffem / fem,
+                                                color: textColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8 * fem),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            backgroundColor = Colors.white;
+                                            textColor = Colors.black;
+                                            borderColor = Colors.black;
+                                            _selectedReport = 'Basket Overview';
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 139 * fem,
+                                          height: 39 * fem,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: borderColor),
+                                            color: backgroundColor,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(5 * fem),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              'Basket Overview',
+                                              textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 16 * ffem,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.495 * ffem / fem,
+                                                color: textColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(width: 8 * fem),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            backgroundColor = Colors.white;
+                                            textColor = Colors.black;
+                                            borderColor = Colors.black;
+                                            _selectedReport = 'Shop compliance';
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 143 * fem,
+                                          height: 39 * fem,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(color: borderColor),
+                                            color: backgroundColor,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(5 * fem),
+                                            ),
+                                          ),
+                                          child: Center(
+                                            child: Text(
+                                              'Shop compliance',
+                                              textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 16 * ffem,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.495 * ffem / fem,
+                                                color: textColor,
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 8 * fem,
+                                      ),
+                                      Container(
+                                        // component6dM3 (I1:534;228:491)
+                                        width: 48 * fem,
+                                        height: 39 * fem,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color(0xfffca316)),
+                                          color: Color(0xfffca316),
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(5 * fem),
+                                            topRight: Radius.circular(5 * fem),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'OOS',
+                                            textAlign: TextAlign.center,
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 16 * ffem,
+                                              fontWeight: FontWeight.w600,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xffffffff),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 8 * fem,
+                                      ),
+                                      Container(
+                                        // component7t25 (I1:534;228:494)
+                                        width: 47 * fem,
+                                        height: 39 * fem,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color(0xfffca316)),
+                                          color: Color(0xfffca316),
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(5 * fem),
+                                            topRight: Radius.circular(5 * fem),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'OSA',
+                                            textAlign: TextAlign.center,
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 16 * ffem,
+                                              fontWeight: FontWeight.w600,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xffffffff),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 8 * fem,
+                                      ),
+                                      Container(
+                                        // component8kKB (I1:534;228:497)
+                                        width: 120 * fem,
+                                        height: 39 * fem,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color(0xfffca316)),
+                                          color: Color(0xfffca316),
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(5 * fem),
+                                            topRight: Radius.circular(5 * fem),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Share Of Shelf',
+                                            textAlign: TextAlign.center,
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 16 * ffem,
+                                              fontWeight: FontWeight.w600,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xffffffff),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                      SizedBox(
+                                        width: 8 * fem,
+                                      ),
+                                      Container(
+                                        // component9cMP (I1:534;228:500)
+                                        width: 58 * fem,
+                                        height: 39 * fem,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                              color: Color(0xfffca316)),
+                                          color: Color(0xfffca316),
+                                          borderRadius: BorderRadius.only(
+                                            topLeft: Radius.circular(5 * fem),
+                                            topRight: Radius.circular(5 * fem),
+                                          ),
+                                        ),
+                                        child: Center(
+                                          child: Text(
+                                            'Score',
+                                            textAlign: TextAlign.center,
+                                            style: SafeGoogleFont(
+                                              'Kanit',
+                                              fontSize: 16 * ffem,
+                                              fontWeight: FontWeight.w600,
+                                              height: 1.495 * ffem / fem,
+                                              color: Color(0xffffffff),
+                                            ),
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
-      ),//
+      ), //
     );
   }
 }
