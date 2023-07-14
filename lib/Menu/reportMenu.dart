@@ -11,12 +11,16 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   TextEditingController _searchController = TextEditingController();
   String _selectedMenu = 'report'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
-  String _selectedReport = 'Audit Result'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+ // String _selectedReport = 'Audit Result'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
   TextEditingController searchController = TextEditingController();
   String searchText = '';
-  Color backgroundColor = Color(0xfffca316);
-  Color textColor = Color(0xffffffff);
-  Color borderColor = Color(0xfffca316);
+  Color defaultBackgroundColor = Color(0xfffca316);
+  Color defaultTextColor = Color(0xffffffff);
+  Color defaultBorderColor = Color(0xfffca316);
+  Color selectedBackgroundColor = Colors.white;
+  Color selectedTextColor = Colors.black;
+  Color selectedBorderColor = Colors.black;
+  String _selectedReport = '';
 
   @override
   void dispose() {
@@ -628,7 +632,7 @@ class _ReportPageState extends State<ReportPage> {
                           left: 0 * fem,
                           top: 0 * fem,
                           child: Container(
-                            width: 848 * fem,
+                            width: 1232 * fem,
                             height: 40 * fem,
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.center,
@@ -636,18 +640,21 @@ class _ReportPageState extends State<ReportPage> {
                                 InkWell(
                                   onTap: () {
                                     setState(() {
-                                      backgroundColor = Colors.white;
-                                      textColor = Colors.black;
-                                      borderColor = Colors.black;
                                       _selectedReport = 'Audit Result';
                                     });
                                   },
                                   child: Container(
-                                    width: 107 * fem,
+                                    width: 144 * fem,
                                     height: double.infinity,
                                     decoration: BoxDecoration(
-                                      border: Border.all(color: borderColor),
-                                      color: backgroundColor,
+                                      border: Border.all(
+                                        color: _selectedReport == 'Audit Result'
+                                            ? selectedBorderColor
+                                            : defaultBorderColor,
+                                      ),
+                                      color: _selectedReport == 'Audit Result'
+                                          ? selectedBackgroundColor
+                                          : defaultBackgroundColor,
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(5 * fem),
                                         topRight: Radius.circular(5 * fem),
@@ -662,7 +669,9 @@ class _ReportPageState extends State<ReportPage> {
                                           fontSize: 16 * ffem,
                                           fontWeight: FontWeight.w600,
                                           height: 1.495 * ffem / fem,
-                                          color: textColor,
+                                          color: _selectedReport == 'Audit Result'
+                                              ? selectedTextColor
+                                              : defaultTextColor,
                                         ),
                                       ),
                                     ),
@@ -677,18 +686,21 @@ class _ReportPageState extends State<ReportPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            backgroundColor = Colors.white;
-                                            textColor = Colors.black;
-                                            borderColor = Colors.black;
                                             _selectedReport = 'Audit Overview';
                                           });
                                         },
                                         child: Container(
-                                          width: 130 * fem,
+                                          width: 144 * fem,
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: borderColor),
-                                            color: backgroundColor,
+                                            border: Border.all(
+                                              color: _selectedReport == 'Audit Overview'
+                                                  ? selectedBorderColor
+                                                  : defaultBorderColor,
+                                            ),
+                                            color: _selectedReport == 'Audit Overview'
+                                                ? selectedBackgroundColor
+                                                : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
                                               topRight: Radius.circular(5 * fem),
@@ -703,7 +715,9 @@ class _ReportPageState extends State<ReportPage> {
                                                 fontSize: 16 * ffem,
                                                 fontWeight: FontWeight.w600,
                                                 height: 1.495 * ffem / fem,
-                                                color: textColor,
+                                                color: _selectedReport == 'Audit Overview'
+                                                    ? selectedTextColor
+                                                    : defaultTextColor,
                                               ),
                                             ),
                                           ),
@@ -713,18 +727,21 @@ class _ReportPageState extends State<ReportPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            backgroundColor = Colors.white;
-                                            textColor = Colors.black;
-                                            borderColor = Colors.black;
                                             _selectedReport = 'Basket Overview';
                                           });
                                         },
                                         child: Container(
-                                          width: 139 * fem,
+                                          width: 144 * fem,
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: borderColor),
-                                            color: backgroundColor,
+                                            border: Border.all(
+                                              color: _selectedReport == 'Basket Overview'
+                                                  ? selectedBorderColor
+                                                  : defaultBorderColor,
+                                            ),
+                                            color: _selectedReport == 'Basket Overview'
+                                                ? selectedBackgroundColor
+                                                : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
                                               topRight: Radius.circular(5 * fem),
@@ -739,7 +756,9 @@ class _ReportPageState extends State<ReportPage> {
                                                 fontSize: 16 * ffem,
                                                 fontWeight: FontWeight.w600,
                                                 height: 1.495 * ffem / fem,
-                                                color: textColor,
+                                                color: _selectedReport == 'Basket Overview'
+                                                    ? selectedTextColor
+                                                    : defaultTextColor,
                                               ),
                                             ),
                                           ),
@@ -749,18 +768,21 @@ class _ReportPageState extends State<ReportPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            backgroundColor = Colors.white;
-                                            textColor = Colors.black;
-                                            borderColor = Colors.black;
-                                            _selectedReport = 'Shop compliance';
+                                            _selectedReport = 'Shop Compliance';
                                           });
                                         },
                                         child: Container(
-                                          width: 143 * fem,
+                                          width: 144 * fem,
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
-                                            border: Border.all(color: borderColor),
-                                            color: backgroundColor,
+                                            border: Border.all(
+                                              color: _selectedReport == 'Shop Compliance'
+                                                  ? selectedBorderColor
+                                                  : defaultBorderColor,
+                                            ),
+                                            color: _selectedReport == 'Shop Compliance'
+                                                ? selectedBackgroundColor
+                                                : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
                                               topRight: Radius.circular(5 * fem),
@@ -768,14 +790,16 @@ class _ReportPageState extends State<ReportPage> {
                                           ),
                                           child: Center(
                                             child: Text(
-                                              'Shop compliance',
+                                              'Shop Compliance',
                                               textAlign: TextAlign.center,
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
                                                 fontWeight: FontWeight.w600,
                                                 height: 1.495 * ffem / fem,
-                                                color: textColor,
+                                                color: _selectedReport == 'Shop Compliance'
+                                                    ? selectedTextColor
+                                                    : defaultTextColor,
                                               ),
                                             ),
                                           ),
@@ -784,29 +808,42 @@ class _ReportPageState extends State<ReportPage> {
                                       SizedBox(
                                         width: 8 * fem,
                                       ),
-                                      Container(
-                                        // component6dM3 (I1:534;228:491)
-                                        width: 48 * fem,
-                                        height: 39 * fem,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Color(0xfffca316)),
-                                          color: Color(0xfffca316),
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5 * fem),
-                                            topRight: Radius.circular(5 * fem),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedReport = 'OOS';
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 144 * fem,
+                                          height: 39 * fem,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: _selectedReport == 'OOS'
+                                                  ? selectedBorderColor
+                                                  : defaultBorderColor,
+                                            ),
+                                            color: _selectedReport == 'OOS'
+                                                ? selectedBackgroundColor
+                                                : defaultBackgroundColor,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(5 * fem),
+                                            ),
                                           ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'OOS',
-                                            textAlign: TextAlign.center,
-                                            style: SafeGoogleFont(
-                                              'Kanit',
-                                              fontSize: 16 * ffem,
-                                              fontWeight: FontWeight.w600,
-                                              height: 1.495 * ffem / fem,
-                                              color: Color(0xffffffff),
+                                          child: Center(
+                                            child: Text(
+                                              'OOS',
+                                              textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 16 * ffem,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.495 * ffem / fem,
+                                                color: _selectedReport == 'OOS'
+                                                    ? selectedTextColor
+                                                    : defaultTextColor,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -814,29 +851,42 @@ class _ReportPageState extends State<ReportPage> {
                                       SizedBox(
                                         width: 8 * fem,
                                       ),
-                                      Container(
-                                        // component7t25 (I1:534;228:494)
-                                        width: 47 * fem,
-                                        height: 39 * fem,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Color(0xfffca316)),
-                                          color: Color(0xfffca316),
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5 * fem),
-                                            topRight: Radius.circular(5 * fem),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedReport = 'OSA';
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 144 * fem,
+                                          height: 39 * fem,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: _selectedReport == 'OSA'
+                                                  ? selectedBorderColor
+                                                  : defaultBorderColor,
+                                            ),
+                                            color: _selectedReport == 'OSA'
+                                                ? selectedBackgroundColor
+                                                : defaultBackgroundColor,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(5 * fem),
+                                            ),
                                           ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'OSA',
-                                            textAlign: TextAlign.center,
-                                            style: SafeGoogleFont(
-                                              'Kanit',
-                                              fontSize: 16 * ffem,
-                                              fontWeight: FontWeight.w600,
-                                              height: 1.495 * ffem / fem,
-                                              color: Color(0xffffffff),
+                                          child: Center(
+                                            child: Text(
+                                              'OSA',
+                                              textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 16 * ffem,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.495 * ffem / fem,
+                                                color: _selectedReport == 'OSA'
+                                                    ? selectedTextColor
+                                                    : defaultTextColor,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -844,29 +894,42 @@ class _ReportPageState extends State<ReportPage> {
                                       SizedBox(
                                         width: 8 * fem,
                                       ),
-                                      Container(
-                                        // component8kKB (I1:534;228:497)
-                                        width: 120 * fem,
-                                        height: 39 * fem,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Color(0xfffca316)),
-                                          color: Color(0xfffca316),
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5 * fem),
-                                            topRight: Radius.circular(5 * fem),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedReport = 'Share Of Shelf';
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 144 * fem,
+                                          height: 39 * fem,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: _selectedReport == 'Share Of Shelf'
+                                                  ? selectedBorderColor
+                                                  : defaultBorderColor,
+                                            ),
+                                            color: _selectedReport == 'Share Of Shelf'
+                                                ? selectedBackgroundColor
+                                                : defaultBackgroundColor,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(5 * fem),
+                                            ),
                                           ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Share Of Shelf',
-                                            textAlign: TextAlign.center,
-                                            style: SafeGoogleFont(
-                                              'Kanit',
-                                              fontSize: 16 * ffem,
-                                              fontWeight: FontWeight.w600,
-                                              height: 1.495 * ffem / fem,
-                                              color: Color(0xffffffff),
+                                          child: Center(
+                                            child: Text(
+                                              'Share Of Shelf',
+                                              textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 16 * ffem,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.495 * ffem / fem,
+                                                color: _selectedReport == 'Share Of Shelf'
+                                                    ? selectedTextColor
+                                                    : defaultTextColor,
+                                              ),
                                             ),
                                           ),
                                         ),
@@ -874,29 +937,42 @@ class _ReportPageState extends State<ReportPage> {
                                       SizedBox(
                                         width: 8 * fem,
                                       ),
-                                      Container(
-                                        // component9cMP (I1:534;228:500)
-                                        width: 58 * fem,
-                                        height: 39 * fem,
-                                        decoration: BoxDecoration(
-                                          border: Border.all(
-                                              color: Color(0xfffca316)),
-                                          color: Color(0xfffca316),
-                                          borderRadius: BorderRadius.only(
-                                            topLeft: Radius.circular(5 * fem),
-                                            topRight: Radius.circular(5 * fem),
+                                      InkWell(
+                                        onTap: () {
+                                          setState(() {
+                                            _selectedReport = 'Score';
+                                          });
+                                        },
+                                        child: Container(
+                                          width: 144 * fem,
+                                          height: 39 * fem,
+                                          decoration: BoxDecoration(
+                                            border: Border.all(
+                                              color: _selectedReport == 'Score'
+                                                  ? selectedBorderColor
+                                                  : defaultBorderColor,
+                                            ),
+                                            color: _selectedReport == 'Score'
+                                                ? selectedBackgroundColor
+                                                : defaultBackgroundColor,
+                                            borderRadius: BorderRadius.only(
+                                              topLeft: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(5 * fem),
+                                            ),
                                           ),
-                                        ),
-                                        child: Center(
-                                          child: Text(
-                                            'Score',
-                                            textAlign: TextAlign.center,
-                                            style: SafeGoogleFont(
-                                              'Kanit',
-                                              fontSize: 16 * ffem,
-                                              fontWeight: FontWeight.w600,
-                                              height: 1.495 * ffem / fem,
-                                              color: Color(0xffffffff),
+                                          child: Center(
+                                            child: Text(
+                                              'Score',
+                                              textAlign: TextAlign.center,
+                                              style: SafeGoogleFont(
+                                                'Kanit',
+                                                fontSize: 16 * ffem,
+                                                fontWeight: FontWeight.w600,
+                                                height: 1.495 * ffem / fem,
+                                                color: _selectedReport == 'Score'
+                                                    ? selectedTextColor
+                                                    : defaultTextColor,
+                                              ),
                                             ),
                                           ),
                                         ),
