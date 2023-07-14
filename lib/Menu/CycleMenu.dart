@@ -142,7 +142,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     int totalCycleBlocks = filteredCycleBlocks.length;
     int inProgressCount = filteredCycleBlocks.where((block) => block.status == "IN_PROGRESS").length;
     int newCycleCount = filteredCycleBlocks.where((block) => block.status == "NEW_CYCLE").length;
-    int doneCount = filteredCycleBlocks.where((block) => block.status == "DONE").length;//
+    int doneCount = filteredCycleBlocks.where((block) => block.status == "DONE").length;
     int incorrectCount = filteredCycleBlocks.where((block) => block.status == "CANCEL").length;
 
 
