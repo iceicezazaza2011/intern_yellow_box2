@@ -4,25 +4,6 @@ import 'package:intern_yellow_box/utils.dart';
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
 
-// class FilterOption {
-//   final String title;
-//   final List<SubFilterOption> subFilters;
-//
-//   FilterOption({
-//     required this.title,
-//     required this.subFilters,
-//   });
-// }
-//
-// class SubFilterOption {
-//   final String title;
-//   bool isSelected;
-//
-//   SubFilterOption({
-//     required this.title,
-//     this.isSelected = false,
-//   });
-// }
 
 class CycleMenuPage extends StatefulWidget {
   //const CycleMenuPage({required Key key}) : super(key: key);
@@ -43,7 +24,29 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
   List<bool> _selectedItems = List.filled(4, false);
   DateTime? selectedStartDate;
   DateTime? selectedDateEnd;
-  
+  bool _issearchconTextNotEmpty = false;
+  String searchFilter = '';
+
+  late Future<List<CycleBlock>> futureCycle;
+
+  void _searchClearText() {
+    _cycleController.clear();
+    setState(() {
+      _issearchconTextNotEmpty = false;
+
+    });
+  }
+
+  // void loadData() {
+  //   futureCycle = cycleService.getCycleBlock(); // เรียกใช้ CycleService เพื่อดึงข้อมูล CycleBlock
+  //   futureCycle.then((data) {
+  //     setState(() {
+  //       cycleBlocks = data; // อัปเดตข้อมูล CycleBlock
+  //       filteredCycleBlocks = cycleBlocks; // อัปเดตข้อมูล filteredCycleBlocks ด้วยข้อมูลเดียวกัน
+  //     });
+  //   });
+  // }
+
 
 
 
@@ -57,6 +60,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
   void initState() {
     super.initState();
     filteredCycleBlocks = [];
+    futureCycle = cycleService.getCycleBlock();
     cyclef();
   }
 
@@ -76,17 +80,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     }
   }
 
-  void filterDataByDate1(DateTime startDate) {
-    setState(() {
-      filteredCycleBlocks = filteredCycleBlocks.where((cycle) {
-        if (cycle.startDate != null) {
-          DateTime cycleStartDate = DateTime.parse(cycle.startDate!);
-          return cycleStartDate.isAtSameMomentAs(startDate);
-        }
-        return false;
-      }).toList();
-    });
-  }
   Future<void> _selectDateStart(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -98,23 +91,10 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     if (pickedDate != null) {
       setState(() {
         selectedStartDate = pickedDate;
-        print(pickedDate);
       });
-      filterDataByDate1(selectedStartDate!);
     }
   }
 
-  void filterDataByDate2(DateTime startDate) {
-    setState(() {
-      filteredCycleBlocks = filteredCycleBlocks.where((cycle) {
-        if (cycle.startDate != null) {
-          DateTime cycleStartDate = DateTime.parse(cycle.startDate!);
-          return cycleStartDate.isAtSameMomentAs(startDate);
-        }
-        return false;
-      }).toList();
-    });
-  }
   Future<void> _selectDateEnd(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
       context: context,
@@ -126,9 +106,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
     if (pickedDate != null) {
       setState(() {
         selectedDateEnd = pickedDate;
-        print(pickedDate);
       });
-      filterDataByDate2(selectedDateEnd!);
     }
   }
 
@@ -792,23 +770,26 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                       decoration: InputDecoration(
                                         hintText: 'Search By Cycle',
                                         contentPadding: EdgeInsets.fromLTRB(12, 12, 44, 12),
-                                        suffixIcon: IconButton(
-                                          onPressed: () {},
+                                        suffixIcon: _issearchconTextNotEmpty
+                                            ? IconButton(
+                                          onPressed: _searchClearText,
                                           icon: Icon(
-                                            Icons.search,
-                                            size: 24,
+                                            Icons.cancel,
+                                            size: 20,
+                                            color: Colors.grey,
                                           ),
-                                        ),
+                                        )
+                                            : null,
                                       ),
                                       onChanged: (value) {
                                         setState(() {
-                                          filteredCycleBlocks = cycleBlocks.where((block) {
-                                            return block.cycle!.toLowerCase().contains(value.toLowerCase());
-                                          }).toList();
+                                          searchFilter = value;
+                                          _issearchconTextNotEmpty = value.isNotEmpty;
                                         });
                                       },
                                     ),
                                   ),
+
                                   Container(
                                     margin: EdgeInsets.only(left: 8.0),
                                     child: ElevatedButton(
@@ -819,10 +800,20 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                           borderRadius: BorderRadius.circular(8.0),
                                         ),
                                       ),
-                                      child: const Row(
+                                      child: Row(
                                         children: [
                                           SizedBox(width: 4),
-                                          Text('Filtter By StartDate',style: TextStyle(color: Colors.black),),
+                                          if (selectedStartDate == null)
+                                            Text(
+                                              'Filter By StartDate',
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          if (selectedStartDate != null)
+                                            Text(
+                                              '${selectedStartDate?.day}/${selectedStartDate?.month}/${selectedStartDate?.year}',
+                                              style: TextStyle(color: Colors.black),
+                                            ),
+                                          //Text('Filtter By StartDate //selectedStartDate',style: TextStyle(color: Colors.black),),
                                         ],
                                       ),
                                     ),
@@ -838,12 +829,22 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                           borderRadius: BorderRadius.circular(8.0),
                                         ),
                                       ),
-                                      child: const Row(
+                                      child: Row(
                                         children: [
                                           SizedBox(width: 4),
-                                          Text('Filtter By EndDate',style: TextStyle(color: Colors.black),),
+                                          if (selectedDateEnd == null)
+                                          Text(
+                                            'Filter By EndDate',
+                                            style: TextStyle(color: Colors.black),
+                                          ),
+                                          if (selectedDateEnd != null)
+                                            Text(
+                                              '${selectedDateEnd?.day}/${selectedDateEnd?.month}/${selectedDateEnd?.year}',
+                                              style: TextStyle(color: Colors.black),
+                                            ),
                                         ],
                                       ),
+
                                     ),
                                   ),
 
@@ -893,17 +894,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                       style: TextStyle(color: Colors.black),
                                     ),
                                   ),
-                                  Container(
-                                    margin: EdgeInsets.only(left: 8.0),
-                                    child: ElevatedButton(
-                                      onPressed: () {
-                                        // ทำสิ่งที่ต้องการเมื่อปุ่ม submit ถูกคลิก
-                                        // เช่น ประมวลผลการกรองข้อมูล
-                                        // หรือแสดงผลลัพธ์ที่กรองแล้ว
-                                      },
-                                      child: Text('Submit'),
-                                    ),
-                                  ),
+
 
                                 ],
                               ),
@@ -914,10 +905,59 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                         ),
                         SizedBox(height: 20 * fem),
               FutureBuilder<List<CycleBlock>>(
-                future: cycleService.getCycleBlock(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
+                future: futureCycle,
+                builder: (context, cycles) {
+                  if (cycles.hasData) {
                      //List<CycleBlock> filteredCycleBlocks = snapshot.data!;
+                    var cycleBlockWithFilter = cycles.data;
+
+                    cycleBlockWithFilter = cycleBlockWithFilter!.where((cycle) {
+                    if (cycle.cycle != null ) {
+                        return cycle.cycle!.toUpperCase().contains(searchFilter.toUpperCase().trim());
+                      }
+                      return false;
+                    }).toList();
+
+
+                    cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
+                      if(selectedStartDate==null){return true;}
+                      else if (cycle.startDate != null ) {
+                        DateTime cycleStartDate = DateTime.parse(cycle.startDate!);
+                        return cycleStartDate.isAtSameMomentAs(selectedStartDate!);
+                      }
+                      return false;
+                    }).toList();
+
+
+                    cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
+                      if(selectedDateEnd==null){return true;}
+                      else if (cycle.endDate != null ) {
+                        DateTime cycleStartDate = DateTime.parse(cycle.endDate!);
+                        return cycleStartDate.isAtSameMomentAs(selectedDateEnd!);
+                      }
+                      return false;
+                    }).toList();
+
+                    List<String> filteredItems = [];
+
+                    for (int i = 0; i < _selectedItems.length; i++) {
+                      if (_selectedItems[i]) {
+                        filteredItems.add(_items[i]);
+                      }
+                    }
+
+                    cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
+                      if (filteredItems.isEmpty) {
+                        return true;
+                      } else if (cycle.status != null && filteredItems.contains(cycle.status!)) {
+                        return true;
+                      }
+                      return false;
+                    }).toList();
+
+
+
+
                     return SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
                       controller: _horizontalScrollController,
@@ -1017,8 +1057,8 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                             ),
                           ),
                         ],
-                        rows: List<DataRow>.generate(filteredCycleBlocks.length, (index) {
-                          CycleBlock cycleBlock = filteredCycleBlocks[index];
+                        rows: List<DataRow>.generate(cycleBlockWithFilter.length, (index) {
+                          CycleBlock cycleBlock = cycleBlockWithFilter![index];
                           int Number = index + 1;
                           return DataRow(
                             cells: [
@@ -1100,16 +1140,27 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                 ),
                               ),
                               DataCell(
-                                SizedBox(
-                                  width: 300 * fem,
-                                  child: Text(
-                                    cycleBlock.status!,
-                                    style: SafeGoogleFont(
-                                      'Kanit',
-                                      fontSize: 16 * ffem,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.495 * ffem / fem,
-                                      color: Color(0xff717171),
+                                Container(
+                                  width: 100 * fem,
+                                  height: 30 * fem,
+                                  decoration: BoxDecoration(
+                                  border: Border.all(color: cycleBlock.getStatusColor()),
+                                  color: cycleBlock.getStatusColor(),
+                                      borderRadius: BorderRadius.circular(5 * fem)
+                                  ),
+                                  child: Center(
+                                    child: SizedBox(
+                                      width: 300 * fem,
+                                      child: Text(
+                                        cycleBlock.status!,
+                                        style: SafeGoogleFont(
+                                          'Kanit',
+                                          fontSize: 16 * ffem,
+                                          fontWeight: FontWeight.w400,
+                                          height: 1.495 * ffem / fem,
+                                          color: Color(0xffffffff),
+                                        ),
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -1119,8 +1170,8 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                         }).toList(),
                       ),
                     );
-                  } else if (snapshot.hasError) {
-                    return Text("Error: ${snapshot.error}");
+                  } else if (cycles.hasError) {
+                    return Text("Error: ${cycles.error}");
                   } else {
                     return const Center(
                       child: SpinKitDualRing(
