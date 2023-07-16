@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intern_yellow_box/Login.dart';
+import 'package:intern_yellow_box/Menu/reportMenu.dart';
 import 'package:intern_yellow_box/utils.dart';
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
+import 'Manu.dart';
 
 
 class CycleMenuPage extends StatefulWidget {
@@ -290,6 +292,14 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                       onTap: () {
                         setState(() {
                           _selectedMenu = 'home';
+                          if (_selectedMenu == 'dashboard') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainMenuPage(),
+                              ),
+                            );
+                          }
                         });
                       },
                       child: Container(
@@ -343,6 +353,14 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                       onTap: () {
                         setState(() {
                           _selectedMenu = 'cycle';
+                          if (_selectedMenu == 'cycle') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CycleMenuPage(),
+                              ),
+                            );
+                          }
                         });
                       },
                       child: Container(
@@ -391,6 +409,14 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                       onTap: () {
                         setState(() {
                           _selectedMenu = 'report';
+                          if (_selectedMenu == 'report') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReportPage(),
+                              ),
+                            );
+                          }
                         });
                       },
                       child: Container(
@@ -439,6 +465,14 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                       onTap: () {
                         setState(() {
                           _selectedMenu = 'dashboard';
+                          if (_selectedMenu == 'dashboard') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainMenuPage(),
+                              ),
+                            );
+                          }
                         });
                       },
                       child: Container(
