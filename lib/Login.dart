@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intern_yellow_box/Menu/CycleMenu.dart';
 import 'package:intern_yellow_box/uppercase.dart';
 import 'Menu/Manu.dart';
 import 'package:flutter/gestures.dart';
@@ -49,15 +50,15 @@ class _LoginPageState extends State<LoginPage> {
     String password = Password.text.trim();
     String org = Org.text.trim();
 
-    if (name.isEmpty || password.isEmpty) {
+    if (name.isEmpty || password.isEmpty || org.isEmpty) {
       setState(() {
         _messageWidget = buildMessageWidget(
-            'กรุณากรอก  ชื่อผู้ใช้ หรือ รหัสผ่าน', Colors.red);
+            'กรุณากรอก องค์กร หรือ ชื่อผู้ใช้ หรือ รหัสผ่าน', Colors.red);
       });
-    } else if (name != 'admin' || password != '1234' ) {
+    } else if (name != 'admin' || password != '1234' || org != 'ZEEN') {
       setState(() {//
         _messageWidget = buildMessageWidget(
-            'ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง', Colors.red);
+            'องค์กร หรือ ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง', Colors.red);
       });
     } else {
       setState(() {
@@ -67,7 +68,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) => const MainMenuPage(),
+          builder: (context) =>  CycleMenuPage(),
         ),
       );
     }
@@ -95,9 +96,8 @@ class _LoginPageState extends State<LoginPage> {
     double baseWidth = 1920;
     double fem = MediaQuery.of(context).size.width / baseWidth;
     double ffem = fem * 0.97;
-    return Container(
-      width: double.infinity,
-      child: Container(
+    return Scaffold(
+      body: Container(
         // loginoFP (9:64)
         padding: EdgeInsets.fromLTRB(1*fem, 0*fem, 0*fem, 0*fem),
         width: double.infinity,
@@ -129,7 +129,7 @@ class _LoginPageState extends State<LoginPage> {
             ),
             Container(
               // frame2qjo (9:67)
-              padding: EdgeInsets.fromLTRB(192*fem, 132*fem, 200*fem, 100*fem),
+              padding: EdgeInsets.fromLTRB(192*fem, 132*fem, 200*fem, 50*fem),
               width: 1000*fem,
               height: 1080*fem,
               decoration: BoxDecoration (
@@ -148,67 +148,194 @@ class _LoginPageState extends State<LoginPage> {
                       fit: BoxFit.cover,
                     ),
                   ),
+                  if (_messageWidget != null) _messageWidget!,
                   Container(
-                    // usernamedff (9:78)
-                    margin: EdgeInsets.fromLTRB(26*fem, 0*fem, 26.61*fem, 32*fem),
-                    padding: EdgeInsets.fromLTRB(24*fem, 14*fem, 24*fem, 14*fem),
-                    width: double.infinity,
-                    decoration: BoxDecoration (
+                    margin: EdgeInsets.fromLTRB(26 * fem, 0, 26.61 * fem, 32 * fem),
+                   // padding: EdgeInsets.fromLTRB(24 * fem, 14 * fem, 24 * fem, 14 * fem),
+                    width: double.infinity, // Adjusted height to 64
+                    decoration: BoxDecoration(
                       border: Border.all(color: Color(0xffd2d2d2)),
                       color: Color(0xfff1f1f1),
-                      borderRadius: BorderRadius.circular(8*fem),
+                      borderRadius: BorderRadius.circular(8 * fem),
                     ),
-                    child: Text(
-                      'ORG',
-                      style: SafeGoogleFont (
-                        'Kanit',
-                        fontSize: 24*ffem,
-                        fontWeight: FontWeight.w400,
-                        height: 1.495*ffem/fem,
-                        color: Color(0xff717171),
-                      ),
+                    child: Stack(
+                      alignment: Alignment.centerRight,
+                      children: [
+                        TextField(
+                          style: Theme.of(context).textTheme.bodyText1,
+                          textAlign: TextAlign.left,
+                          controller: Org,
+                          onChanged: (value) {
+                            setState(() {
+                              _isOrgTextNotEmpty = value.isNotEmpty;
+                            });
+                          },
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'องค์กร',
+                            labelStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 20 * ffem,
+                              fontWeight: FontWeight.w400,
+                              height: 1.495 * ffem / fem,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.account_balance_sharp,
+                              color: Colors.grey,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                          inputFormatters: [
+                            UpperCaseTxt(), // เพิ่มคลาส UpperCaseTextFormatter() ที่สร้างขึ้น
+                          ],
+                        ),
+                        if (_isOrgTextNotEmpty)
+                          Positioned(
+                            right: 0,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.cancel,
+                                size: 20,
+                                color: Colors.grey,
+                              ),
+                              onPressed: _OrgclearText,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   Container(
                     // usernameCsB (9:68)
                     margin: EdgeInsets.fromLTRB(26*fem, 0*fem, 26.61*fem, 32*fem),
-                    padding: EdgeInsets.fromLTRB(24*fem, 14*fem, 24*fem, 14*fem),
+                    //padding: EdgeInsets.fromLTRB(24*fem, 14*fem, 24*fem, 14*fem),
                     width: double.infinity,
                     decoration: BoxDecoration (
                       border: Border.all(color: Color(0xffd2d2d2)),
                       color: Color(0xfff1f1f1),
                       borderRadius: BorderRadius.circular(8*fem),
                     ),
-                    child: Text(
-                      'Username',
-                      style: SafeGoogleFont (
-                        'Kanit',
-                        fontSize: 24*ffem,
-                        fontWeight: FontWeight.w400,
-                        height: 1.495*ffem/fem,
-                        color: Color(0xff717171),
-                      ),
+                    child:  Stack(
+                      alignment: Alignment.centerRight,
+                      children: [
+                        TextField(
+                          style: Theme.of(context).textTheme.bodyText1,
+                          textAlign: TextAlign.left,
+                          controller: Name,
+                          onChanged: (value) {
+                            setState(() {
+                              _isNameTextNotEmpty = value.isNotEmpty;
+                            });
+                          },
+                          keyboardType: TextInputType.name,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'ชื่อผู้ใช้',
+                            labelStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 20 * ffem,
+                              fontWeight: FontWeight.w400,
+                              height: 1.495 * ffem / fem,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.person,
+                              color: Colors.grey,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                        if (_isNameTextNotEmpty)
+                          Positioned(
+                            right: 0,
+                            child: IconButton(
+                              icon: Icon(
+                                Icons.cancel,
+                                size: 20,
+                                color: Colors.grey,
+                              ),
+                              onPressed: _nameclearText,
+                            ),
+                          ),
+                      ],
                     ),
                   ),
                   Container(
                     // passwardfEy (9:74)
                     margin: EdgeInsets.fromLTRB(26*fem, 0*fem, 26.61*fem, 64*fem),
-                    padding: EdgeInsets.fromLTRB(24*fem, 14*fem, 24*fem, 14*fem),
+                    //padding: EdgeInsets.fromLTRB(24*fem, 14*fem, 24*fem, 14*fem),
                     width: double.infinity,
                     decoration: BoxDecoration (
                       border: Border.all(color: Color(0xffd2d2d2)),
                       color: Color(0xfff1f1f1),
                       borderRadius: BorderRadius.circular(8*fem),
                     ),
-                    child: Text(
-                      'Passward',
-                      style: SafeGoogleFont (
-                        'Kanit',
-                        fontSize: 24*ffem,
-                        fontWeight: FontWeight.w400,
-                        height: 1.495*ffem/fem,
-                        color: Color(0xff717171),
-                      ),
+                    child:  Stack(
+                      alignment: Alignment.centerRight,
+                      children: [
+                        TextField(
+                          style: Theme.of(context).textTheme.bodyText1,
+                          textAlign: TextAlign.left,
+                          controller: Password,
+                          keyboardType: TextInputType.number,
+                          obscureText: obscureText,
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'รหัสผ่าน',
+                            labelStyle: TextStyle(
+                              color: Colors.grey,
+                              fontSize: 20*ffem,
+                              fontWeight: FontWeight.w400,
+                              height: 1.495*ffem/fem,
+                            ),
+                            prefixIcon: Icon(
+                              Icons.lock,
+                              color: Colors.grey,
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Colors.grey,
+                              ),
+                            ),
+                            suffixIcon: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  obscureText = !obscureText;
+                                });
+                              },
+                              child: Icon(
+                                obscureText
+                                    ? Icons.visibility_off
+                                    : Icons.visibility,
+                                size: 20*ffem,
+                                color: Colors.grey,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                   Container(
@@ -221,17 +348,25 @@ class _LoginPageState extends State<LoginPage> {
                       color: Color(0xfffa7003),
                       borderRadius: BorderRadius.circular(8*fem),
                     ),
-                    child: Center(
-                      child: Text(
-                        'Login',
-                        style: SafeGoogleFont (
-                          'Kanit',
-                          fontSize: 24*ffem,
-                          fontWeight: FontWeight.w400,
-                          height: 1.495*ffem/fem,
-                          color: Color(0xffffffff),
+                    child: ElevatedButton(
+                      onPressed: () => login(context),
+                      style: ElevatedButton.styleFrom(
+                        primary: Colors.orange,
+                        onPrimary: Colors.white,
+                        onSurface: Colors.orange,
+                      ),
+                      child: Center(
+                        child: Text('เข้าสู่ระบบ',
+                          style: SafeGoogleFont (
+                            'Kanit',
+                            fontSize: 24*ffem,
+                            fontWeight: FontWeight.w400,
+                            height: 1.495*ffem/fem,
+                            color: Color(0xffffffff),
+                          ),
                         ),
                       ),
+
                     ),
                   ),
                 ],

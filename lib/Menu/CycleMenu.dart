@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intern_yellow_box/Login.dart';
 import 'package:intern_yellow_box/utils.dart';
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
@@ -176,8 +177,12 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
               padding: const EdgeInsets.only(top: 6),
               child: InkWell(
                 onTap: () {
-                  // ตรวจสอบการ Logout และดำเนินการตามต้องการ
-                  // ...
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  LoginPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 102,
