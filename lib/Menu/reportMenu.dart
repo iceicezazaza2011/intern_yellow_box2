@@ -33,6 +33,7 @@ class _ReportPageState extends State<ReportPage> {
   int _rowPerPage = PaginatedDataTable.defaultRowsPerPage;
   final _horizontalScrollController = ScrollController();
   final ReportService reportService = ReportService();
+  String dropdownValue = 'FMGT_2023_01_01'; // ค่าเริ่มต้นของ Dropdown
 
   @override
   void dispose() {
@@ -487,103 +488,33 @@ class _ReportPageState extends State<ReportPage> {
                           ),
                         ),
                         Container(
-                          // cycleEBT (1:144)
-                          padding: EdgeInsets.fromLTRB(
-                              0 * fem, 0 * fem, 0 * fem, 12 * fem),
                           width: double.infinity,
+                          height: 36 * fem,
                           decoration: BoxDecoration(
+                            border: Border.all(color: Color(0xffe5e5e5)),
                             color: Color(0xffffffff),
-                            borderRadius: BorderRadius.circular(5 * fem),
                           ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                // group46VdB (1:217)
-                                width: double.infinity,
-                                height: 40 * fem,
-                                decoration: BoxDecoration(
-                                  color: Color(0xfffca316),
-                                  borderRadius: BorderRadius.only(
-                                    topLeft: Radius.circular(5 * fem),
-                                    topRight: Radius.circular(5 * fem),
-                                  ),
-                                ),
-                                child: Center(
+                          child: DropdownButton<String>(
+                            value: dropdownValue,
+                            icon: Icon(Icons.arrow_drop_down),
+                            iconSize: 24,
+                            elevation: 16,
+                            underline: SizedBox(),
+                            onChanged: (String? newValue) {
+                              setState(() {
+                                dropdownValue = newValue!;
+                              });
+                            },
+                            items: <String>[
+                              'FMGT_2023_01_01',
+                              // เพิ่มตัวเลือก Dropdown อื่น ๆ ที่คุณต้องการ
+                            ].map<DropdownMenuItem<String>>((String value) {
+                              return DropdownMenuItem<String>(
+                                value: value,
+                                child: Padding(
+                                  padding: EdgeInsets.symmetric(horizontal: 12),
                                   child: Text(
-                                    'Cycle',
-                                    textAlign: TextAlign.center,
-                                    style: SafeGoogleFont(
-                                      'Kanit',
-                                      fontSize: 24 * ffem,
-                                      fontWeight: FontWeight.w600,
-                                      height: 1.495 * ffem / fem,
-                                      color: Color(0xffffffff),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                width: double.infinity,
-                                height: 32 * fem,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xffe5e5e5)),
-                                  color: Color(0xffffffff),
-                                ),
-                                child: TextField(
-                                  controller: searchController,
-                                  //textAlignVertical: TextAlignVertical.center, // แสดงข้อความตรงกลางแนวตั้ง
-                                  decoration: InputDecoration(
-                                    hintText: 'Search',
-                                    border: InputBorder.none,
-                                    contentPadding: EdgeInsets.only(left: 44),
-                                    // ย้ายแถบไปทางด้านซ้าย
-                                    suffixIcon: IconButton(
-                                      onPressed: () {
-                                        // คำสั่งที่ต้องการเมื่อกดปุ่มค้นหา
-                                        // ...
-                                      },
-                                      icon: Icon(
-                                        Icons.search,
-                                        size: 16,
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                // c1dmK (1:212)
-                                width: double.infinity,
-                                height: 36 * fem,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xffe5e5e5)),
-                                  color: Color(0xffffe5bb),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'FMGT_2023_01_01',
-                                    textAlign: TextAlign.center,
-                                    style: SafeGoogleFont(
-                                      'Kanit',
-                                      fontSize: 16 * ffem,
-                                      fontWeight: FontWeight.w600,
-                                      height: 1.495 * ffem / fem,
-                                      color: Color(0xff323131),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                              Container(
-                                // c38CH (1:209)
-                                width: double.infinity,
-                                height: 36 * fem,
-                                decoration: BoxDecoration(
-                                  border: Border.all(color: Color(0xffe5e5e5)),
-                                  color: Color(0xffffffff),
-                                ),
-                                child: Center(
-                                  child: Text(
-                                    'FMGT_2023_01_01',
+                                    value,
                                     textAlign: TextAlign.center,
                                     style: SafeGoogleFont(
                                       'Kanit',
@@ -594,8 +525,8 @@ class _ReportPageState extends State<ReportPage> {
                                     ),
                                   ),
                                 ),
-                              ),
-                            ],
+                              );
+                            }).toList(),
                           ),
                         ),
                       ],
@@ -649,63 +580,11 @@ class _ReportPageState extends State<ReportPage> {
                                             );
                                           }
                                           else {
-                                            return SingleChildScrollView(
-                                              controller: _horizontalScrollController,
-                                              child: PaginatedDataTable(
-                                                columns: const [
-                                                  DataColumn(label: Text("Cycle")),
-                                                  DataColumn(label: Text("AuditID")),
-                                                  DataColumn(label: Text("AuditStatus")),
-                                                  DataColumn(label: Text("FoundStatus")),
-                                                  DataColumn(label: Text("DcID")),
-                                                  DataColumn(label: Text("DcName")),
-                                                  DataColumn(label: Text("ShopID")),
-                                                  DataColumn(label: Text("ShopName")),
-                                                  DataColumn(label: Text("ShopSegment")),
-                                                  DataColumn(label: Text("Region")),
-                                                  DataColumn(label: Text("Province")),
-                                                  DataColumn(label: Text("PageID")),
-                                                  DataColumn(label: Text("GroupID")),
-                                                  DataColumn(label: Text("QuestionID")),
-                                                  DataColumn(label: Text("Topic")),
-                                                  DataColumn(label: Text("Title")),
-                                                  DataColumn(label: Text("Module")),
-                                                  DataColumn(label: Text("Score")),
-                                                  DataColumn(label: Text("OverallImageUrl")),
-                                                  DataColumn(label: Text("FinalAnswer")),
-                                                  DataColumn(label: Text("AutoAnswer")),
-                                                  DataColumn(label: Text("AnswerBy")),
-                                                  DataColumn(label: Text("AnswerDiff")),
-                                                  DataColumn(label: Text("ShelfShareDiff")),
-                                                  DataColumn(label: Text("PopDiff")),
-                                                  DataColumn(label: Text("ClusterDiff")),
-                                                  DataColumn(label: Text("ShelfLayoutDiff")),
-                                                  DataColumn(label: Text("IsAISkipped")),
-                                                  DataColumn(label: Text("ChallengeBy")),
-                                                  DataColumn(label: Text("AutoQuestion")),
-                                                  DataColumn(label: Text("DetectionStatus")),
-                                                  DataColumn(label: Text("SubmitByAuditorID")),
-                                                  DataColumn(label: Text("UpdateByAuditorID")),
-                                                  DataColumn(label: Text("CheckInDateTime")),
-                                                  DataColumn(label: Text("CheckOutDateTime")),
-                                                  DataColumn(label: Text("UpdateDateTime")),
-                                                  DataColumn(label: Text("QuestionTags")),
-                                                  DataColumn(label: Text("ScoreTags")),
-                                                  DataColumn(label: Text("QuestionRef1")),
-                                                  DataColumn(label: Text("QuestionRef2")),
-                                                  DataColumn(label: Text("ShopRef1")),
-                                                  DataColumn(label: Text("ShopRef2")),
-                                                  DataColumn(label: Text("BasketRef1")),
-                                                  DataColumn(label: Text("BasketRef2")),
-                                                  DataColumn(label: Text("AIAnswer")),
-                                                ],
-                                                source: dts,
-                                                onRowsPerPageChanged: (r) {
-                                                  setState(() {
-                                                    _rowPerPage = r!;
-                                                  });
-                                                },
-                                                rowsPerPage: _rowPerPage,
+                                            return Center(
+                                              child: Image.asset(
+                                                  'assets/images/No_Data.png',
+                                                width: 251,
+                                                height: 283,
                                               ),
                                             );
                                           }
@@ -733,87 +612,88 @@ class _ReportPageState extends State<ReportPage> {
                                   onTap: () {
                                     setState(() {
                                       _selectedReport = 'Audit Result';
-                                      FutureBuilder(
-                                        future: _selectedReport == 'Audit Result' ? reportService.getReport() : null, // ใช้เฉพาะเมื่อเลือก 'Audit Result'
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState == ConnectionState.waiting) {
-                                            return Center(
-                                              child: SpinKitDualRing(
-                                                color: Colors.orange,
-                                                size: 60.0,
-                                              ),
-                                            );
-                                          } else if (snapshot.hasError) {
-                                            return Center(
-                                              child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
-                                            );
-                                          } else if (snapshot.hasData) {
-                                            final reportData = snapshot.data; // ข้อมูลรายงานจาก Future
-
-                                            return SingleChildScrollView(
-                                              controller: _horizontalScrollController,
-                                              child: PaginatedDataTable(
-                                                columns: const [
-                                                  DataColumn(label: Text("Cycle")),
-                                                  DataColumn(label: Text("AuditID")),
-                                                  DataColumn(label: Text("AuditStatus")),
-                                                  DataColumn(label: Text("FoundStatus")),
-                                                  DataColumn(label: Text("DcID")),
-                                                  DataColumn(label: Text("DcName")),
-                                                  DataColumn(label: Text("ShopID")),
-                                                  DataColumn(label: Text("ShopName")),
-                                                  DataColumn(label: Text("ShopSegment")),
-                                                  DataColumn(label: Text("Region")),
-                                                  DataColumn(label: Text("Province")),
-                                                  DataColumn(label: Text("PageID")),
-                                                  DataColumn(label: Text("GroupID")),
-                                                  DataColumn(label: Text("QuestionID")),
-                                                  DataColumn(label: Text("Topic")),
-                                                  DataColumn(label: Text("Title")),
-                                                  DataColumn(label: Text("Module")),
-                                                  DataColumn(label: Text("Score")),
-                                                  DataColumn(label: Text("OverallImageUrl")),
-                                                  DataColumn(label: Text("FinalAnswer")),
-                                                  DataColumn(label: Text("AutoAnswer")),
-                                                  DataColumn(label: Text("AnswerBy")),
-                                                  DataColumn(label: Text("AnswerDiff")),
-                                                  DataColumn(label: Text("ShelfShareDiff")),
-                                                  DataColumn(label: Text("PopDiff")),
-                                                  DataColumn(label: Text("ClusterDiff")),
-                                                  DataColumn(label: Text("ShelfLayoutDiff")),
-                                                  DataColumn(label: Text("IsAISkipped")),
-                                                  DataColumn(label: Text("ChallengeBy")),
-                                                  DataColumn(label: Text("AutoQuestion")),
-                                                  DataColumn(label: Text("DetectionStatus")),
-                                                  DataColumn(label: Text("SubmitByAuditorID")),
-                                                  DataColumn(label: Text("UpdateByAuditorID")),
-                                                  DataColumn(label: Text("CheckInDateTime")),
-                                                  DataColumn(label: Text("CheckOutDateTime")),
-                                                  DataColumn(label: Text("UpdateDateTime")),
-                                                  DataColumn(label: Text("QuestionTags")),
-                                                  DataColumn(label: Text("ScoreTags")),
-                                                  DataColumn(label: Text("QuestionRef1")),
-                                                  DataColumn(label: Text("QuestionRef2")),
-                                                  DataColumn(label: Text("ShopRef1")),
-                                                  DataColumn(label: Text("ShopRef2")),
-                                                  DataColumn(label: Text("BasketRef1")),
-                                                  DataColumn(label: Text("BasketRef2")),
-                                                  DataColumn(label: Text("AIAnswer")),
-                                                ],
-                                                source: dts, // ใช้ข้อมูลรายงานเป็นแหล่งข้อมูลในตาราง
-                                                onRowsPerPageChanged: (r) {
-                                                  setState(() {
-                                                    _rowPerPage = r!;
-                                                  });
-                                                },
-                                                rowsPerPage: _rowPerPage,
-                                              ),
-                                            );
-                                          } else {
-                                            return SizedBox(); // สถานะที่ไม่มีข้อมูล (อาจเกิดขึ้นได้หากยังไม่มีการคลิกปุ่ม 'Audit Result')
-                                          }
-                                        },
-                                      );
+                                      if (_selectedReport == 'Audit Result') {
+                                        FutureBuilder(
+                                          future: reportService.getReport(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.connectionState == ConnectionState.waiting) {
+                                              return Center(
+                                                child: SpinKitDualRing(
+                                                  color: Colors.orange,
+                                                  size: 60.0,
+                                                ),
+                                              );
+                                            } else if (snapshot.hasError) {
+                                              return Center(
+                                                child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                              );
+                                            } else if (snapshot.hasData) {
+                                              final reportData = snapshot.data;
+                                              return SingleChildScrollView(
+                                                controller: _horizontalScrollController,
+                                                child: PaginatedDataTable(
+                                                  columns: const [
+                                                    DataColumn(label: Text("Cycle")),
+                                                    DataColumn(label: Text("AuditID")),
+                                                    DataColumn(label: Text("AuditStatus")),
+                                                    DataColumn(label: Text("FoundStatus")),
+                                                    DataColumn(label: Text("DcID")),
+                                                    DataColumn(label: Text("DcName")),
+                                                    DataColumn(label: Text("ShopID")),
+                                                    DataColumn(label: Text("ShopName")),
+                                                    DataColumn(label: Text("ShopSegment")),
+                                                    DataColumn(label: Text("Region")),
+                                                    DataColumn(label: Text("Province")),
+                                                    DataColumn(label: Text("PageID")),
+                                                    DataColumn(label: Text("GroupID")),
+                                                    DataColumn(label: Text("QuestionID")),
+                                                    DataColumn(label: Text("Topic")),
+                                                    DataColumn(label: Text("Title")),
+                                                    DataColumn(label: Text("Module")),
+                                                    DataColumn(label: Text("Score")),
+                                                    DataColumn(label: Text("OverallImageUrl")),
+                                                    DataColumn(label: Text("FinalAnswer")),
+                                                    DataColumn(label: Text("AutoAnswer")),
+                                                    DataColumn(label: Text("AnswerBy")),
+                                                    DataColumn(label: Text("AnswerDiff")),
+                                                    DataColumn(label: Text("ShelfShareDiff")),
+                                                    DataColumn(label: Text("PopDiff")),
+                                                    DataColumn(label: Text("ClusterDiff")),
+                                                    DataColumn(label: Text("ShelfLayoutDiff")),
+                                                    DataColumn(label: Text("IsAISkipped")),
+                                                    DataColumn(label: Text("ChallengeBy")),
+                                                    DataColumn(label: Text("AutoQuestion")),
+                                                    DataColumn(label: Text("DetectionStatus")),
+                                                    DataColumn(label: Text("SubmitByAuditorID")),
+                                                    DataColumn(label: Text("UpdateByAuditorID")),
+                                                    DataColumn(label: Text("CheckInDateTime")),
+                                                    DataColumn(label: Text("CheckOutDateTime")),
+                                                    DataColumn(label: Text("UpdateDateTime")),
+                                                    DataColumn(label: Text("QuestionTags")),
+                                                    DataColumn(label: Text("ScoreTags")),
+                                                    DataColumn(label: Text("QuestionRef1")),
+                                                    DataColumn(label: Text("QuestionRef2")),
+                                                    DataColumn(label: Text("ShopRef1")),
+                                                    DataColumn(label: Text("ShopRef2")),
+                                                    DataColumn(label: Text("BasketRef1")),
+                                                    DataColumn(label: Text("BasketRef2")),
+                                                    DataColumn(label: Text("AIAnswer")),
+                                                  ],
+                                                  source: dts,
+                                                  onRowsPerPageChanged: (r) {
+                                                    setState(() {
+                                                      _rowPerPage = r!;
+                                                    });
+                                                  },
+                                                  rowsPerPage: _rowPerPage,
+                                                ),
+                                              );
+                                            } else {
+                                              return SizedBox();
+                                            }
+                                          },
+                                        );
+                                      };
                                     });
                                   },
                                   child: Container(
