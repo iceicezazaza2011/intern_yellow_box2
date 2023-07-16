@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intern_yellow_box/utils.dart';
+
+import '../Domain/component_report.dart';
+import '../Domain/service_report.dart';
+import '../Login.dart';
+import 'CycleMenu.dart';
+import 'Manu.dart';
 
 class ReportPage extends StatefulWidget {
   const ReportPage({super.key});
@@ -11,7 +18,7 @@ class ReportPage extends StatefulWidget {
 class _ReportPageState extends State<ReportPage> {
   TextEditingController _searchController = TextEditingController();
   String _selectedMenu = 'report'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
- // String _selectedReport = 'Audit Result'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+  // String _selectedReport = 'Audit Result'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
   TextEditingController searchController = TextEditingController();
   String searchText = '';
   Color defaultBackgroundColor = Color(0xfffca316);
@@ -21,17 +28,37 @@ class _ReportPageState extends State<ReportPage> {
   Color selectedTextColor = Colors.black;
   Color selectedBorderColor = Colors.black;
   String _selectedReport = '';
+  List<Report> reports = [];
+  DTS dts = DTS();
+  int _rowPerPage = PaginatedDataTable.defaultRowsPerPage;
+  final _horizontalScrollController = ScrollController();
+  final ReportService reportService = ReportService();
 
   @override
   void dispose() {
     _searchController.dispose();
     super.dispose();
   }
+  @override
+  void initState(){
+    super.initState();
+    reportf();
+  }
+  void reportf() async {
+    final reports = await ReportService().getReport();
+    dts.updateReports((reports));
+  }
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
+    final double screenHeight = MediaQuery
+        .of(context)
+        .size
+        .height;
+    final double screenWidth = MediaQuery
+        .of(context)
+        .size
+        .width;
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
 
@@ -44,7 +71,7 @@ class _ReportPageState extends State<ReportPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 6),
                 child: Image.asset(
-                  'assets/images/ZeenLOGO_EN 1.png',
+                  'assets/images/zeenlogoen-1.png',
                   width: 124.36,
                   height: 48,
                 ),
@@ -86,8 +113,12 @@ class _ReportPageState extends State<ReportPage> {
               padding: const EdgeInsets.only(top: 6),
               child: InkWell(
                 onTap: () {
-                  // ตรวจสอบการ Logout และดำเนินการตามต้องการ
-                  // ...
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>  LoginPage(),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 102,
@@ -195,6 +226,14 @@ class _ReportPageState extends State<ReportPage> {
                       onTap: () {
                         setState(() {
                           _selectedMenu = 'home';
+                          if (_selectedMenu == 'home') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainMenuPage(),
+                              ),
+                            );
+                          }
                         });
                       },
                       child: Container(
@@ -248,6 +287,14 @@ class _ReportPageState extends State<ReportPage> {
                       onTap: () {
                         setState(() {
                           _selectedMenu = 'cycle';
+                          if (_selectedMenu == 'cycle') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => CycleMenuPage(),
+                              ),
+                            );
+                          }
                         });
                       },
                       child: Container(
@@ -296,6 +343,14 @@ class _ReportPageState extends State<ReportPage> {
                       onTap: () {
                         setState(() {
                           _selectedMenu = 'report';
+                          if (_selectedMenu == 'report') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => ReportPage(),
+                              ),
+                            );
+                          }
                         });
                       },
                       child: Container(
@@ -344,6 +399,14 @@ class _ReportPageState extends State<ReportPage> {
                       onTap: () {
                         setState(() {
                           _selectedMenu = 'dashboard';
+                          if (_selectedMenu == 'dashboard') {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainMenuPage(),
+                              ),
+                            );
+                          }
                         });
                       },
                       child: Container(
@@ -394,7 +457,7 @@ class _ReportPageState extends State<ReportPage> {
             Container(
               // autogroupfx1bF4d (Q5RuU29MZHLT2yQDo5fX1B)
               padding:
-                  EdgeInsets.fromLTRB(8 * fem, 16 * fem, 0 * fem, 20 * fem),
+              EdgeInsets.fromLTRB(8 * fem, 16 * fem, 0 * fem, 20 * fem),
               height: double.infinity,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -402,7 +465,7 @@ class _ReportPageState extends State<ReportPage> {
                   Container(
                     // autogroupusdpNf3 (Q5RpQAazQLr5nSTAqSuSdP)
                     margin:
-                        EdgeInsets.fromLTRB(0 * fem, 0 * fem, 8 * fem, 0 * fem),
+                    EdgeInsets.fromLTRB(0 * fem, 0 * fem, 8 * fem, 0 * fem),
                     width: 216 * fem,
                     height: double.infinity,
                     child: Column(
@@ -543,7 +606,7 @@ class _ReportPageState extends State<ReportPage> {
                     margin: EdgeInsets.fromLTRB(
                         0 * fem, 66 * fem, 0 * fem, 0 * fem),
                     width: 1452 * fem,
-                    height: 910 * fem,
+                    height: 910 * fem ,
                     child: Stack(
                       children: [
                         Positioned(
@@ -553,75 +616,104 @@ class _ReportPageState extends State<ReportPage> {
                           child: Container(
                             padding: EdgeInsets.fromLTRB(
                                 4 * fem, 82 * fem, 0 * fem, 4 * fem),
-                            width: 1452 * fem,
-                            height: 871 * fem,
+                            width: 1452,
+                            height: 821,
                             decoration: BoxDecoration(
                               border: Border.all(color: Color(0xff717171)),
                               color: Color(0xffffffff),
                             ),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
+                            child: ListView(
                               children: [
-                                Container(
-                                  // autogroupwrffaQH (Q5RqixiN3S5Uq5zz17wRff)
-                                  margin: EdgeInsets.fromLTRB(
-                                      0 * fem, 0 * fem, 0 * fem, 315 * fem),
-                                  width: 1660 * fem,
-                                  height: 460 * fem,
-                                  child: Stack(
-                                    children: [
-                                      ///// ใส่ข้อมูล Datatable /////
-                                    ],
-                                  ),
-                                ),
-                                Container(
-                                  // autogrouphfnyQfK (Q5RsHan2nhSCNGTxR7hfNy)
-                                  margin: EdgeInsets.fromLTRB(
-                                      10.99 * fem, 0 * fem, 0 * fem, 0 * fem),
-                                  width: 401.01 * fem,
-                                  height: 10 * fem,
-                                  child: Stack(
-                                    children: [
-                                      Positioned(
-                                        // rectangle88LYy (1:225)
-                                        left: 0 * fem,
-                                        top: 0 * fem,
-                                        child: Align(
-                                          child: SizedBox(
-                                            width: 399.76 * fem,
-                                            height: 10 * fem,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        10 * fem),
-                                                color: Color(0xffd9d9d9),
+                                Wrap(
+                                  //crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      // autogroupwrffaQH (Q5RqixiN3S5Uq5zz17wRff)
+                                      margin: EdgeInsets.fromLTRB(
+                                          0 * fem, 0 * fem, 0 * fem, 0 * fem),
+                                      width: 1448 * fem,
+                                      height: 630 * fem,
+                                      child: FutureBuilder(
+                                        future: reportService.getReport(),
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                            return Center(
+                                              child: SpinKitDualRing(
+                                                color: Colors.orange,
+                                                size: 60.0,
                                               ),
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      Positioned(
-                                        // rectangle92FA9 (1:533)
-                                        left: 1.009765625 * fem,
-                                        top: 0 * fem,
-                                        child: Align(
-                                          child: SizedBox(
-                                            width: 400 * fem,
-                                            height: 10 * fem,
-                                            child: Container(
-                                              decoration: BoxDecoration(
-                                                borderRadius:
-                                                    BorderRadius.circular(
-                                                        5 * fem),
-                                                color: Color(0xffd9d9d9),
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                              child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                            );
+                                          }
+                                          else {
+                                            return SingleChildScrollView(
+                                              controller: _horizontalScrollController,
+                                              child: PaginatedDataTable(
+                                                columns: const [
+                                                  DataColumn(label: Text("Cycle")),
+                                                  DataColumn(label: Text("AuditID")),
+                                                  DataColumn(label: Text("AuditStatus")),
+                                                  DataColumn(label: Text("FoundStatus")),
+                                                  DataColumn(label: Text("DcID")),
+                                                  DataColumn(label: Text("DcName")),
+                                                  DataColumn(label: Text("ShopID")),
+                                                  DataColumn(label: Text("ShopName")),
+                                                  DataColumn(label: Text("ShopSegment")),
+                                                  DataColumn(label: Text("Region")),
+                                                  DataColumn(label: Text("Province")),
+                                                  DataColumn(label: Text("PageID")),
+                                                  DataColumn(label: Text("GroupID")),
+                                                  DataColumn(label: Text("QuestionID")),
+                                                  DataColumn(label: Text("Topic")),
+                                                  DataColumn(label: Text("Title")),
+                                                  DataColumn(label: Text("Module")),
+                                                  DataColumn(label: Text("Score")),
+                                                  DataColumn(label: Text("OverallImageUrl")),
+                                                  DataColumn(label: Text("FinalAnswer")),
+                                                  DataColumn(label: Text("AutoAnswer")),
+                                                  DataColumn(label: Text("AnswerBy")),
+                                                  DataColumn(label: Text("AnswerDiff")),
+                                                  DataColumn(label: Text("ShelfShareDiff")),
+                                                  DataColumn(label: Text("PopDiff")),
+                                                  DataColumn(label: Text("ClusterDiff")),
+                                                  DataColumn(label: Text("ShelfLayoutDiff")),
+                                                  DataColumn(label: Text("IsAISkipped")),
+                                                  DataColumn(label: Text("ChallengeBy")),
+                                                  DataColumn(label: Text("AutoQuestion")),
+                                                  DataColumn(label: Text("DetectionStatus")),
+                                                  DataColumn(label: Text("SubmitByAuditorID")),
+                                                  DataColumn(label: Text("UpdateByAuditorID")),
+                                                  DataColumn(label: Text("CheckInDateTime")),
+                                                  DataColumn(label: Text("CheckOutDateTime")),
+                                                  DataColumn(label: Text("UpdateDateTime")),
+                                                  DataColumn(label: Text("QuestionTags")),
+                                                  DataColumn(label: Text("ScoreTags")),
+                                                  DataColumn(label: Text("QuestionRef1")),
+                                                  DataColumn(label: Text("QuestionRef2")),
+                                                  DataColumn(label: Text("ShopRef1")),
+                                                  DataColumn(label: Text("ShopRef2")),
+                                                  DataColumn(label: Text("BasketRef1")),
+                                                  DataColumn(label: Text("BasketRef2")),
+                                                  DataColumn(label: Text("AIAnswer")),
+                                                ],
+                                                source: dts,
+                                                onRowsPerPageChanged: (r) {
+                                                  setState(() {
+                                                    _rowPerPage = r!;
+                                                  });
+                                                },
+                                                rowsPerPage: _rowPerPage,
                                               ),
-                                            ),
-                                          ),
-                                        ),
+                                            );
+                                          }
+                                        },
                                       ),
-                                    ],
-                                  ),
+
+                                    ),
+                                  ],
                                 ),
                               ],
                             ),
@@ -641,6 +733,87 @@ class _ReportPageState extends State<ReportPage> {
                                   onTap: () {
                                     setState(() {
                                       _selectedReport = 'Audit Result';
+                                      FutureBuilder(
+                                        future: _selectedReport == 'Audit Result' ? reportService.getReport() : null, // ใช้เฉพาะเมื่อเลือก 'Audit Result'
+                                        builder: (context, snapshot) {
+                                          if (snapshot.connectionState == ConnectionState.waiting) {
+                                            return Center(
+                                              child: SpinKitDualRing(
+                                                color: Colors.orange,
+                                                size: 60.0,
+                                              ),
+                                            );
+                                          } else if (snapshot.hasError) {
+                                            return Center(
+                                              child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                            );
+                                          } else if (snapshot.hasData) {
+                                            final reportData = snapshot.data; // ข้อมูลรายงานจาก Future
+
+                                            return SingleChildScrollView(
+                                              controller: _horizontalScrollController,
+                                              child: PaginatedDataTable(
+                                                columns: const [
+                                                  DataColumn(label: Text("Cycle")),
+                                                  DataColumn(label: Text("AuditID")),
+                                                  DataColumn(label: Text("AuditStatus")),
+                                                  DataColumn(label: Text("FoundStatus")),
+                                                  DataColumn(label: Text("DcID")),
+                                                  DataColumn(label: Text("DcName")),
+                                                  DataColumn(label: Text("ShopID")),
+                                                  DataColumn(label: Text("ShopName")),
+                                                  DataColumn(label: Text("ShopSegment")),
+                                                  DataColumn(label: Text("Region")),
+                                                  DataColumn(label: Text("Province")),
+                                                  DataColumn(label: Text("PageID")),
+                                                  DataColumn(label: Text("GroupID")),
+                                                  DataColumn(label: Text("QuestionID")),
+                                                  DataColumn(label: Text("Topic")),
+                                                  DataColumn(label: Text("Title")),
+                                                  DataColumn(label: Text("Module")),
+                                                  DataColumn(label: Text("Score")),
+                                                  DataColumn(label: Text("OverallImageUrl")),
+                                                  DataColumn(label: Text("FinalAnswer")),
+                                                  DataColumn(label: Text("AutoAnswer")),
+                                                  DataColumn(label: Text("AnswerBy")),
+                                                  DataColumn(label: Text("AnswerDiff")),
+                                                  DataColumn(label: Text("ShelfShareDiff")),
+                                                  DataColumn(label: Text("PopDiff")),
+                                                  DataColumn(label: Text("ClusterDiff")),
+                                                  DataColumn(label: Text("ShelfLayoutDiff")),
+                                                  DataColumn(label: Text("IsAISkipped")),
+                                                  DataColumn(label: Text("ChallengeBy")),
+                                                  DataColumn(label: Text("AutoQuestion")),
+                                                  DataColumn(label: Text("DetectionStatus")),
+                                                  DataColumn(label: Text("SubmitByAuditorID")),
+                                                  DataColumn(label: Text("UpdateByAuditorID")),
+                                                  DataColumn(label: Text("CheckInDateTime")),
+                                                  DataColumn(label: Text("CheckOutDateTime")),
+                                                  DataColumn(label: Text("UpdateDateTime")),
+                                                  DataColumn(label: Text("QuestionTags")),
+                                                  DataColumn(label: Text("ScoreTags")),
+                                                  DataColumn(label: Text("QuestionRef1")),
+                                                  DataColumn(label: Text("QuestionRef2")),
+                                                  DataColumn(label: Text("ShopRef1")),
+                                                  DataColumn(label: Text("ShopRef2")),
+                                                  DataColumn(label: Text("BasketRef1")),
+                                                  DataColumn(label: Text("BasketRef2")),
+                                                  DataColumn(label: Text("AIAnswer")),
+                                                ],
+                                                source: dts, // ใช้ข้อมูลรายงานเป็นแหล่งข้อมูลในตาราง
+                                                onRowsPerPageChanged: (r) {
+                                                  setState(() {
+                                                    _rowPerPage = r!;
+                                                  });
+                                                },
+                                                rowsPerPage: _rowPerPage,
+                                              ),
+                                            );
+                                          } else {
+                                            return SizedBox(); // สถานะที่ไม่มีข้อมูล (อาจเกิดขึ้นได้หากยังไม่มีการคลิกปุ่ม 'Audit Result')
+                                          }
+                                        },
+                                      );
                                     });
                                   },
                                   child: Container(
@@ -669,7 +842,8 @@ class _ReportPageState extends State<ReportPage> {
                                           fontSize: 16 * ffem,
                                           fontWeight: FontWeight.w600,
                                           height: 1.495 * ffem / fem,
-                                          color: _selectedReport == 'Audit Result'
+                                          color: _selectedReport ==
+                                              'Audit Result'
                                               ? selectedTextColor
                                               : defaultTextColor,
                                         ),
@@ -678,10 +852,12 @@ class _ReportPageState extends State<ReportPage> {
                                   ),
                                 ),
                                 Container(
-                                  padding: EdgeInsets.fromLTRB(8 * fem, 0 * fem, 0 * fem, 0 * fem),
+                                  padding: EdgeInsets.fromLTRB(
+                                      8 * fem, 0 * fem, 0 * fem, 0 * fem),
                                   height: double.infinity,
                                   child: Row(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment
+                                        .start,
                                     children: [
                                       InkWell(
                                         onTap: () {
@@ -694,16 +870,19 @@ class _ReportPageState extends State<ReportPage> {
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: _selectedReport == 'Audit Overview'
+                                              color: _selectedReport ==
+                                                  'Audit Overview'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
-                                            color: _selectedReport == 'Audit Overview'
+                                            color: _selectedReport ==
+                                                'Audit Overview'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
-                                              topRight: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -715,7 +894,8 @@ class _ReportPageState extends State<ReportPage> {
                                                 fontSize: 16 * ffem,
                                                 fontWeight: FontWeight.w600,
                                                 height: 1.495 * ffem / fem,
-                                                color: _selectedReport == 'Audit Overview'
+                                                color: _selectedReport ==
+                                                    'Audit Overview'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -735,16 +915,19 @@ class _ReportPageState extends State<ReportPage> {
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: _selectedReport == 'Basket Overview'
+                                              color: _selectedReport ==
+                                                  'Basket Overview'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
-                                            color: _selectedReport == 'Basket Overview'
+                                            color: _selectedReport ==
+                                                'Basket Overview'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
-                                              topRight: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -756,7 +939,8 @@ class _ReportPageState extends State<ReportPage> {
                                                 fontSize: 16 * ffem,
                                                 fontWeight: FontWeight.w600,
                                                 height: 1.495 * ffem / fem,
-                                                color: _selectedReport == 'Basket Overview'
+                                                color: _selectedReport ==
+                                                    'Basket Overview'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -776,16 +960,19 @@ class _ReportPageState extends State<ReportPage> {
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: _selectedReport == 'Shop Compliance'
+                                              color: _selectedReport ==
+                                                  'Shop Compliance'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
-                                            color: _selectedReport == 'Shop Compliance'
+                                            color: _selectedReport ==
+                                                'Shop Compliance'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
-                                              topRight: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -797,7 +984,8 @@ class _ReportPageState extends State<ReportPage> {
                                                 fontSize: 16 * ffem,
                                                 fontWeight: FontWeight.w600,
                                                 height: 1.495 * ffem / fem,
-                                                color: _selectedReport == 'Shop Compliance'
+                                                color: _selectedReport ==
+                                                    'Shop Compliance'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -828,7 +1016,8 @@ class _ReportPageState extends State<ReportPage> {
                                                 : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
-                                              topRight: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -871,7 +1060,8 @@ class _ReportPageState extends State<ReportPage> {
                                                 : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
-                                              topRight: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -905,16 +1095,19 @@ class _ReportPageState extends State<ReportPage> {
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: _selectedReport == 'Share Of Shelf'
+                                              color: _selectedReport ==
+                                                  'Share Of Shelf'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
-                                            color: _selectedReport == 'Share Of Shelf'
+                                            color: _selectedReport ==
+                                                'Share Of Shelf'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
-                                              topRight: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -926,7 +1119,8 @@ class _ReportPageState extends State<ReportPage> {
                                                 fontSize: 16 * ffem,
                                                 fontWeight: FontWeight.w600,
                                                 height: 1.495 * ffem / fem,
-                                                color: _selectedReport == 'Share Of Shelf'
+                                                color: _selectedReport ==
+                                                    'Share Of Shelf'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -957,7 +1151,8 @@ class _ReportPageState extends State<ReportPage> {
                                                 : defaultBackgroundColor,
                                             borderRadius: BorderRadius.only(
                                               topLeft: Radius.circular(5 * fem),
-                                              topRight: Radius.circular(5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -969,7 +1164,8 @@ class _ReportPageState extends State<ReportPage> {
                                                 fontSize: 16 * ffem,
                                                 fontWeight: FontWeight.w600,
                                                 height: 1.495 * ffem / fem,
-                                                color: _selectedReport == 'Score'
+                                                color: _selectedReport ==
+                                                    'Score'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -995,4 +1191,78 @@ class _ReportPageState extends State<ReportPage> {
       ), //
     );
   }
+}
+class DTS extends DataTableSource {
+  List<Report> reports = [];
+
+  void updateReports(List<Report> newReports) {
+    reports.clear();
+    reports.addAll(newReports);
+    notifyListeners();
+  }
+
+  @override
+  DataRow? getRow(int index) {
+    // ตรวจสอบว่ามีข้อมูลในรายการ reports หรือไม่
+    // if (index >= reports.length) return null;
+    final Report = reports[index];
+    return DataRow(
+      cells:  [
+        DataCell(Text(Report.Cycle?? '')),
+        DataCell(Text(Report.AuditID?? '')),
+        DataCell(Text(Report.AuditStatus?? '')),
+        DataCell(Text(Report.FoundStatus?? '')),
+        DataCell(Text(Report.DcID?? '')),
+        DataCell(Text(Report.DcName?? '')),
+        DataCell(Text(Report.ShopID?? '')),
+        DataCell(Text(Report.ShopName?? '')),
+        DataCell(Text(Report.ShopSegment?? '')),
+        DataCell(Text(Report.Region?? '')),
+        DataCell(Text(Report.Province?? '')),
+        DataCell(Text(Report.PageID?? '')),
+        DataCell(Text(Report.GroupID?? '')),
+        DataCell(Text(Report.QuestionID?? '')),
+        DataCell(Text(Report.Topic?? '')),
+        DataCell(Text(Report.Title?? '')),
+        DataCell(Text(Report.Module?? '')),
+        DataCell(Text(Report.Score != null ? Report.Score.toString() : '')),
+        DataCell(Text(Report.OverallImageUrl?? '')),
+        DataCell(Text(Report.FinalAnswer?? '')),
+        DataCell(Text(Report.AutoAnswer?? '')),
+        DataCell(Text(Report.AnswerBy?? '')),
+        DataCell(Text(Report.AnswerDiff?? '')),
+        DataCell(Text(Report.ShelfShareDiff?? '')),
+        DataCell(Text(Report.PopDiff?? '')),
+        DataCell(Text(Report.ClusterDiff?? '')),
+        DataCell(Text(Report.ShelfLayoutDiff?? '')),
+        DataCell(Text(Report.IsAISkipped?? '')),
+        DataCell(Text(Report.ChallengeBy?? '')),
+        DataCell(Text(Report.AutoQuestion?? '')),
+        DataCell(Text(Report.DetectionStatus?? '')),
+        DataCell(Text(Report.SubmitByAuditorID?? '')),
+        DataCell(Text(Report.UpdateByAuditorID?? '')),
+        DataCell(Text(Report.CheckInDateTime?? '')),
+        DataCell(Text(Report.CheckOutDateTime?? '')),
+        DataCell(Text(Report.UpdateDateTime?? '')),
+        DataCell(Text(Report.QuestionTags?? '')),
+        DataCell(Text(Report.ScoreTags?? '')),
+        DataCell(Text(Report.QuestionRef1?? '')),
+        DataCell(Text(Report.QuestionRef2?? '')),
+        DataCell(Text(Report.ShopRef1?? '')),
+        DataCell(Text(Report.ShopRef2?? '')),
+        DataCell(Text(Report.BasketRef1?? '')),
+        DataCell(Text(Report.BasketRef2?? '')),
+        DataCell(Text(Report.AIAnswer?? '')),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => reports.length;
+
+  @override
+  int get selectedRowCount => 0;
 }

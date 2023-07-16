@@ -91,225 +91,153 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  @override
   Widget build(BuildContext context) {
-    double baseWidth = 1280;
-    double baseHeight = 832;
-    double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
-    double fem = screenWidth / baseWidth;
-    double ffem = fem * (baseHeight / baseWidth);
-
-    return Scaffold(
-      body: Container(
-        width: screenWidth,
-        height: screenHeight,
-        child: Container(
-          width: screenWidth,
-          height: screenHeight,
-          decoration: BoxDecoration(
-            color: Colors.white,
-          ),
-          child: Expanded(
-            child: SingleChildScrollView(
+    double baseWidth = 1920;
+    double fem = MediaQuery.of(context).size.width / baseWidth;
+    double ffem = fem * 0.97;
+    return Container(
+      width: double.infinity,
+      child: Container(
+        // loginoFP (9:64)
+        padding: EdgeInsets.fromLTRB(1*fem, 0*fem, 0*fem, 0*fem),
+        width: double.infinity,
+        decoration: BoxDecoration (
+          color: Color(0xffffffff),
+        ),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Container(
+              // frame1Ezu (9:65)
+              width: 912*fem,
+              height: 1080*fem,
+              decoration: BoxDecoration (
+                color: Color(0xffe5e5e5),
+              ),
+              child: Align(
+                // womanprotectingherselfagainstc (9:66)
+                alignment: Alignment.centerLeft,
+                child: SizedBox(
+                  width: 912*fem,
+                  height: 1080*fem,
+                  child: Image.asset(
+                    'assets//images/Woman.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
+              ),
+            ),
+            Container(
+              // frame2qjo (9:67)
+              padding: EdgeInsets.fromLTRB(192*fem, 132*fem, 200*fem, 100*fem),
+              width: 1000*fem,
+              height: 1080*fem,
+              decoration: BoxDecoration (
+                color: Color(0xffffffff),
+              ),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Container(
-                        margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 1 * fem, 0 * fem),
-                        width: 607 * fem,
-                        height: 832 * fem,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Align(
-                          alignment: Alignment.topLeft,
-                          child: SizedBox(
-                            width: 985 * fem,
-                            height: 832.74 * fem,
-                            child: Image.asset(
-                              'assets/images/Woman.png',
-                              fit: BoxFit.cover,
-                            ),
-                          ),
+                  Container(
+                    // zeenlogoen1jaH (9:77)
+                    margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 72*fem),
+                    width: 616.61*fem,
+                    height: 238*fem,
+                    child: Image.asset(
+                      'assets/images/zeenlogoen-1.png',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                  Container(
+                    // usernamedff (9:78)
+                    margin: EdgeInsets.fromLTRB(26*fem, 0*fem, 26.61*fem, 32*fem),
+                    padding: EdgeInsets.fromLTRB(24*fem, 14*fem, 24*fem, 14*fem),
+                    width: double.infinity,
+                    decoration: BoxDecoration (
+                      border: Border.all(color: Color(0xffd2d2d2)),
+                      color: Color(0xfff1f1f1),
+                      borderRadius: BorderRadius.circular(8*fem),
+                    ),
+                    child: Text(
+                      'ORG',
+                      style: SafeGoogleFont (
+                        'Kanit',
+                        fontSize: 24*ffem,
+                        fontWeight: FontWeight.w400,
+                        height: 1.495*ffem/fem,
+                        color: Color(0xff717171),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    // usernameCsB (9:68)
+                    margin: EdgeInsets.fromLTRB(26*fem, 0*fem, 26.61*fem, 32*fem),
+                    padding: EdgeInsets.fromLTRB(24*fem, 14*fem, 24*fem, 14*fem),
+                    width: double.infinity,
+                    decoration: BoxDecoration (
+                      border: Border.all(color: Color(0xffd2d2d2)),
+                      color: Color(0xfff1f1f1),
+                      borderRadius: BorderRadius.circular(8*fem),
+                    ),
+                    child: Text(
+                      'Username',
+                      style: SafeGoogleFont (
+                        'Kanit',
+                        fontSize: 24*ffem,
+                        fontWeight: FontWeight.w400,
+                        height: 1.495*ffem/fem,
+                        color: Color(0xff717171),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    // passwardfEy (9:74)
+                    margin: EdgeInsets.fromLTRB(26*fem, 0*fem, 26.61*fem, 64*fem),
+                    padding: EdgeInsets.fromLTRB(24*fem, 14*fem, 24*fem, 14*fem),
+                    width: double.infinity,
+                    decoration: BoxDecoration (
+                      border: Border.all(color: Color(0xffd2d2d2)),
+                      color: Color(0xfff1f1f1),
+                      borderRadius: BorderRadius.circular(8*fem),
+                    ),
+                    child: Text(
+                      'Passward',
+                      style: SafeGoogleFont (
+                        'Kanit',
+                        fontSize: 24*ffem,
+                        fontWeight: FontWeight.w400,
+                        height: 1.495*ffem/fem,
+                        color: Color(0xff717171),
+                      ),
+                    ),
+                  ),
+                  Container(
+                    // loginJoj (9:71)
+                    margin: EdgeInsets.fromLTRB(224*fem, 0*fem, 224.61*fem, 0*fem),
+                    width: double.infinity,
+                    height: 64*fem,
+                    decoration: BoxDecoration (
+                      border: Border.all(color: Color(0xffd2d2d2)),
+                      color: Color(0xfffa7003),
+                      borderRadius: BorderRadius.circular(8*fem),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Login',
+                        style: SafeGoogleFont (
+                          'Kanit',
+                          fontSize: 24*ffem,
+                          fontWeight: FontWeight.w400,
+                          height: 1.495*ffem/fem,
+                          color: Color(0xffffffff),
                         ),
                       ),
-                      Container(
-                        padding: EdgeInsets.fromLTRB(125 * fem, 142 * fem, 124 * fem, 272 * fem),
-                        width: 672 * fem,
-                        height: 832 * fem,
-                        decoration: const BoxDecoration(
-                          color: Colors.white,
-                        ),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 0.38 * fem, 56 * fem),
-                              width: 388.62 * fem,
-                              height: 150 * fem,
-                              child: Image.asset(
-                                'assets/images/ZeenLOGO_EN 1.png',
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            if (_messageWidget != null) _messageWidget!,
-
-                            Container(
-                              //margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 34*fem),
-                              padding: EdgeInsets.fromLTRB(8*fem, 9*fem, 8*fem, 9*fem),
-                              width: double.infinity,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: Stack(
-                                    alignment: Alignment.centerRight,
-                                    children: [
-                                      TextField(
-                                        style: Theme.of(context).textTheme.bodyText1,
-                                        textAlign: TextAlign.left,
-                                        controller: Name,
-                                        onChanged: (value) {
-                                          setState(() {
-                                            _isNameTextNotEmpty = value.isNotEmpty;
-                                          });
-                                        },
-                                        keyboardType: TextInputType.name,
-                                        decoration:  InputDecoration(
-                                          border: OutlineInputBorder(),
-                                          labelText: 'ชื่อผู้ใช้',
-                                          labelStyle: TextStyle(
-                                            color: Colors.orange,
-                                            fontSize: 20*ffem,
-                                            fontWeight: FontWeight.w400,
-                                            height: 1.495*ffem/fem,
-                                          ),
-                                          prefixIcon: Icon(
-                                            Icons.person,
-                                            color: Colors.orange,
-                                          ),
-                                          focusedBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Colors.orange,
-                                            ),
-                                          ),
-                                          enabledBorder: OutlineInputBorder(
-                                            borderSide: BorderSide(
-                                              color: Colors.orange,
-                                            ),
-                                          ),
-                                        ),
-                                      ),
-                                      if (_isNameTextNotEmpty)
-                                        Positioned(
-                                          right: 0,
-                                          child: IconButton(
-                                            icon: Icon(
-                                              Icons.cancel,
-                                              size: 20,
-                                              color: Colors.grey,
-                                            ),
-                                            onPressed: _nameclearText,
-                                          ),
-                                        ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(0*fem, 0*fem, 0*fem, 34*fem),
-                              padding: EdgeInsets.fromLTRB(8*fem, 0*fem, 8*fem, 9*fem),
-                              width: double.infinity,
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(horizontal: 20),
-                                child: SizedBox(
-                                  width: double.infinity,
-                                  child: TextField(
-                                    style: Theme.of(context).textTheme.bodyText1,
-                                    textAlign: TextAlign.left,
-                                    controller: Password,
-                                    keyboardType: TextInputType.number,
-                                    obscureText: obscureText,
-                                    decoration: InputDecoration(
-                                      border: OutlineInputBorder(),
-                                      labelText: 'รหัสผ่าน',
-                                      labelStyle: TextStyle(
-                                        color: Colors.orange,
-                                        fontSize: 20*ffem,
-                                        fontWeight: FontWeight.w400,
-                                        height: 1.495*ffem/fem,
-                                      ),
-                                      prefixIcon: Icon(
-                                        Icons.lock,
-                                        color: Colors.orange,
-                                      ),
-                                      focusedBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.orange,
-                                        ),
-                                      ),
-                                      enabledBorder: OutlineInputBorder(
-                                        borderSide: BorderSide(
-                                          color: Colors.orange,
-                                        ),
-                                      ),
-                                      suffixIcon: GestureDetector(
-                                        onTap: () {
-                                          setState(() {
-                                            obscureText = !obscureText;
-                                          });
-                                        },
-                                        child: Icon(
-                                          obscureText
-                                              ? Icons.visibility_off
-                                              : Icons.visibility,
-                                          size: 20*ffem,
-                                          color: Colors.grey,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Container(
-                              margin: EdgeInsets.fromLTRB(148*fem, 0*fem, 149*fem, 0*fem),
-                              width: double.infinity,
-                              height: 48*fem,
-                              child: ElevatedButton(
-                                onPressed: () => login(context),
-                                style: ElevatedButton.styleFrom(
-                                  primary: Colors.orange,
-                                  onPrimary: Colors.white,
-                                  onSurface: Colors.orange,
-                                ),
-                                child: Center(
-                                  child: Text('เข้าสู่ระบบ',
-                                    style: SafeGoogleFont (
-                                      'Kanit',
-                                      fontSize: 24*ffem,
-                                      fontWeight: FontWeight.w400,
-                                      height: 1.495*ffem/fem,
-                                      color: Color(0xffffffff),
-                                    ),
-                                  ),
-                                ),
-
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
             ),
-          ),
+          ],
         ),
       ),
     );

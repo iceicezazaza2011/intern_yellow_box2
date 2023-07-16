@@ -6,6 +6,7 @@ import '../Domain/service_cycle.dart';
 
 
 class CycleMenuPage extends StatefulWidget {
+
   //const CycleMenuPage({required Key key}) : super(key: key);
 
   @override
@@ -133,7 +134,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
               Padding(
                 padding: const EdgeInsets.only(top: 6),
                 child: Image.asset(
-                  'assets/images/ZeenLOGO_EN 1.png',
+                  'assets/images/zeenlogoen-1.png',
                   width: 124.36,
                   height: 48,
                 ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/src/asset_manifest.dart';
 import 'package:intern_yellow_box/Menu/CycleMenu.dart';
-import 'package:intern_yellow_box/reportMenu.dart';
+import 'package:intern_yellow_box/Menu/reportMenu.dart';
+import 'package:intern_yellow_box/test.dart';
+import 'Login.dart';
 import 'Menu/Manu.dart';
 
 void main() {
@@ -23,10 +25,11 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        //home: LoginPage(),//
+        home: LoginPage(),//
         //home: MainMenuPage(),
-        //home: CycleMenuPage(),
-        home: ReportPage(),
+        //home: CycleMenuPage('ZEEN','admin','1234'),
+       // home: ReportPage(),
+        //home: HomeScreen(),
       ),
     );
   }
