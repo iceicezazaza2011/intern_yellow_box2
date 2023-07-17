@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:intern_yellow_box/Domain/vault/vaultAccount.dart';
 import 'package:intern_yellow_box/Menu/CycleMenu.dart';
-import 'package:intern_yellow_box/Menu/dashMenu.dart';
+import 'package:intern_yellow_box/component/base_screen.dart';
+import 'package:intern_yellow_box/service/vault-service.dart';
 import 'package:intern_yellow_box/uppercase.dart';
+import 'package:intern_yellow_box/utils/local_storage_utils.dart';
 import 'Menu/Manu.dart';
 import 'package:flutter/gestures.dart';
 import 'dart:ui';
@@ -21,6 +26,7 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController Password = TextEditingController();
   bool _isNameTextNotEmpty = false;
   bool _isOrgTextNotEmpty = false;
+  VaultAccount? account;
 
   bool obscureText = true;
   Widget? _messageWidget;
@@ -46,7 +52,10 @@ class _LoginPageState extends State<LoginPage> {
     super.dispose();
   }
 
-  void login(BuildContext context) {
+  void login(BuildContext context) async {
+    Name.text = 'zeen.demo01@gmail.com';
+    Org.text = 'FMAD_BETA';
+    Password.text = 'Zeen+54321';
     String name = Name.text.trim();
     String password = Password.text.trim();
     String org = Org.text.trim();
@@ -56,20 +65,15 @@ class _LoginPageState extends State<LoginPage> {
         _messageWidget = buildMessageWidget(
             'กรุณากรอก องค์กร หรือ ชื่อผู้ใช้ หรือ รหัสผ่าน', Colors.red);
       });
-    } else if (name != 'admin' || password != '1234' || org != 'ZEEN') {
-      setState(() {//
-        _messageWidget = buildMessageWidget(
-            'องค์กร หรือ ชื่อผู้ใช้ หรือ รหัสผ่านไม่ถูกต้อง', Colors.red);
-      });
     } else {
-      setState(() {
-        _messageWidget = null;
-      });
+      account = await VaultService().login(name, password, org);
+      LocalStorageUtils().setVaultAccount(account!);
+      var account2 = await LocalStorageUtils().getVaultAccount();
 
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  DashboardPage(),
+          builder: (context) =>  BaseScreen(account,),
         ),
       );
     }
@@ -350,7 +354,9 @@ class _LoginPageState extends State<LoginPage> {
                       borderRadius: BorderRadius.circular(8*fem),
                     ),
                     child: ElevatedButton(
-                      onPressed: () => login(context),
+                      onPressed: () async => {
+                        login(context)
+                      },
                       style: ElevatedButton.styleFrom(
                         primary: Colors.orange,
                         onPrimary: Colors.white,

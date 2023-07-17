@@ -1,3 +1,5 @@
+import 'dart:html';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_fonts/src/asset_manifest.dart';
@@ -5,8 +7,11 @@ import 'package:intern_yellow_box/Menu/CycleMenu.dart';
 import 'package:intern_yellow_box/Menu/reportMenu.dart';
 import 'package:intern_yellow_box/test.dart';
 import 'Login.dart';
+import 'dart:html' as html;
 import 'Menu/Manu.dart';
 
+
+final Storage storage = html.window.localStorage;
 void main() {
   runApp(const MyApp());
 }
