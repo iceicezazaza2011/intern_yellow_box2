@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intern_yellow_box/Menu/CycleMenu.dart';
+import 'package:intern_yellow_box/Menu/dashMenu.dart';
 import 'package:intern_yellow_box/uppercase.dart';
 import 'Menu/Manu.dart';
 import 'package:flutter/gestures.dart';
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(
-          builder: (context) =>  CycleMenuPage(),
+          builder: (context) =>  DashboardPage(),
         ),
       );
     }

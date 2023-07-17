@@ -6,6 +6,7 @@ import 'package:intern_yellow_box/utils.dart';
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
 import 'Manu.dart';
+import 'dashMenu.dart';
 
 
 class CycleMenuPage extends StatefulWidget {
@@ -291,29 +292,29 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                     InkWell(
                       onTap: () {
                         setState(() {
-                          _selectedMenu = 'home';
+                          _selectedMenu = 'dashboard';
                           if (_selectedMenu == 'dashboard') {
                             Navigator.pushReplacement(
                               context,
                               MaterialPageRoute(
-                                builder: (context) => MainMenuPage(),
+                                builder: (context) => DashboardPage(),
                               ),
                             );
                           }
                         });
                       },
                       child: Container(
-                        padding: EdgeInsets.fromLTRB(
-                            9 * fem, 9 * fem, 0 * fem, 9 * fem),
+                        padding:
+                        EdgeInsets.fromLTRB(9 * fem, 9 * fem, 0 * fem, 9 * fem),
                         width: double.infinity,
                         decoration: BoxDecoration(
                           border: Border.all(color: Color(0xff717171)),
-                          color: _selectedMenu == 'home'
+                          color: _selectedMenu == 'dashboard'
                               ? Colors.orange
                               : Color(0xff323131),
                         ),
                         child: FittedBox(
-                          fit: BoxFit.cover,
+                          fit: BoxFit.scaleDown,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -323,7 +324,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                 width: 18 * fem,
                                 height: 22 * fem,
                                 child: Image.asset(
-                                  'assets/images/homeicon.png',
+                                  'assets/images/dashboardicon.png',
                                   width: 18 * fem,
                                   height: 22 * fem,
                                 ),
@@ -333,7 +334,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                 margin: EdgeInsets.fromLTRB(
                                     0 * fem, 0 * fem, 106 * fem, 0 * fem),
                                 child: Text(
-                                  'Home',
+                                  'Dashboard',
                                   style: SafeGoogleFont(
                                     'Kanit',
                                     fontSize: 20 * ffem,
@@ -374,7 +375,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                               : Color(0xff323131),
                         ),
                         child: FittedBox(
-                          fit: BoxFit.cover,
+                          fit: BoxFit.scaleDown,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -430,7 +431,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                               : Color(0xff323131),
                         ),
                         child: FittedBox(
-                          fit: BoxFit.cover,
+                          fit: BoxFit.scaleDown,
                           child: Row(
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
@@ -447,62 +448,6 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                               ),
                               Text(
                                 'Report',
-                                style: SafeGoogleFont(
-                                  'Kanit',
-                                  fontSize: 20 * ffem,
-                                  fontWeight: FontWeight.w400,
-                                  height: 1.495 * ffem / fem,
-                                  color: Color(0xffffffff),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    SizedBox(height: 9 * fem),
-                    InkWell(
-                      onTap: () {
-                        setState(() {
-                          _selectedMenu = 'dashboard';
-                          if (_selectedMenu == 'dashboard') {
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => MainMenuPage(),
-                              ),
-                            );
-                          }
-                        });
-                      },
-                      child: Container(
-                        padding: EdgeInsets.fromLTRB(
-                            14 * fem, 9 * fem, 80 * fem, 9 * fem),
-                        width: double.infinity,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: Color(0xff717171)),
-                          color: _selectedMenu == 'dashboard'
-                              ? Colors.orange
-                              : Color(0xff323131),
-                        ),
-                        child: FittedBox(
-                          fit: BoxFit.cover,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: [
-                              Container(
-                                margin: EdgeInsets.fromLTRB(
-                                    0 * fem, 0 * fem, 22 * fem, 0 * fem),
-                                width: 22 * fem,
-                                height: 22 * fem,
-                                child: Image.asset(
-                                  'assets/images/dashboardicon.png',
-                                  width: 22 * fem,
-                                  height: 22 * fem,
-                                ),
-                              ),
-                              Text(
-                                'Dashboard',
                                 style: SafeGoogleFont(
                                   'Kanit',
                                   fontSize: 20 * ffem,

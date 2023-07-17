@@ -25,10 +25,10 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginPage(),//
+        //home: LoginPage(),//
         //home: MainMenuPage(),
         //home: CycleMenuPage('ZEEN','admin','1234'),
-       // home: ReportPage(),
+        home: ReportPage(),
         //home: HomeScreen(),
       ),
     );

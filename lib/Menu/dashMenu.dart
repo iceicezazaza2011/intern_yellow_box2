@@ -1,22 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:intern_yellow_box/Menu/reportMenu.dart';
-import 'package:intern_yellow_box/utils.dart';
 
 import '../Login.dart';
+import '../utils.dart';
 import 'CycleMenu.dart';
-import 'dashMenu.dart';
 
-
-class MainMenuPage extends StatefulWidget {
-  const MainMenuPage({Key? key}) : super(key: key);
+class DashboardPage extends StatefulWidget {
+  const DashboardPage({super.key});
 
   @override
-  State<MainMenuPage> createState() => _MainMenuPageState();
+  State<DashboardPage> createState() => _DashboardPageState();
 }
 
-class _MainMenuPageState extends State<MainMenuPage> {
+class _DashboardPageState extends State<DashboardPage> {
   TextEditingController _searchController = TextEditingController();
-  String _selectedMenu = 'home'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
+  String _selectedMenu = 'dashboard'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
 
   @override
   void dispose() {
@@ -83,10 +81,10 @@ class _MainMenuPageState extends State<MainMenuPage> {
               child: InkWell(
                 onTap: () {
                   Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(
+                    context,
+                    MaterialPageRoute(
                       builder: (context) => LoginPage(),
-                  ),
+                    ),
                   );
                 },
                 child: Container(
@@ -236,7 +234,7 @@ class _MainMenuPageState extends State<MainMenuPage> {
                                 margin: EdgeInsets.fromLTRB(
                                     0 * fem, 0 * fem, 106 * fem, 0 * fem),
                                 child: Text(
-                                  'dashboard',
+                                  'Dashboard',
                                   style: SafeGoogleFont(
                                     'Kanit',
                                     fontSize: 20 * ffem,
@@ -373,4 +371,3 @@ class _MainMenuPageState extends State<MainMenuPage> {
     );
   }
 }
-//
