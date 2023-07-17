@@ -522,7 +522,7 @@ class _ReportPageState extends State<ReportPage> {
                                           //   }).toList();
                                           // } else {
                                           //   cycleBlockWithFilter = [];
-                                          // }
+                                          // }//
                                           return ListView.builder(
                                             itemCount: cycleBlockWithFilter.length,
                                             itemBuilder: (BuildContext context, int index) {
