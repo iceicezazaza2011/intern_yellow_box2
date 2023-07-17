@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intern_yellow_box/utils.dart';
 
+import '../Domain/component_cycle.dart';
 import '../Domain/component_report.dart';
+import '../Domain/service_cycle.dart';
 import '../Domain/service_report.dart';
 import '../Login.dart';
 import 'CycleMenu.dart';
@@ -34,14 +36,18 @@ class _ReportPageState extends State<ReportPage> {
   int _rowPerPage = PaginatedDataTable.defaultRowsPerPage;
   final _horizontalScrollController = ScrollController();
   final ReportService reportService = ReportService();
+  Future<List<CycleBlock>> cycleName = CycleService().getCycleBlock();
+  TextEditingController _cycleController = TextEditingController();
+  String value = '';
+  String searchFilter = '';
 
-  List<String> dropdownOptions = [
-    'FMGT_2023_01_01',
-    'UNI_2023_01_01',
-    'UNI_2023_01_01A',
-    'UNI_2023_01_01B',
-  ];
-  String dropdownValue = 'FMGT_2023_01_01'; // ค่าเริ่มต้นของ Dropdown
+  // List<String> dropdownOptions = [
+  //   'FMGT_2023_01_01',
+  //   'UNI_2023_01_01',
+  //   'UNI_2023_01_01A',
+  //   'UNI_2023_01_01B',
+  // ];
+  String dropdownValue = ''; // ค่าเริ่มต้นของ Dropdown
 
   @override
   void dispose() {
@@ -472,42 +478,98 @@ class _ReportPageState extends State<ReportPage> {
                               ),
                               Container(
                                 width: double.infinity,
-                                height: 32 * fem,
+                                height: 890 * fem,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Color(0xffe5e5e5)),
                                   color: Color(0xffffffff),
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                                child: DropdownButton<String>(
-                                  value: dropdownValue,
-                                  icon: Icon(Icons.arrow_drop_down),
-                                  iconSize: 24 * ffem,
-                                  elevation: 16,
-                                  underline: SizedBox(),
-                                  onChanged: (String? newValue) {
-                                    setState(() {
-                                      dropdownValue = newValue!;
-                                    });
-                                  },
-                                  items: dropdownOptions.map((String value) {
-                                    return DropdownMenuItem<String>(
-                                      value: value,
-                                      child: Padding(
-                                        padding: EdgeInsets.only(left: 12 * fem),
-                                        child: Text(
-                                          value,
-                                          textAlign: TextAlign.center,
-                                          style: TextStyle(
-                                            fontSize: 16 * ffem,
-                                            fontWeight: FontWeight.w600,
-                                            height: 1.495 * ffem / fem,
-                                            color: Color(0xff717171),
-                                          ),
+                                child: Column(
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: TextField(
+                                        decoration: InputDecoration(
+                                          hintText: 'ค้นหา Cycle',
+                                          prefixIcon: Icon(Icons.search),
                                         ),
+                                        onChanged: (value) {
+                                          setState(() {
+                                            searchFilter = value;
+                                          });
+                                        },
                                       ),
-                                    );
-                                  }).toList(),
+                                    ),
+                                    FutureBuilder<List<CycleBlock>>(
+                                      future: CycleService().getCycleBlock(),
+                                      builder: (BuildContext context, AsyncSnapshot<List<CycleBlock>> snapshot) {
+                                        if (snapshot.connectionState == ConnectionState.waiting) {
+                                          return Center(
+                                            child: CircularProgressIndicator(
+                                              color: Colors.orange,
+                                            ),
+                                          );
+                                        } else if (snapshot.hasData) {
+                                          List<CycleBlock> cycleBlockWithFilter = snapshot.data!;
+                                          // if (cycleBlockWithFilter != null) {
+                                          //   cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
+                                          //     print("xxccc");
+                                          //     print(searchFilter);
+                                          //     if (cycle.cycle != null) {
+                                          //       return cycle.cycle!.toUpperCase().contains(searchFilter.toUpperCase().trim());
+                                          //     }
+                                          //     return false;
+                                          //   }).toList();
+                                          // } else {
+                                          //   cycleBlockWithFilter = [];
+                                          // }
+                                          return ListView.builder(
+                                            itemCount: cycleBlockWithFilter.length,
+                                            itemBuilder: (BuildContext context, int index) {
+                                              CycleBlock cycleBlock = cycleBlockWithFilter![index];
+                                              String value = cycleBlock.cycle!;
+
+                                              bool isSelected = value == dropdownValue;
+
+                                              return Container(
+                                                decoration: BoxDecoration(
+                                                  color: isSelected ? Color.fromRGBO(255, 230, 187, 1.0) : null,
+                                                  borderRadius: BorderRadius.circular(2.0),
+                                                ),
+                                                child: Padding(
+                                                  padding: EdgeInsets.only(left: 12 * fem),
+                                                  child: ListTile(
+                                                    title: Text(
+                                                      value,
+                                                      textAlign: TextAlign.center,
+                                                      style: TextStyle(
+                                                        fontSize: 16,
+                                                        fontWeight: FontWeight.w600,
+                                                        height: 1.495,
+                                                        color: isSelected ? Colors.black : Color(0xff717171),
+                                                      ),
+                                                    ),
+                                                    onTap: () {
+                                                      setState(() {
+                                                        dropdownValue = value;
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return Text('Error: ${snapshot.error}');
+                                        } else {
+                                          return Text('No data available');
+                                        }
+                                      },
+                                    ),
+                                  ],
                                 ),
-                              ),
+                              )
+
                             ],
                           ),
                         ),
