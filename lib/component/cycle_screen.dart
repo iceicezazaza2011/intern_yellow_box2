@@ -1,9 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intern_yellow_box/Domain/vault/vaultAccount.dart';
-//import 'package:intern_yellow_box/component/dropdown_filter_cycle.dart';
-import 'package:intern_yellow_box/utils/local_storage_utils.dart';
 import 'package:multiselect/multiselect.dart';
 
 import '../Domain/component_cycle.dart';
@@ -18,9 +14,9 @@ class CycleScreen extends StatefulWidget {
 }
 
 class _CycleScreenState extends State<CycleScreen> {
+  TextEditingController _searchController = TextEditingController();
   bool _issearchconTextNotEmpty = false;
-  List<String> _items = ['DONE', 'IN PROGRESS', 'NEW CYCLE', 'CANCLE'];
-  List<bool> _selectedItems = List.filled(4, false);
+  List<String> _items = ['DONE', 'IN_PROGRESS', 'NEW CYCLE', 'CANCEL'];
   TextEditingController _cycleController = TextEditingController();
   final _horizontalScrollController = ScrollController();
   List<CycleBlock> filteredCycleBlocks = [];
@@ -29,9 +25,15 @@ class _CycleScreenState extends State<CycleScreen> {
   String searchFilter = '';
   late Future<List<CycleBlock>> futureCycle;
   final CycleService cycleService = CycleService();
-  List<CycleBlock> cycleBlocks = []; // สร้างรายการข้อมูลสำหรับ CycleBlock
+  List<CycleBlock> cycleBlocks = [];
   List<String> selectedCycleStatus = [];
   int totalCycleBlocks = 0;
+
+  @override
+  void dispose() {
+    _searchController.dispose();
+    super.dispose();
+  }
 
   @override
   void initState() {
@@ -41,18 +43,25 @@ class _CycleScreenState extends State<CycleScreen> {
     // cyclef();
   }
 
+  void _searchClearText() {
+    _cycleController.clear();
+    setState(() {
+      _issearchconTextNotEmpty = false;
+    });
+  }
+
   Future<void> cyclef() async {
     try {
       List<CycleBlock> data = await cycleService.getCycleBlock();
       setState(() {
         cycleBlocks = data; // กำหนดค่าข้อมูลให้กับตัวแปร cycleBlocks
-        filteredCycleBlocks = cycleBlocks; // กำหนดค่าข้อมูลเริ่มต้นให้กับตัวแปร filteredCycleBlocks
+        filteredCycleBlocks =
+            cycleBlocks; // กำหนดค่าข้อมูลเริ่มต้นให้กับตัวแปร filteredCycleBlocks
       });
     } catch (error) {
       print("Error: $error");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -61,19 +70,23 @@ class _CycleScreenState extends State<CycleScreen> {
     final double ffem = fem * 0.97;
 
     // int totalCycleBlocks = filteredCycleBlocks.length;
-    int inProgressCount = filteredCycleBlocks.where((block) => block.status == "IN_PROGRESS").length;
-    int newCycleCount = filteredCycleBlocks.where((block) => block.status == "NEW_CYCLE").length;
-    int doneCount = filteredCycleBlocks.where((block) => block.status == "DONE").length;
-    int incorrectCount = filteredCycleBlocks.where((block) => block.status == "CANCEL").length;
-    var cycleBlockWithFilter;
+    int inProgressCount = filteredCycleBlocks
+        .where((block) => block.status == "IN_PROGRESS")
+        .length;
+    int newCycleCount = filteredCycleBlocks
+        .where((block) => block.status == "NEW_CYCLE")
+        .length;
+    int doneCount =
+        filteredCycleBlocks.where((block) => block.status == "DONE").length;
+    int incorrectCount =
+        filteredCycleBlocks.where((block) => block.status == "CANCEL").length;
 
-    void _searchClearText() {
-      _cycleController.clear();
-      setState(() {
-        _issearchconTextNotEmpty = false;
-
-      });
-    }
+    // void _searchClearText() {
+    //   _cycleController.clear();
+    //   setState(() {
+    //     _issearchconTextNotEmpty = false;
+    //   });
+    // }
 
     Future<void> _selectDateStart(BuildContext context) async {
       final DateTime? pickedDate = await showDatePicker(
@@ -139,12 +152,10 @@ class _CycleScreenState extends State<CycleScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(18.0),
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
@@ -157,8 +168,7 @@ class _CycleScreenState extends State<CycleScreen> {
                                         fontSize: 20 * ffem,
                                         fontWeight: FontWeight.w400,
                                         height: 1.495 * ffem / fem,
-                                        color: Color.fromRGBO(
-                                            93, 176, 243, 1),
+                                        color: Color.fromRGBO(93, 176, 243, 1),
                                       ),
                                     ),
                                   ),
@@ -186,12 +196,10 @@ class _CycleScreenState extends State<CycleScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(18.0),
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
@@ -232,12 +240,10 @@ class _CycleScreenState extends State<CycleScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(18.0),
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
@@ -278,12 +284,10 @@ class _CycleScreenState extends State<CycleScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(18.0),
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
@@ -324,12 +328,10 @@ class _CycleScreenState extends State<CycleScreen> {
                         child: Padding(
                           padding: EdgeInsets.all(18.0),
                           child: Row(
-                            mainAxisAlignment:
-                            MainAxisAlignment.spaceBetween,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Column(
-                                crossAxisAlignment:
-                                CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Container(
                                     margin: EdgeInsets.only(
@@ -394,16 +396,17 @@ class _CycleScreenState extends State<CycleScreen> {
                               controller: _cycleController,
                               decoration: InputDecoration(
                                 hintText: 'Search By Cycle',
-                                contentPadding: EdgeInsets.fromLTRB(12, 12, 44, 12),
+                                contentPadding:
+                                    EdgeInsets.fromLTRB(12, 12, 44, 12),
                                 suffixIcon: _issearchconTextNotEmpty
                                     ? IconButton(
-                                  onPressed: _searchClearText,
-                                  icon: Icon(
-                                    Icons.cancel,
-                                    size: 20,
-                                    color: Colors.grey,
-                                  ),
-                                )
+                                        onPressed: _searchClearText,
+                                        icon: Icon(
+                                          Icons.cancel,
+                                          size: 20,
+                                          color: Colors.grey,
+                                        ),
+                                      )
                                     : null,
                               ),
                               onChanged: (value) {
@@ -414,7 +417,6 @@ class _CycleScreenState extends State<CycleScreen> {
                               },
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(left: 8.0),
                             child: ElevatedButton(
@@ -443,7 +445,6 @@ class _CycleScreenState extends State<CycleScreen> {
                               ),
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(left: 8.0),
                             child: ElevatedButton(
@@ -469,30 +470,29 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                 ],
                               ),
-
                             ),
                           ),
-
                           Container(
                             margin: EdgeInsets.only(left: 8.0),
                             width: 200,
                             height: 30,
                             decoration: BoxDecoration(
                               color: Colors.white, // สีพื้นหลัง
-                              borderRadius: BorderRadius.circular(6), // กำหนดรูปร่างเป็นวงกลม
+                              borderRadius: BorderRadius.circular(
+                                  6), // กำหนดรูปร่างเป็นวงกลม
                               boxShadow: [
                                 BoxShadow(
-                                  color: Colors.grey.withOpacity(0.5), // สีเงา
+                                  color: Colors.grey.withOpacity(0.1), // สีเงา
                                   spreadRadius: 2, // การกระจายของเงา
                                   blurRadius: 4, // ความกว้างของเงา
                                   offset: Offset(0, 2), // ตำแหน่งเงาแนวแกน x, y
                                 ),
                               ],
                             ),
-                            child:  DropDownMultiSelect(
+                            child: DropDownMultiSelect(
                               onChanged: (List<String> x) {
                                 setState(() {
-                                  selectedCycleStatus =x;
+                                  selectedCycleStatus = x;
                                 });
                               },
                               options: _items,
@@ -500,13 +500,31 @@ class _CycleScreenState extends State<CycleScreen> {
                               whenEmpty: 'Select Something',
                             ),
                           ),
-
-
+                          Container(
+                            margin: EdgeInsets.only(left: 8.0),
+                            child: ElevatedButton(
+                              onPressed: () => _selectDateEnd(context),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8.0),
+                                ),
+                              ),
+                              child: Row(
+                                children: [
+                                  SizedBox(width: 4),
+                                  if (selectedDateEnd == null)
+                                    Text(
+                                      'Reset',
+                                      style: TextStyle(color: Colors.black),
+                                    ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ],
                       ),
                     ),
-
-
                   ],
                 ),
                 SizedBox(height: 20 * fem),
@@ -515,58 +533,63 @@ class _CycleScreenState extends State<CycleScreen> {
                   builder: (context, cycles) {
                     if (cycles.hasData) {
                       //List<CycleBlock> filteredCycleBlocks = snapshot.data!;
-                      cycleBlockWithFilter = cycles.data;
+                      var cycleBlockWithFilter = cycles.data;
 
-                      // cycleBlockWithFilter = cycleBlockWithFilter!.where((cycle) {
-                      //   if (cycle.cycle != null ) {
-                      //     return cycle.cycle!.toUpperCase().contains(searchFilter.toUpperCase().trim());
-                      //   }
-                      //   return false;
-                      // }).toList();
-                      //
-                      //
-                      // cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
-                      //   if(selectedStartDate==null){return true;}
-                      //   else if (cycle.startDate != null ) {
-                      //     DateTime cycleStartDate = DateTime.parse(cycle.startDate!);
-                      //     return cycleStartDate.isAtSameMomentAs(selectedStartDate!);
-                      //   }
-                      //   return false;
-                      // }).toList();
-                      //
-                      //
-                      // cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
-                      //   if(selectedDateEnd==null){return true;}
-                      //   else if (cycle.endDate != null ) {
-                      //     DateTime cycleStartDate = DateTime.parse(cycle.endDate!);
-                      //     return cycleStartDate.isAtSameMomentAs(selectedDateEnd!);
-                      //   }
-                      //   return false;
-                      // }).toList();
+                      cycleBlockWithFilter =
+                          cycleBlockWithFilter!.where((cycle) {
+                        if (cycle.cycle != null) {
+                          return cycle.cycle!
+                              .toUpperCase()
+                              .contains(searchFilter.toUpperCase().trim());
+                        }
+                        return false;
+                      }).toList();
 
-                      // for (int i = 0; i < _selectedItems.length; i++) {
-                      //   if (_selectedItems[i]) {
-                      //     filteredItems.add(_items[i]);
-                      //   }
-                      // }
+                      cycleBlockWithFilter =
+                          cycleBlockWithFilter.where((cycle) {
+                        if (selectedStartDate == null) {
+                          return true;
+                        } else if (cycle.startDate != null) {
+                          DateTime cycleStartDate =
+                              DateTime.parse(cycle.startDate!);
+                          return cycleStartDate
+                              .isAtSameMomentAs(selectedStartDate!);
+                        }
+                        return false;
+                      }).toList();
+                      //
+                      cycleBlockWithFilter =
+                          cycleBlockWithFilter.where((cycle) {
+                        if (selectedDateEnd == null) {
+                          return true;
+                        } else if (cycle.endDate != null) {
+                          DateTime cycleStartDate =
+                              DateTime.parse(cycle.endDate!);
+                          return cycleStartDate
+                              .isAtSameMomentAs(selectedDateEnd!);
+                        }
+                        return false;
+                      }).toList();
 
-                      cycleBlockWithFilter = cycleBlockWithFilter?.where((cycle) {
+                      cycleBlockWithFilter =
+                          cycleBlockWithFilter.where((cycle) {
                         if (selectedCycleStatus.isEmpty) {
                           return true;
-                        } else if (selectedCycleStatus.contains(cycle.status!)) {
+                        } else if (selectedCycleStatus
+                            .contains(cycle.status!)) {
                           return true;
                         }
                         return false;
                       }).toList();
-                      totalCycleBlocks = cycleBlockWithFilter.length;
+                      //totalCycleBlocks = cycleBlockWithFilter.length;
 
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
                         controller: _horizontalScrollController,
                         child: DataTable(
                           headingRowHeight: 44.0 * fem,
-                          headingRowColor:
-                          MaterialStateColor.resolveWith((states) => Color.fromRGBO(249, 225, 185, 1)),
+                          headingRowColor: MaterialStateColor.resolveWith(
+                              (states) => Color.fromRGBO(249, 225, 185, 1)),
                           columns: [
                             DataColumn(
                               label: SizedBox(
@@ -659,8 +682,10 @@ class _CycleScreenState extends State<CycleScreen> {
                               ),
                             ),
                           ],
-                          rows: List<DataRow>.generate(cycleBlockWithFilter!.length, (index) {
-                            CycleBlock cycleBlock = cycleBlockWithFilter![index];
+                          rows: List<DataRow>.generate(
+                              cycleBlockWithFilter.length, (index) {
+                            CycleBlock cycleBlock =
+                                cycleBlockWithFilter![index];
                             int Number = index + 1;
                             return DataRow(
                               cells: [
@@ -679,8 +704,6 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                 ),
-
-
                                 DataCell(
                                   SizedBox(
                                     width: 300 * fem,
@@ -700,7 +723,7 @@ class _CycleScreenState extends State<CycleScreen> {
                                   SizedBox(
                                     width: 200 * fem,
                                     child: Text(
-                                      cycleBlock.orgID!,
+                                      cycleBlock.org!,
                                       style: SafeGoogleFont(
                                         'Kanit',
                                         fontSize: 16 * ffem,
@@ -746,10 +769,11 @@ class _CycleScreenState extends State<CycleScreen> {
                                     width: 100 * fem,
                                     height: 30 * fem,
                                     decoration: BoxDecoration(
-                                        border: Border.all(color: cycleBlock.getStatusColor()),
+                                        border: Border.all(
+                                            color: cycleBlock.getStatusColor()),
                                         color: cycleBlock.getStatusColor(),
-                                        borderRadius: BorderRadius.circular(5 * fem)
-                                    ),
+                                        borderRadius:
+                                            BorderRadius.circular(5 * fem)),
                                     child: Center(
                                       child: SizedBox(
                                         width: 300 * fem,
