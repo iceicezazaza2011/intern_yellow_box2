@@ -31,6 +31,7 @@ class _CycleScreenState extends State<CycleScreen> {
   final CycleService cycleService = CycleService();
   List<CycleBlock> cycleBlocks = []; // สร้างรายการข้อมูลสำหรับ CycleBlock
   List<String> selectedCycleStatus = [];
+  int totalCycleBlocks = 0;
 
   @override
   void initState() {
@@ -59,11 +60,12 @@ class _CycleScreenState extends State<CycleScreen> {
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
 
-    int totalCycleBlocks = filteredCycleBlocks.length;
+    // int totalCycleBlocks = filteredCycleBlocks.length;
     int inProgressCount = filteredCycleBlocks.where((block) => block.status == "IN_PROGRESS").length;
     int newCycleCount = filteredCycleBlocks.where((block) => block.status == "NEW_CYCLE").length;
     int doneCount = filteredCycleBlocks.where((block) => block.status == "DONE").length;
     int incorrectCount = filteredCycleBlocks.where((block) => block.status == "CANCEL").length;
+    var cycleBlockWithFilter;
 
     void _searchClearText() {
       _cycleController.clear();
@@ -487,36 +489,6 @@ class _CycleScreenState extends State<CycleScreen> {
                                 ),
                               ],
                             ),
-                            // child: DropdownButton(
-                            //   isExpanded: true,
-                            //   hint: Text('Filter By Status'),
-                            //   items: _items.map((String item) {
-                            //     return DropdownMenuItem(
-                            //       value: item,
-                            //       child: Row(
-                            //         children: [
-                            //           Checkbox(
-                            //             value: _selectedItems[_items.indexOf(item)],
-                            //             onChanged: (bool? value) {
-                            //
-                            //             },
-                            //           ),
-                            //           Text(item),
-                            //         ],
-                            //       ),
-                            //     );
-                            //   }).toList(),
-                            //   onChanged: (value) {
-                            //     setState(() {
-                            //       _selectedItems[_items.indexOf(item)] = value ?? false;
-                            //     });
-                            //     // No action required when an item in the multiselect dropdown is selected
-                            //   },
-                            //   icon: Icon(Icons.arrow_drop_down),
-                            //   iconSize: 24,
-                            //   elevation: 16,
-                            //   style: TextStyle(color: Colors.black),
-                            // ),
                             child:  DropDownMultiSelect(
                               onChanged: (List<String> x) {
                                 setState(() {
@@ -543,7 +515,7 @@ class _CycleScreenState extends State<CycleScreen> {
                   builder: (context, cycles) {
                     if (cycles.hasData) {
                       //List<CycleBlock> filteredCycleBlocks = snapshot.data!;
-                      var cycleBlockWithFilter = cycles.data;
+                      cycleBlockWithFilter = cycles.data;
 
                       // cycleBlockWithFilter = cycleBlockWithFilter!.where((cycle) {
                       //   if (cycle.cycle != null ) {
@@ -579,7 +551,6 @@ class _CycleScreenState extends State<CycleScreen> {
                       // }
 
                       cycleBlockWithFilter = cycleBlockWithFilter?.where((cycle) {
-                        print(selectedCycleStatus);   print(cycle.status);                        print(selectedCycleStatus.isEmpty);   print(selectedCycleStatus.contains(cycle.status!));
                         if (selectedCycleStatus.isEmpty) {
                           return true;
                         } else if (selectedCycleStatus.contains(cycle.status!)) {
@@ -587,16 +558,7 @@ class _CycleScreenState extends State<CycleScreen> {
                         }
                         return false;
                       }).toList();
-
-                      print(cycleBlockWithFilter);
-
-                      // print(cycles.data!.length);
-                      //
-                      // cycleBlockWithFilter = cycles.data;
-                      // List<dynamic> list = _selectedItems;
-                      // if(list[0]){
-                      //
-                      // }
+                      totalCycleBlocks = cycleBlockWithFilter.length;
 
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
