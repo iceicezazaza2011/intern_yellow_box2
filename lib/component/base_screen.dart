@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intern_yellow_box/component/cycle_screen.dart';
+import 'package:intern_yellow_box/component/cycle_screen2.dart';
 import 'package:intern_yellow_box/component/header.dart';
 import 'package:intern_yellow_box/component/logout.dart';
 import 'package:intern_yellow_box/component/report_screen.dart';
@@ -16,7 +17,9 @@ import '../utils.dart';
 
 class BaseScreen extends StatefulWidget {
   final VaultAccount? account;
-  const BaseScreen(this.account);
+  final List<CycleBlock> cycles;
+
+  const BaseScreen(this.account, this.cycles);
 
   @override
   State<BaseScreen> createState() => _BaseScreenState();
@@ -24,7 +27,6 @@ class BaseScreen extends StatefulWidget {
 
 class _BaseScreenState extends State<BaseScreen> {
   String _selectedMenu = 'cycle'; // เพิ่มตัวแปรเพื่อเก็บเมนูที่ถูกเลือก//
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,9 +47,10 @@ class _BaseScreenState extends State<BaseScreen> {
             SingleChildScrollView(
               child: hamburgerBar(),
             ),
-            if(_selectedMenu == 'cycle')...[
-              CycleScreen(),
-            ]else if(_selectedMenu == 'report')...[
+            if (_selectedMenu == 'cycle') ...[
+              // CycleScreen(),
+              CycleScreen2(widget.cycles),
+            ] else if (_selectedMenu == 'report') ...[
               ReportScreen(),
             ],
           ],
@@ -56,7 +59,7 @@ class _BaseScreenState extends State<BaseScreen> {
     );
   }
 
-  Widget hamburgerBar(){
+  Widget hamburgerBar() {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
@@ -141,8 +144,7 @@ class _BaseScreenState extends State<BaseScreen> {
               });
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(
-                  9 * fem, 9 * fem, 0 * fem, 9 * fem),
+              padding: EdgeInsets.fromLTRB(9 * fem, 9 * fem, 0 * fem, 9 * fem),
               width: double.infinity,
               // decoration: BoxDecoration(
               //   border: Border.all(color: Color(0xff717171)),
@@ -202,8 +204,8 @@ class _BaseScreenState extends State<BaseScreen> {
               });
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(
-                  14 * fem, 9 * fem, 121 * fem, 9 * fem),
+              padding:
+                  EdgeInsets.fromLTRB(14 * fem, 9 * fem, 121 * fem, 9 * fem),
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(color: Color(0xff717171)),
@@ -258,8 +260,8 @@ class _BaseScreenState extends State<BaseScreen> {
               });
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(
-                  14 * fem, 9 * fem, 109 * fem, 9 * fem),
+              padding:
+                  EdgeInsets.fromLTRB(14 * fem, 9 * fem, 109 * fem, 9 * fem),
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(color: Color(0xff717171)),
@@ -314,8 +316,8 @@ class _BaseScreenState extends State<BaseScreen> {
               });
             },
             child: Container(
-              padding: EdgeInsets.fromLTRB(
-                  14 * fem, 9 * fem, 80 * fem, 9 * fem),
+              padding:
+                  EdgeInsets.fromLTRB(14 * fem, 9 * fem, 80 * fem, 9 * fem),
               width: double.infinity,
               decoration: BoxDecoration(
                 border: Border.all(color: Color(0xff717171)),
