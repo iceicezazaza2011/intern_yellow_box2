@@ -1098,7 +1098,7 @@ class _CycleMenuPageState extends State<CycleMenuPage> {
                                           SizedBox(
                                             width: 200 * fem,
                                             child: Text(
-                                              cycleBlock.orgID!,
+                                              cycleBlock.org!,
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
