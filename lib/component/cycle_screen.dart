@@ -5,6 +5,21 @@ import 'package:multiselect/multiselect.dart';
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
 import '../utils.dart';
+// Sample card data class
+
+class CardData {
+  final String status;
+
+  CardData(this.status);
+}
+
+// Populate the card data
+List<CardData> cardsData = [
+  CardData("DONE"),
+  CardData("IN_PROGRESS"),
+  CardData("CANCEL"),
+  CardData("NEW CYCLE"),
+];
 
 class CycleScreen extends StatefulWidget {
   const CycleScreen({super.key});
@@ -27,7 +42,7 @@ class _CycleScreenState extends State<CycleScreen> {
   final CycleService cycleService = CycleService();
   List<CycleBlock> cycleBlocks = [];
   List<String> selectedCycleStatus = [];
-  int totalCycleBlocks = 0;
+  int totalCycleBlocks = 1;
 
   @override
   void dispose() {
@@ -63,30 +78,48 @@ class _CycleScreenState extends State<CycleScreen> {
     }
   }
 
+  void _resetFilters() {
+    setState(() {
+      _cycleController.text = ''; // รีเซ็ตค่าใน TextField ที่เกี่ยวข้อง
+      selectedStartDate = null; // รีเซ็ตค่าเลือกวันที่เริ่มต้น
+      selectedDateEnd = null; // รีเซ็ตค่าเลือกวันที่สิ้นสุด
+      selectedCycleStatus = []; // รีเซ็ตค่าเลือกสถานะ Cycle
+      searchFilter = '';
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final double screenWidth = MediaQuery.of(context).size.width;
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
+    int doneCount = 0;
+    int cancelCount = 0;
+    int newCount = 0;
+    int inprogressCount = 0;
 
-    // int totalCycleBlocks = filteredCycleBlocks.length;
-    int inProgressCount = filteredCycleBlocks
-        .where((block) => block.status == "IN_PROGRESS")
-        .length;
-    int newCycleCount = filteredCycleBlocks
-        .where((block) => block.status == "NEW_CYCLE")
-        .length;
-    int doneCount =
-        filteredCycleBlocks.where((block) => block.status == "DONE").length;
-    int incorrectCount =
-        filteredCycleBlocks.where((block) => block.status == "CANCEL").length;
-
-    // void _searchClearText() {
-    //   _cycleController.clear();
-    //   setState(() {
-    //     _issearchconTextNotEmpty = false;
-    //   });
-    // }
+    for (var cardData in cardsData) {
+      if (cardData.status == "DONE") {
+        // Check if the status is "DONE"
+        doneCount++; // Increment the count for "DONE" statuses
+      } else if (cardData.status == "CANCEL") {
+        cancelCount++;
+      } else if (cardData.status == "IN_PROGRESS") {
+        inprogressCount++;
+      } else if (cardData.status == "NEW CYCLE") {
+        newCount++;
+      }
+    }
+    // int inProgressCount = filteredCycleBlocks
+    //     .where((block) => block.status == "IN_PROGRESS")
+    //     .length;
+    // int newCycleCount = filteredCycleBlocks
+    //     .where((block) => block.status == "NEW_CYCLE")
+    //     .length;
+    // // int doneCount =
+    // //     filteredCycleBlocks.where((block) => block.status == "DONE").length;
+    // int incorrectCount =
+    //     filteredCycleBlocks.where((block) => block.status == "CANCEL").length;
 
     Future<void> _selectDateStart(BuildContext context) async {
       final DateTime? pickedDate = await showDatePicker(
@@ -184,6 +217,17 @@ class _CycleScreenState extends State<CycleScreen> {
                                   ),
                                 ],
                               ),
+                              Container(
+                                width: 94 * fem,
+                                height: 94 * fem,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/all cycle.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
+                              ),
                             ],
                           ),
                         ),
@@ -217,7 +261,7 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                   Text(
-                                    "$inProgressCount",
+                                    "$inprogressCount",
                                     style: SafeGoogleFont(
                                       'Kanit',
                                       fontSize: 34 * ffem,
@@ -227,6 +271,17 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                 ],
+                              ),
+                              Container(
+                                width: 94 * fem,
+                                height: 94 * fem,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage(
+                                        'assets/images/inprogress.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -261,7 +316,7 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                   Text(
-                                    "$newCycleCount",
+                                    "$newCount",
                                     style: SafeGoogleFont(
                                       'Kanit',
                                       fontSize: 34 * ffem,
@@ -271,6 +326,16 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                 ],
+                              ),
+                              Container(
+                                width: 94 * fem,
+                                height: 94 * fem,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/new1.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -305,7 +370,7 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                   Text(
-                                    "$doneCount",
+                                    "$doneCount", // Display the count of "DONE" statuses
                                     style: SafeGoogleFont(
                                       'Kanit',
                                       fontSize: 34 * ffem,
@@ -315,6 +380,16 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                 ],
+                              ),
+                              Container(
+                                width: 94 * fem,
+                                height: 94 * fem,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image: AssetImage('assets/images/done.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -338,7 +413,7 @@ class _CycleScreenState extends State<CycleScreen> {
                                       bottom: 2 * fem,
                                     ),
                                     child: Text(
-                                      "INCORRECT",
+                                      "CANCEL CYCLE",
                                       style: SafeGoogleFont(
                                         'Kanit',
                                         fontSize: 20 * ffem,
@@ -349,7 +424,7 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                   Text(
-                                    "$incorrectCount",
+                                    "$cancelCount",
                                     style: SafeGoogleFont(
                                       'Kanit',
                                       fontSize: 34 * ffem,
@@ -359,6 +434,17 @@ class _CycleScreenState extends State<CycleScreen> {
                                     ),
                                   ),
                                 ], //
+                              ),
+                              Container(
+                                width: 94 * fem,
+                                height: 94 * fem,
+                                decoration: BoxDecoration(
+                                  image: DecorationImage(
+                                    image:
+                                        AssetImage('assets/images/cancel.png'),
+                                    fit: BoxFit.cover,
+                                  ),
+                                ),
                               ),
                             ],
                           ),
@@ -503,7 +589,8 @@ class _CycleScreenState extends State<CycleScreen> {
                           Container(
                             margin: EdgeInsets.only(left: 8.0),
                             child: ElevatedButton(
-                              onPressed: () => _selectDateEnd(context),
+                              onPressed:
+                                  _resetFilters, // เรียกใช้งานฟังก์ชัน _resetFilters()
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.white,
                                 shape: RoundedRectangleBorder(
@@ -513,11 +600,10 @@ class _CycleScreenState extends State<CycleScreen> {
                               child: Row(
                                 children: [
                                   SizedBox(width: 4),
-                                  if (selectedDateEnd == null)
-                                    Text(
-                                      'Reset',
-                                      style: TextStyle(color: Colors.black),
-                                    ),
+                                  Text(
+                                    'Reset',
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ],
                               ),
                             ),
