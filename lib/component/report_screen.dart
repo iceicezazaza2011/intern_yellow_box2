@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intern_yellow_box/Menu/reportMenu.dart';
@@ -7,6 +6,7 @@ import '../Domain/component_report.dart';
 import '../Domain/service_report.dart';
 import '../utils.dart';
 
+//
 class ReportScreen extends StatefulWidget {
   const ReportScreen({super.key});
 
@@ -34,28 +34,20 @@ class _ReportScreenState extends State<ReportScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final double screenHeight = MediaQuery
-        .of(context)
-        .size
-        .height;
-    final double screenWidth = MediaQuery
-        .of(context)
-        .size
-        .width;
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
     final double fem = screenWidth / 1920;
     final double ffem = fem * 0.97;
     return Container(
       // autogroupfx1bF4d (Q5RuU29MZHLT2yQDo5fX1B)
-      padding:
-      EdgeInsets.fromLTRB(8 * fem, 16 * fem, 0 * fem, 20 * fem),
+      padding: EdgeInsets.fromLTRB(8 * fem, 16 * fem, 0 * fem, 20 * fem),
       height: double.infinity,
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
           Container(
             // autogroupusdpNf3 (Q5RpQAazQLr5nSTAqSuSdP)
-            margin:
-            EdgeInsets.fromLTRB(0 * fem, 0 * fem, 8 * fem, 0 * fem),
+            margin: EdgeInsets.fromLTRB(0 * fem, 0 * fem, 8 * fem, 0 * fem),
             width: 216 * fem,
             height: double.infinity,
             child: Column(
@@ -63,8 +55,8 @@ class _ReportScreenState extends State<ReportScreen> {
               children: [
                 Container(
                   // reportuQ5 (1:143)
-                  margin: EdgeInsets.fromLTRB(
-                      16 * fem, 0 * fem, 0 * fem, 16 * fem),
+                  margin:
+                      EdgeInsets.fromLTRB(16 * fem, 0 * fem, 0 * fem, 16 * fem),
                   child: Text(
                     'REPORT',
                     style: SafeGoogleFont(
@@ -123,10 +115,9 @@ class _ReportScreenState extends State<ReportScreen> {
           ),
           Container(
             // autogroupx7eyQ6V (Q5RqaYniP5wXuPXXmAX7ey)
-            margin: EdgeInsets.fromLTRB(
-                0 * fem, 66 * fem, 0 * fem, 0 * fem),
+            margin: EdgeInsets.fromLTRB(0 * fem, 66 * fem, 0 * fem, 0 * fem),
             width: 1452 * fem,
-            height: 910 * fem ,
+            height: 910 * fem,
             child: Stack(
               children: [
                 Positioned(
@@ -156,7 +147,8 @@ class _ReportScreenState extends State<ReportScreen> {
                               child: FutureBuilder(
                                 future: reportService.getReport(),
                                 builder: (context, snapshot) {
-                                  if (snapshot.connectionState == ConnectionState.waiting) {
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
                                     return Center(
                                       child: SpinKitDualRing(
                                         color: Colors.orange,
@@ -165,10 +157,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                     );
                                   } else if (snapshot.hasError) {
                                     return Center(
-                                      child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                      child: Text(
+                                          'เกิดข้อผิดพลาด: ${snapshot.error}'),
                                     );
-                                  }
-                                  else {
+                                  } else {
                                     return Center(
                                       child: Image.asset(
                                         'assets/images/No_Data.png',
@@ -179,7 +171,6 @@ class _ReportScreenState extends State<ReportScreen> {
                                   }
                                 },
                               ),
-
                             ),
                           ],
                         ),
@@ -205,7 +196,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                 FutureBuilder(
                                   future: reportService.getReport(),
                                   builder: (context, snapshot) {
-                                    if (snapshot.connectionState == ConnectionState.waiting) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.waiting) {
                                       return Center(
                                         child: SpinKitDualRing(
                                           color: Colors.orange,
@@ -214,7 +206,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                       );
                                     } else if (snapshot.hasError) {
                                       return Center(
-                                        child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                        child: Text(
+                                            'เกิดข้อผิดพลาด: ${snapshot.error}'),
                                       );
                                     } else if (snapshot.hasData) {
                                       final reportData = snapshot.data;
@@ -224,48 +217,77 @@ class _ReportScreenState extends State<ReportScreen> {
                                           columns: const [
                                             DataColumn(label: Text("Cycle")),
                                             DataColumn(label: Text("AuditID")),
-                                            DataColumn(label: Text("AuditStatus")),
-                                            DataColumn(label: Text("FoundStatus")),
+                                            DataColumn(
+                                                label: Text("AuditStatus")),
+                                            DataColumn(
+                                                label: Text("FoundStatus")),
                                             DataColumn(label: Text("DcID")),
                                             DataColumn(label: Text("DcName")),
                                             DataColumn(label: Text("ShopID")),
                                             DataColumn(label: Text("ShopName")),
-                                            DataColumn(label: Text("ShopSegment")),
+                                            DataColumn(
+                                                label: Text("ShopSegment")),
                                             DataColumn(label: Text("Region")),
                                             DataColumn(label: Text("Province")),
                                             DataColumn(label: Text("PageID")),
                                             DataColumn(label: Text("GroupID")),
-                                            DataColumn(label: Text("QuestionID")),
+                                            DataColumn(
+                                                label: Text("QuestionID")),
                                             DataColumn(label: Text("Topic")),
                                             DataColumn(label: Text("Title")),
                                             DataColumn(label: Text("Module")),
                                             DataColumn(label: Text("Score")),
-                                            DataColumn(label: Text("OverallImageUrl")),
-                                            DataColumn(label: Text("FinalAnswer")),
-                                            DataColumn(label: Text("AutoAnswer")),
+                                            DataColumn(
+                                                label: Text("OverallImageUrl")),
+                                            DataColumn(
+                                                label: Text("FinalAnswer")),
+                                            DataColumn(
+                                                label: Text("AutoAnswer")),
                                             DataColumn(label: Text("AnswerBy")),
-                                            DataColumn(label: Text("AnswerDiff")),
-                                            DataColumn(label: Text("ShelfShareDiff")),
+                                            DataColumn(
+                                                label: Text("AnswerDiff")),
+                                            DataColumn(
+                                                label: Text("ShelfShareDiff")),
                                             DataColumn(label: Text("PopDiff")),
-                                            DataColumn(label: Text("ClusterDiff")),
-                                            DataColumn(label: Text("ShelfLayoutDiff")),
-                                            DataColumn(label: Text("IsAISkipped")),
-                                            DataColumn(label: Text("ChallengeBy")),
-                                            DataColumn(label: Text("AutoQuestion")),
-                                            DataColumn(label: Text("DetectionStatus")),
-                                            DataColumn(label: Text("SubmitByAuditorID")),
-                                            DataColumn(label: Text("UpdateByAuditorID")),
-                                            DataColumn(label: Text("CheckInDateTime")),
-                                            DataColumn(label: Text("CheckOutDateTime")),
-                                            DataColumn(label: Text("UpdateDateTime")),
-                                            DataColumn(label: Text("QuestionTags")),
-                                            DataColumn(label: Text("ScoreTags")),
-                                            DataColumn(label: Text("QuestionRef1")),
-                                            DataColumn(label: Text("QuestionRef2")),
+                                            DataColumn(
+                                                label: Text("ClusterDiff")),
+                                            DataColumn(
+                                                label: Text("ShelfLayoutDiff")),
+                                            DataColumn(
+                                                label: Text("IsAISkipped")),
+                                            DataColumn(
+                                                label: Text("ChallengeBy")),
+                                            DataColumn(
+                                                label: Text("AutoQuestion")),
+                                            DataColumn(
+                                                label: Text("DetectionStatus")),
+                                            DataColumn(
+                                                label:
+                                                    Text("SubmitByAuditorID")),
+                                            DataColumn(
+                                                label:
+                                                    Text("UpdateByAuditorID")),
+                                            DataColumn(
+                                                label: Text("CheckInDateTime")),
+                                            DataColumn(
+                                                label:
+                                                    Text("CheckOutDateTime")),
+                                            DataColumn(
+                                                label: Text("UpdateDateTime")),
+                                            DataColumn(
+                                                label: Text("QuestionTags")),
+                                            DataColumn(
+                                                label: Text("ScoreTags")),
+                                            DataColumn(
+                                                label: Text("QuestionRef1")),
+                                            DataColumn(
+                                                label: Text("QuestionRef2")),
                                             DataColumn(label: Text("ShopRef1")),
                                             DataColumn(label: Text("ShopRef2")),
-                                            DataColumn(label: Text("BasketRef1")),
-                                            DataColumn(label: Text("BasketRef2")),
+                                            DataColumn(
+                                                label: Text("BasketRef1")),
+                                            DataColumn(
+                                                label: Text("BasketRef2")),
                                             DataColumn(label: Text("AIAnswer")),
                                           ],
                                           source: dts,
@@ -282,7 +304,8 @@ class _ReportScreenState extends State<ReportScreen> {
                                     }
                                   },
                                 );
-                              };
+                              }
+                              ;
                             });
                           },
                           child: Container(
@@ -311,8 +334,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                   fontSize: 16 * ffem,
                                   fontWeight: FontWeight.w600,
                                   height: 1.495 * ffem / fem,
-                                  color: _selectedReport ==
-                                      'Audit Result'
+                                  color: _selectedReport == 'Audit Result'
                                       ? selectedTextColor
                                       : defaultTextColor,
                                 ),
@@ -325,8 +347,7 @@ class _ReportScreenState extends State<ReportScreen> {
                               8 * fem, 0 * fem, 0 * fem, 0 * fem),
                           height: double.infinity,
                           child: Row(
-                            crossAxisAlignment: CrossAxisAlignment
-                                .start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               InkWell(
                                 onTap: () {
@@ -339,19 +360,16 @@ class _ReportScreenState extends State<ReportScreen> {
                                   height: 39 * fem,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: _selectedReport ==
-                                          'Audit Overview'
+                                      color: _selectedReport == 'Audit Overview'
                                           ? selectedBorderColor
                                           : defaultBorderColor,
                                     ),
-                                    color: _selectedReport ==
-                                        'Audit Overview'
+                                    color: _selectedReport == 'Audit Overview'
                                         ? selectedBackgroundColor
                                         : defaultBackgroundColor,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5 * fem),
-                                      topRight: Radius.circular(
-                                          5 * fem),
+                                      topRight: Radius.circular(5 * fem),
                                     ),
                                   ),
                                   child: Center(
@@ -363,10 +381,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                         fontSize: 16 * ffem,
                                         fontWeight: FontWeight.w600,
                                         height: 1.495 * ffem / fem,
-                                        color: _selectedReport ==
-                                            'Audit Overview'
-                                            ? selectedTextColor
-                                            : defaultTextColor,
+                                        color:
+                                            _selectedReport == 'Audit Overview'
+                                                ? selectedTextColor
+                                                : defaultTextColor,
                                       ),
                                     ),
                                   ),
@@ -384,19 +402,17 @@ class _ReportScreenState extends State<ReportScreen> {
                                   height: 39 * fem,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: _selectedReport ==
-                                          'Basket Overview'
-                                          ? selectedBorderColor
-                                          : defaultBorderColor,
+                                      color:
+                                          _selectedReport == 'Basket Overview'
+                                              ? selectedBorderColor
+                                              : defaultBorderColor,
                                     ),
-                                    color: _selectedReport ==
-                                        'Basket Overview'
+                                    color: _selectedReport == 'Basket Overview'
                                         ? selectedBackgroundColor
                                         : defaultBackgroundColor,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5 * fem),
-                                      topRight: Radius.circular(
-                                          5 * fem),
+                                      topRight: Radius.circular(5 * fem),
                                     ),
                                   ),
                                   child: Center(
@@ -408,10 +424,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                         fontSize: 16 * ffem,
                                         fontWeight: FontWeight.w600,
                                         height: 1.495 * ffem / fem,
-                                        color: _selectedReport ==
-                                            'Basket Overview'
-                                            ? selectedTextColor
-                                            : defaultTextColor,
+                                        color:
+                                            _selectedReport == 'Basket Overview'
+                                                ? selectedTextColor
+                                                : defaultTextColor,
                                       ),
                                     ),
                                   ),
@@ -429,19 +445,17 @@ class _ReportScreenState extends State<ReportScreen> {
                                   height: 39 * fem,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: _selectedReport ==
-                                          'Shop Compliance'
-                                          ? selectedBorderColor
-                                          : defaultBorderColor,
+                                      color:
+                                          _selectedReport == 'Shop Compliance'
+                                              ? selectedBorderColor
+                                              : defaultBorderColor,
                                     ),
-                                    color: _selectedReport ==
-                                        'Shop Compliance'
+                                    color: _selectedReport == 'Shop Compliance'
                                         ? selectedBackgroundColor
                                         : defaultBackgroundColor,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5 * fem),
-                                      topRight: Radius.circular(
-                                          5 * fem),
+                                      topRight: Radius.circular(5 * fem),
                                     ),
                                   ),
                                   child: Center(
@@ -453,10 +467,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                         fontSize: 16 * ffem,
                                         fontWeight: FontWeight.w600,
                                         height: 1.495 * ffem / fem,
-                                        color: _selectedReport ==
-                                            'Shop Compliance'
-                                            ? selectedTextColor
-                                            : defaultTextColor,
+                                        color:
+                                            _selectedReport == 'Shop Compliance'
+                                                ? selectedTextColor
+                                                : defaultTextColor,
                                       ),
                                     ),
                                   ),
@@ -485,8 +499,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                         : defaultBackgroundColor,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5 * fem),
-                                      topRight: Radius.circular(
-                                          5 * fem),
+                                      topRight: Radius.circular(5 * fem),
                                     ),
                                   ),
                                   child: Center(
@@ -529,8 +542,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                         : defaultBackgroundColor,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5 * fem),
-                                      topRight: Radius.circular(
-                                          5 * fem),
+                                      topRight: Radius.circular(5 * fem),
                                     ),
                                   ),
                                   child: Center(
@@ -564,19 +576,16 @@ class _ReportScreenState extends State<ReportScreen> {
                                   height: 39 * fem,
                                   decoration: BoxDecoration(
                                     border: Border.all(
-                                      color: _selectedReport ==
-                                          'Share Of Shelf'
+                                      color: _selectedReport == 'Share Of Shelf'
                                           ? selectedBorderColor
                                           : defaultBorderColor,
                                     ),
-                                    color: _selectedReport ==
-                                        'Share Of Shelf'
+                                    color: _selectedReport == 'Share Of Shelf'
                                         ? selectedBackgroundColor
                                         : defaultBackgroundColor,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5 * fem),
-                                      topRight: Radius.circular(
-                                          5 * fem),
+                                      topRight: Radius.circular(5 * fem),
                                     ),
                                   ),
                                   child: Center(
@@ -588,10 +597,10 @@ class _ReportScreenState extends State<ReportScreen> {
                                         fontSize: 16 * ffem,
                                         fontWeight: FontWeight.w600,
                                         height: 1.495 * ffem / fem,
-                                        color: _selectedReport ==
-                                            'Share Of Shelf'
-                                            ? selectedTextColor
-                                            : defaultTextColor,
+                                        color:
+                                            _selectedReport == 'Share Of Shelf'
+                                                ? selectedTextColor
+                                                : defaultTextColor,
                                       ),
                                     ),
                                   ),
@@ -620,8 +629,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                         : defaultBackgroundColor,
                                     borderRadius: BorderRadius.only(
                                       topLeft: Radius.circular(5 * fem),
-                                      topRight: Radius.circular(
-                                          5 * fem),
+                                      topRight: Radius.circular(5 * fem),
                                     ),
                                   ),
                                   child: Center(
@@ -633,8 +641,7 @@ class _ReportScreenState extends State<ReportScreen> {
                                         fontSize: 16 * ffem,
                                         fontWeight: FontWeight.w600,
                                         height: 1.495 * ffem / fem,
-                                        color: _selectedReport ==
-                                            'Score'
+                                        color: _selectedReport == 'Score'
                                             ? selectedTextColor
                                             : defaultTextColor,
                                       ),
