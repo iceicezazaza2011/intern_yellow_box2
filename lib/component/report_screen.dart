@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intern_yellow_box/Menu/reportMenu.dart';
 
+import '../Domain/component_cycle.dart';
 import '../Domain/component_report.dart';
+import '../Domain/service_cycle.dart';
 import '../Domain/service_report.dart';
 import '../utils.dart';
 
@@ -30,8 +31,26 @@ class _ReportScreenState extends State<ReportScreen> {
   int _rowPerPage = PaginatedDataTable.defaultRowsPerPage;
   final _horizontalScrollController = ScrollController();
   final ReportService reportService = ReportService();
-  String dropdownValue = 'FMGT_2023_01_01'; // ค่าเริ่มต้นของ Dropdown
+  String searchFilter = '';
+  late Future<List<CycleBlock>> futureCycle;
+  final CycleService cycleService = CycleService();
+  String listValue = '';
 
+  String? dropdownValue;
+  List<String> dropdownOptions = [
+    'Option 1',
+    'Option 2',
+    'Option 3',
+    // เพิ่มรายการข้อมูลตามที่คุณต้องการ
+  ];
+
+  @override
+  void initState() {
+    super.initState();
+    futureCycle = cycleService.getCycleBlock();
+  }
+
+//
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
@@ -69,45 +88,148 @@ class _ReportScreenState extends State<ReportScreen> {
                   ),
                 ),
                 Container(
+                  // cycleEBT (1:144)
+                  padding: EdgeInsets.fromLTRB(0, 0, 0, 12 * fem),
                   width: double.infinity,
-                  height: 36 * fem,
                   decoration: BoxDecoration(
-                    border: Border.all(color: Color(0xffe5e5e5)),
                     color: Color(0xffffffff),
+                    borderRadius: BorderRadius.circular(5 * fem),
                   ),
-                  child: DropdownButton<String>(
-                    value: dropdownValue,
-                    icon: Icon(Icons.arrow_drop_down),
-                    iconSize: 24,
-                    elevation: 16,
-                    underline: SizedBox(),
-                    onChanged: (String? newValue) {
-                      setState(() {
-                        dropdownValue = newValue!;
-                      });
-                    },
-                    items: <String>[
-                      'FMGT_2023_01_01',
-                      // เพิ่มตัวเลือก Dropdown อื่น ๆ ที่คุณต้องการ
-                    ].map<DropdownMenuItem<String>>((String value) {
-                      return DropdownMenuItem<String>(
-                        value: value,
-                        child: Padding(
-                          padding: EdgeInsets.symmetric(horizontal: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        // group46VdB (1:217)
+                        width: double.infinity,
+                        height: 40 * fem,
+                        decoration: BoxDecoration(
+                          color: Color(0xfffca316),
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(5 * fem),
+                            topRight: Radius.circular(5 * fem),
+                          ),
+                        ),
+                        child: Center(
                           child: Text(
-                            value,
+                            'Cycle',
                             textAlign: TextAlign.center,
-                            style: SafeGoogleFont(
-                              'Kanit',
-                              fontSize: 16 * ffem,
+                            style: TextStyle(
+                              fontSize: 24 * ffem,
                               fontWeight: FontWeight.w600,
                               height: 1.495 * ffem / fem,
-                              color: Color(0xff717171),
+                              color: Color(0xffffffff),
                             ),
                           ),
                         ),
-                      );
-                    }).toList(),
+                      ),
+                      Container(
+                        width: double.infinity,
+                        height: 696 * fem,
+                        decoration: BoxDecoration(
+                          border: Border.all(color: Color(0xffe5e5e5)),
+                          color: Color(0xffffffff),
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextField(
+                                decoration: InputDecoration(
+                                  hintText: 'ค้นหา Cycle',
+                                  prefixIcon: Icon(Icons.search),
+                                ),
+                                onChanged: (value) {
+                                  setState(() {
+                                    searchFilter = value;
+                                  });
+                                },
+                              ),
+                            ),
+                            SizedBox(height: 16),
+                            Expanded(
+                              child: FutureBuilder<List<CycleBlock>>(
+                                future: futureCycle,
+                                builder: (context, cycles) {
+                                  if (cycles.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return Center(
+                                      child: CircularProgressIndicator(
+                                        color: Colors.orange,
+                                      ),
+                                    );
+                                  } else if (cycles.hasData) {
+                                    //List<CycleBlock> cycleBlockWithFilter = cycles.data!;
+                                    var cycleBlockWithFilter = cycles.data;
+
+                                    cycleBlockWithFilter =
+                                        cycleBlockWithFilter!.where((cycle) {
+                                      if (cycle.cycle != null) {
+                                        return cycle.cycle!
+                                            .toUpperCase()
+                                            .contains(searchFilter
+                                                .toUpperCase()
+                                                .trim());
+                                      }
+                                      return false;
+                                    }).toList();
+                                    return ListView.builder(
+                                      itemCount: cycleBlockWithFilter.length,
+                                      itemBuilder:
+                                          (BuildContext context, int index) {
+                                        CycleBlock cycleBlock =
+                                            cycleBlockWithFilter![index];
+                                        String value = cycleBlock.cycle!;
+
+                                        bool isSelected = value == listValue;
+
+                                        return Container(
+                                          decoration: BoxDecoration(
+                                            color: isSelected
+                                                ? Color.fromRGBO(
+                                                    255, 230, 187, 1.0)
+                                                : null,
+                                            borderRadius:
+                                                BorderRadius.circular(2.0),
+                                          ),
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsets.only(left: 12 * fem),
+                                            child: ListTile(
+                                              title: Text(
+                                                value,
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  fontSize: 14,
+                                                  fontWeight: FontWeight.w600,
+                                                  height: 1.495,
+                                                  color: isSelected
+                                                      ? Colors.black
+                                                      : Color(0xff717171),
+                                                ),
+                                              ),
+                                              onTap: () {
+                                                setState(() {
+                                                  listValue = value;
+                                                });
+                                              },
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                    );
+                                  } else if (cycles.hasError) {
+                                    return Text('Error: ${cycles.error}');
+                                  } else {
+                                    return Text('No data available');
+                                  }
+                                },
+                              ),
+                            )
+                          ],
+                        ),
+                      )
+                    ],
                   ),
                 ),
               ],
@@ -125,8 +247,8 @@ class _ReportScreenState extends State<ReportScreen> {
                   left: 0 * fem,
                   top: 39 * fem,
                   child: Container(
-                    padding: EdgeInsets.fromLTRB(
-                        4 * fem, 82 * fem, 0 * fem, 4 * fem),
+                    padding:
+                        EdgeInsets.fromLTRB(4 * fem, 5 * fem, 0 * fem, 4 * fem),
                     width: 1452,
                     height: 821,
                     decoration: BoxDecoration(
@@ -136,40 +258,221 @@ class _ReportScreenState extends State<ReportScreen> {
                     child: ListView(
                       children: [
                         Wrap(
-                          //crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Container(
-                              // autogroupwrffaQH (Q5RqixiN3S5Uq5zz17wRff)
                               margin: EdgeInsets.fromLTRB(
-                                  0 * fem, 0 * fem, 0 * fem, 0 * fem),
+                                  10 * fem, 20 * fem, 0 * fem, 0 * fem),
                               width: 1448 * fem,
-                              height: 630 * fem,
-                              child: FutureBuilder(
-                                future: reportService.getReport(),
-                                builder: (context, snapshot) {
-                                  if (snapshot.connectionState ==
-                                      ConnectionState.waiting) {
-                                    return Center(
-                                      child: SpinKitDualRing(
-                                        color: Colors.orange,
-                                        size: 60.0,
-                                      ),
-                                    );
-                                  } else if (snapshot.hasError) {
-                                    return Center(
-                                      child: Text(
-                                          'เกิดข้อผิดพลาด: ${snapshot.error}'),
-                                    );
-                                  } else {
-                                    return Center(
-                                      child: Image.asset(
-                                        'assets/images/No_Data.png',
-                                        width: 251,
-                                        height: 283,
-                                      ),
-                                    );
-                                  }
-                                },
+                              height: 1150 * fem,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Container(
+                                    margin: EdgeInsets.only(bottom: 14 * fem),
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        //SizedBox(width: 10), // เพิ่มส่วนนี้เพื่อเว้นระยะห่างระหว่างปุ่ม Filter และปุ่ม Search
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            SizedBox(
+                                              height: 5,
+                                            ),
+                                            Container(
+                                              width: 104,
+                                              height: 46,
+                                              child: DropdownButtonFormField<
+                                                  String>(
+                                                value: dropdownValue,
+                                                onChanged: (String? newValue) {
+                                                  setState(() {
+                                                    dropdownValue = newValue;
+                                                  });
+                                                },
+                                                items: dropdownOptions
+                                                    .map((String value) {
+                                                  return DropdownMenuItem<
+                                                      String>(
+                                                    value: value,
+                                                    child: Text(value),
+                                                  );
+                                                }).toList(),
+                                                decoration: InputDecoration(
+                                                  labelText: 'Dropdown',
+                                                  border: OutlineInputBorder(),
+                                                ),
+                                              ),
+                                            ),
+                                            SizedBox(
+                                              width: 24,
+                                            ),
+                                            Container(
+                                              width: 349,
+                                              height: 40,
+                                              decoration: BoxDecoration(
+                                                color: Colors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(4),
+                                                border: Border.all(
+                                                  color: Colors.grey,
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: TextField(
+                                                controller: searchController,
+                                                decoration: InputDecoration(
+                                                  hintText: 'Search',
+                                                  border: InputBorder.none,
+                                                  contentPadding:
+                                                      EdgeInsets.fromLTRB(
+                                                          12, 12, 44, 12),
+                                                  suffixIcon: IconButton(
+                                                    onPressed: () {
+                                                      // คำสั่งที่ต้องการเมื่อกดปุ่มค้นหา
+                                                      // ...
+                                                    },
+                                                    icon: Icon(
+                                                      Icons.search,
+                                                      size: 24,
+                                                    ),
+                                                  ),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  FutureBuilder(
+                                    future: reportService.getReport(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.connectionState ==
+                                          ConnectionState.waiting) {
+                                        return Center(
+                                          child: SpinKitDualRing(
+                                            color: Colors.orange,
+                                            size: 60.0,
+                                          ),
+                                        );
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                          child: Text(
+                                              'เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                        );
+                                      } else if (snapshot.hasData) {
+                                        final reportData = snapshot.data;
+                                        return SingleChildScrollView(
+                                          controller:
+                                              _horizontalScrollController,
+                                          child: PaginatedDataTable(
+                                            columns: const [
+                                              DataColumn(label: Text("Cycle")),
+                                              DataColumn(
+                                                  label: Text("AuditID")),
+                                              DataColumn(
+                                                  label: Text("AuditStatus")),
+                                              DataColumn(
+                                                  label: Text("FoundStatus")),
+                                              DataColumn(label: Text("DcID")),
+                                              DataColumn(label: Text("DcName")),
+                                              DataColumn(label: Text("ShopID")),
+                                              DataColumn(
+                                                  label: Text("ShopName")),
+                                              DataColumn(
+                                                  label: Text("ShopSegment")),
+                                              DataColumn(label: Text("Region")),
+                                              DataColumn(
+                                                  label: Text("Province")),
+                                              DataColumn(label: Text("PageID")),
+                                              DataColumn(
+                                                  label: Text("GroupID")),
+                                              DataColumn(
+                                                  label: Text("QuestionID")),
+                                              DataColumn(label: Text("Topic")),
+                                              DataColumn(label: Text("Title")),
+                                              DataColumn(label: Text("Module")),
+                                              DataColumn(label: Text("Score")),
+                                              //DataColumn(label: Text("OverallImageUrl")),
+                                              DataColumn(
+                                                  label: Text("FinalAnswer")),
+                                              DataColumn(
+                                                  label: Text("AutoAnswer")),
+                                              DataColumn(
+                                                  label: Text("AnswerBy")),
+                                              DataColumn(
+                                                  label: Text("AnswerDiff")),
+                                              DataColumn(
+                                                  label:
+                                                      Text("ShelfShareDiff")),
+                                              DataColumn(
+                                                  label: Text("PopDiff")),
+                                              DataColumn(
+                                                  label: Text("ClusterDiff")),
+                                              DataColumn(
+                                                  label:
+                                                      Text("ShelfLayoutDiff")),
+                                              DataColumn(
+                                                  label: Text("IsAISkipped")),
+                                              DataColumn(
+                                                  label: Text("ChallengeBy")),
+                                              DataColumn(
+                                                  label: Text("AutoQuestion")),
+                                              DataColumn(
+                                                  label:
+                                                      Text("DetectionStatus")),
+                                              DataColumn(
+                                                  label: Text(
+                                                      "SubmitByAuditorID")),
+                                              DataColumn(
+                                                  label: Text(
+                                                      "UpdateByAuditorID")),
+                                              DataColumn(
+                                                  label:
+                                                      Text("CheckInDateTime")),
+                                              DataColumn(
+                                                  label:
+                                                      Text("CheckOutDateTime")),
+                                              DataColumn(
+                                                  label:
+                                                      Text("UpdateDateTime")),
+                                              DataColumn(
+                                                  label: Text("QuestionTags")),
+                                              DataColumn(
+                                                  label: Text("ScoreTags")),
+                                              DataColumn(
+                                                  label: Text("QuestionRef1")),
+                                              DataColumn(
+                                                  label: Text("QuestionRef2")),
+                                              DataColumn(
+                                                  label: Text("ShopRef1")),
+                                              DataColumn(
+                                                  label: Text("ShopRef2")),
+                                              DataColumn(
+                                                  label: Text("BasketRef1")),
+                                              DataColumn(
+                                                  label: Text("BasketRef2")),
+                                              DataColumn(
+                                                  label: Text("AIAnswer")),
+                                            ],
+                                            source: dts,
+                                            onRowsPerPageChanged: (r) {
+                                              setState(() {
+                                                _rowPerPage = r!;
+                                              });
+                                            },
+                                            rowsPerPage: _rowPerPage,
+                                          ),
+                                        );
+                                      } else {
+                                        return SizedBox();
+                                      }
+                                    },
+                                  ),
+                                ],
                               ),
                             ),
                           ],
@@ -192,120 +495,6 @@ class _ReportScreenState extends State<ReportScreen> {
                           onTap: () {
                             setState(() {
                               _selectedReport = 'Audit Result';
-                              if (_selectedReport == 'Audit Result') {
-                                FutureBuilder(
-                                  future: reportService.getReport(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.connectionState ==
-                                        ConnectionState.waiting) {
-                                      return Center(
-                                        child: SpinKitDualRing(
-                                          color: Colors.orange,
-                                          size: 60.0,
-                                        ),
-                                      );
-                                    } else if (snapshot.hasError) {
-                                      return Center(
-                                        child: Text(
-                                            'เกิดข้อผิดพลาด: ${snapshot.error}'),
-                                      );
-                                    } else if (snapshot.hasData) {
-                                      final reportData = snapshot.data;
-                                      return SingleChildScrollView(
-                                        controller: _horizontalScrollController,
-                                        child: PaginatedDataTable(
-                                          columns: const [
-                                            DataColumn(label: Text("Cycle")),
-                                            DataColumn(label: Text("AuditID")),
-                                            DataColumn(
-                                                label: Text("AuditStatus")),
-                                            DataColumn(
-                                                label: Text("FoundStatus")),
-                                            DataColumn(label: Text("DcID")),
-                                            DataColumn(label: Text("DcName")),
-                                            DataColumn(label: Text("ShopID")),
-                                            DataColumn(label: Text("ShopName")),
-                                            DataColumn(
-                                                label: Text("ShopSegment")),
-                                            DataColumn(label: Text("Region")),
-                                            DataColumn(label: Text("Province")),
-                                            DataColumn(label: Text("PageID")),
-                                            DataColumn(label: Text("GroupID")),
-                                            DataColumn(
-                                                label: Text("QuestionID")),
-                                            DataColumn(label: Text("Topic")),
-                                            DataColumn(label: Text("Title")),
-                                            DataColumn(label: Text("Module")),
-                                            DataColumn(label: Text("Score")),
-                                            DataColumn(
-                                                label: Text("OverallImageUrl")),
-                                            DataColumn(
-                                                label: Text("FinalAnswer")),
-                                            DataColumn(
-                                                label: Text("AutoAnswer")),
-                                            DataColumn(label: Text("AnswerBy")),
-                                            DataColumn(
-                                                label: Text("AnswerDiff")),
-                                            DataColumn(
-                                                label: Text("ShelfShareDiff")),
-                                            DataColumn(label: Text("PopDiff")),
-                                            DataColumn(
-                                                label: Text("ClusterDiff")),
-                                            DataColumn(
-                                                label: Text("ShelfLayoutDiff")),
-                                            DataColumn(
-                                                label: Text("IsAISkipped")),
-                                            DataColumn(
-                                                label: Text("ChallengeBy")),
-                                            DataColumn(
-                                                label: Text("AutoQuestion")),
-                                            DataColumn(
-                                                label: Text("DetectionStatus")),
-                                            DataColumn(
-                                                label:
-                                                    Text("SubmitByAuditorID")),
-                                            DataColumn(
-                                                label:
-                                                    Text("UpdateByAuditorID")),
-                                            DataColumn(
-                                                label: Text("CheckInDateTime")),
-                                            DataColumn(
-                                                label:
-                                                    Text("CheckOutDateTime")),
-                                            DataColumn(
-                                                label: Text("UpdateDateTime")),
-                                            DataColumn(
-                                                label: Text("QuestionTags")),
-                                            DataColumn(
-                                                label: Text("ScoreTags")),
-                                            DataColumn(
-                                                label: Text("QuestionRef1")),
-                                            DataColumn(
-                                                label: Text("QuestionRef2")),
-                                            DataColumn(label: Text("ShopRef1")),
-                                            DataColumn(label: Text("ShopRef2")),
-                                            DataColumn(
-                                                label: Text("BasketRef1")),
-                                            DataColumn(
-                                                label: Text("BasketRef2")),
-                                            DataColumn(label: Text("AIAnswer")),
-                                          ],
-                                          source: dts,
-                                          onRowsPerPageChanged: (r) {
-                                            setState(() {
-                                              _rowPerPage = r!;
-                                            });
-                                          },
-                                          rowsPerPage: _rowPerPage,
-                                        ),
-                                      );
-                                    } else {
-                                      return SizedBox();
-                                    }
-                                  },
-                                );
-                              }
-                              ;
                             });
                           },
                           child: Container(
@@ -353,6 +542,33 @@ class _ReportScreenState extends State<ReportScreen> {
                                 onTap: () {
                                   setState(() {
                                     _selectedReport = 'Audit Overview';
+                                    FutureBuilder(
+                                      future: reportService.getReport(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.connectionState ==
+                                            ConnectionState.waiting) {
+                                          return const Center(
+                                            child: SpinKitDualRing(
+                                              color: Colors.orange,
+                                              size: 60.0,
+                                            ),
+                                          );
+                                        } else if (snapshot.hasError) {
+                                          return Center(
+                                            child: Text(
+                                                'เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                          );
+                                        } else {
+                                          return Center(
+                                            child: Image.asset(
+                                              'assets/images/zeenlogoen-1.png',
+                                              width: 251,
+                                              height: 283,
+                                            ),
+                                          );
+                                        }
+                                      },
+                                    );
                                   });
                                 },
                                 child: Container(
@@ -663,4 +879,80 @@ class _ReportScreenState extends State<ReportScreen> {
       ),
     );
   }
+}
+
+class DTS extends DataTableSource {
+  List<Report> reports = [];
+
+  void updateReports(List<Report> newReports) {
+    reports.clear();
+    reports.addAll(newReports);
+    notifyListeners();
+  }
+
+  @override
+  DataRow getRow(int index) {
+    // ตรวจสอบว่ามีข้อมูลในรายการ reports หรือไม่
+    // if (index >= reports.length) return null;
+    final Report report = reports[index];
+
+    return DataRow(
+      cells: [
+        DataCell(Text(report.Cycle ?? '')),
+        DataCell(Text(report.AuditID ?? '')),
+        DataCell(Text(report.AuditStatus ?? '')),
+        DataCell(Text(report.FoundStatus ?? '')),
+        DataCell(Text(report.DcID ?? '')),
+        DataCell(Text(report.DcName ?? '')),
+        DataCell(Text(report.ShopID ?? '')),
+        DataCell(Text(report.ShopName ?? '')),
+        DataCell(Text(report.ShopSegment ?? '')),
+        DataCell(Text(report.Region ?? '')),
+        DataCell(Text(report.Province ?? '')),
+        DataCell(Text(report.PageID ?? '')),
+        DataCell(Text(report.GroupID ?? '')),
+        DataCell(Text(report.QuestionID ?? '')),
+        DataCell(Text(report.Topic ?? '')),
+        DataCell(Text(report.Title ?? '')),
+        DataCell(Text(report.Module ?? '')),
+        DataCell(Text(report.Score != null ? report.Score.toString() : '')),
+        //DataCell(Text(Report.OverallImageUrl ?? '')),
+        DataCell(Text(report.FinalAnswer ?? '')),
+        DataCell(Text(report.AutoAnswer ?? '')),
+        DataCell(Text(report.AnswerBy ?? '')),
+        DataCell(Text(report.AnswerDiff ?? '')),
+        DataCell(Text(report.ShelfShareDiff ?? '')),
+        DataCell(Text(report.PopDiff ?? '')),
+        DataCell(Text(report.ClusterDiff ?? '')),
+        DataCell(Text(report.ShelfLayoutDiff ?? '')),
+        DataCell(Text(report.IsAISkipped ?? '')),
+        DataCell(Text(report.ChallengeBy ?? '')),
+        DataCell(Text(report.AutoQuestion ?? '')),
+        DataCell(Text(report.DetectionStatus ?? '')),
+        DataCell(Text(report.SubmitByAuditorID ?? '')),
+        DataCell(Text(report.UpdateByAuditorID ?? '')),
+        DataCell(Text(report.CheckInDateTime ?? '')),
+        DataCell(Text(report.CheckOutDateTime ?? '')),
+        DataCell(Text(report.UpdateDateTime ?? '')),
+        DataCell(Text(report.QuestionTags ?? '')),
+        DataCell(Text(report.ScoreTags ?? '')),
+        DataCell(Text(report.QuestionRef1 ?? '')),
+        DataCell(Text(report.QuestionRef2 ?? '')),
+        DataCell(Text(report.ShopRef1 ?? '')),
+        DataCell(Text(report.ShopRef2 ?? '')),
+        DataCell(Text(report.BasketRef1 ?? '')),
+        DataCell(Text(report.BasketRef2 ?? '')),
+        DataCell(Text(report.AIAnswer ?? '')),
+      ],
+    );
+  }
+
+  @override
+  bool get isRowCountApproximate => false;
+
+  @override
+  int get rowCount => reports.length;
+
+  @override
+  int get selectedRowCount => 0;
 }
