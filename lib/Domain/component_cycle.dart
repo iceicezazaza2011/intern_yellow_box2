@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class CycleBlock {
   int? index;
-  String? orgID;
+  String? org;
   String? cycle;
   String? startDate;
   String? endDate;
@@ -10,7 +10,7 @@ class CycleBlock {
 
   CycleBlock({
     this.index,
-    this.orgID,
+    this.org,
     this.cycle,
     this.startDate,
     this.endDate,
@@ -34,8 +34,7 @@ class CycleBlock {
 
   factory CycleBlock.fromJson(Map<String, dynamic> json) {
     return CycleBlock(
-
-      orgID: json['orgID'],
+      org: json['org'],
       cycle: json['cycle'],
       startDate: json['startDate'],
       endDate: json['endDate'],

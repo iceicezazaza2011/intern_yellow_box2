@@ -1,32 +1,28 @@
-import 'dart:io';
+import 'dart:convert';
 
 import 'package:http/http.dart' as http;
 import 'package:intern_yellow_box/Domain/component_cycle.dart';
 
-
-import 'dart:convert';
-import 'dart:developer';
-
-class CycleService{
-  Future<List<CycleBlock>> getCycleBlock() async{
-    String url = "https://648b1e6917f1536d65ea68a8.mockapi.io/cycle";
+class CycleService {
+  Future<List<CycleBlock>> getCycleBlock() async {
+    String url =
+        "http://192.168.86.20:8083/training-ws/cycle/allCycles/ZEENDEMO2_BETA";
     final queryParameters = {
       'org': '',
     };
     // print(uri);
-    try{
+    try {
       final response = await http.get(Uri.parse(url));
-      if(response.statusCode == 200)
-      {
-        List list = jsonDecode(response.body)??[];
-        List<CycleBlock> result = list.map((e) => CycleBlock.fromJson(e)).toList();
+      if (response.statusCode == 200) {
+        List list = jsonDecode(response.body) ?? [];
+        List<CycleBlock> result =
+            list.map((e) => CycleBlock.fromJson(e)).toList();
         return result;
-      }//
-      else
-      {
+      } //
+      else {
         throw Exception("Error Occur");
       }
-    }catch(e){
+    } catch (e) {
       print("xxxxxxxx");
       print(e.toString());
     }
