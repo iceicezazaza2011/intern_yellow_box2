@@ -1,3 +1,5 @@
+import 'dart:js';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:intern_yellow_box/utils.dart';
@@ -37,17 +39,20 @@ class _ReportPageState extends State<ReportPage> {
   final _horizontalScrollController = ScrollController();
   final ReportService reportService = ReportService();
   Future<List<CycleBlock>> cycleName = CycleService().getCycleBlock();
-  TextEditingController _cycleController = TextEditingController();
   String value = '';
   String searchFilter = '';
+  bool isDataLoaded = false;
+  late Future<List<CycleBlock>> futureCycle;
+  final CycleService cycleService = CycleService();
+  String listValue = ''; // ค่าเริ่มต้นของ Dropdown
 
-  // List<String> dropdownOptions = [
-  //   'FMGT_2023_01_01',
-  //   'UNI_2023_01_01',
-  //   'UNI_2023_01_01A',
-  //   'UNI_2023_01_01B',
-  // ];
-  String dropdownValue = ''; // ค่าเริ่มต้นของ Dropdown
+  String? dropdownValue;
+  List<String> dropdownOptions = [
+    'Option 1',
+    'Option 2',
+    'Option 3',
+    // เพิ่มรายการข้อมูลตามที่คุณต้องการ
+  ];
 
   @override
   void dispose() {
@@ -58,6 +63,7 @@ class _ReportPageState extends State<ReportPage> {
   @override
   void initState() {
     super.initState();
+    futureCycle = cycleService.getCycleBlock();
     reportf();
   }
 
@@ -65,6 +71,8 @@ class _ReportPageState extends State<ReportPage> {
     final reports = await ReportService().getReport();
     dts.updateReports((reports));
   }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -412,7 +420,7 @@ class _ReportPageState extends State<ReportPage> {
             Container(
               // autogroupfx1bF4d (Q5RuU29MZHLT2yQDo5fX1B)
               padding:
-                  EdgeInsets.fromLTRB(8 * fem, 16 * fem, 0 * fem, 20 * fem),
+              EdgeInsets.fromLTRB(8 * fem, 16 * fem, 0 * fem, 20 * fem),
               height: double.infinity,
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -420,7 +428,7 @@ class _ReportPageState extends State<ReportPage> {
                   Container(
                     // autogroupusdpNf3 (Q5RpQAazQLr5nSTAqSuSdP)
                     margin:
-                        EdgeInsets.fromLTRB(0 * fem, 0 * fem, 8 * fem, 0 * fem),
+                    EdgeInsets.fromLTRB(0 * fem, 0 * fem, 8 * fem, 0 * fem),
                     width: 216 * fem,
                     height: double.infinity,
                     child: Column(
@@ -478,7 +486,7 @@ class _ReportPageState extends State<ReportPage> {
                               ),
                               Container(
                                 width: double.infinity,
-                                height: 890 * fem,
+                                height: 696 * fem,
                                 decoration: BoxDecoration(
                                   border: Border.all(color: Color(0xffe5e5e5)),
                                   color: Color(0xffffffff),
@@ -500,76 +508,74 @@ class _ReportPageState extends State<ReportPage> {
                                         },
                                       ),
                                     ),
-                                    FutureBuilder<List<CycleBlock>>(
-                                      future: CycleService().getCycleBlock(),
-                                      builder: (BuildContext context, AsyncSnapshot<List<CycleBlock>> snapshot) {
-                                        if (snapshot.connectionState == ConnectionState.waiting) {
-                                          return Center(
-                                            child: CircularProgressIndicator(
-                                              color: Colors.orange,
-                                            ),
-                                          );
-                                        } else if (snapshot.hasData) {
-                                          List<CycleBlock> cycleBlockWithFilter = snapshot.data!;
-                                          // if (cycleBlockWithFilter != null) {
-                                          //   cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
-                                          //     print("xxccc");
-                                          //     print(searchFilter);
-                                          //     if (cycle.cycle != null) {
-                                          //       return cycle.cycle!.toUpperCase().contains(searchFilter.toUpperCase().trim());
-                                          //     }
-                                          //     return false;
-                                          //   }).toList();
-                                          // } else {
-                                          //   cycleBlockWithFilter = [];
-                                          // }
-                                          return ListView.builder(
-                                            itemCount: cycleBlockWithFilter.length,
-                                            itemBuilder: (BuildContext context, int index) {
-                                              CycleBlock cycleBlock = cycleBlockWithFilter![index];
-                                              String value = cycleBlock.cycle!;
+                                    SizedBox(height: 16),
+                                    Expanded(
+                                      child: FutureBuilder<List<CycleBlock>>(
+                                        future: futureCycle,
+                                        builder: (context, cycles) {
+                                          if (cycles.connectionState == ConnectionState.waiting) {
+                                            return Center(
+                                              child: CircularProgressIndicator(
+                                                color: Colors.orange,
+                                              ),
+                                            );
+                                          } else if (cycles.hasData) {
+                                            //List<CycleBlock> cycleBlockWithFilter = cycles.data!;
+                                            var cycleBlockWithFilter = cycles.data;
 
-                                              bool isSelected = value == dropdownValue;
+                                            cycleBlockWithFilter = cycleBlockWithFilter!.where((cycle) {
+                                              if (cycle.cycle != null ) {
+                                                return cycle.cycle!.toUpperCase().contains(searchFilter.toUpperCase().trim());
+                                              }
+                                              return false;
+                                            }).toList();
+                                            return ListView.builder(
+                                              itemCount: cycleBlockWithFilter.length,
+                                              itemBuilder: (BuildContext context, int index) {
+                                                CycleBlock cycleBlock = cycleBlockWithFilter![index];
+                                                String value = cycleBlock.cycle!;
 
-                                              return Container(
-                                                decoration: BoxDecoration(
-                                                  color: isSelected ? Color.fromRGBO(255, 230, 187, 1.0) : null,
-                                                  borderRadius: BorderRadius.circular(2.0),
-                                                ),
-                                                child: Padding(
-                                                  padding: EdgeInsets.only(left: 12 * fem),
-                                                  child: ListTile(
-                                                    title: Text(
-                                                      value,
-                                                      textAlign: TextAlign.center,
-                                                      style: TextStyle(
-                                                        fontSize: 16,
-                                                        fontWeight: FontWeight.w600,
-                                                        height: 1.495,
-                                                        color: isSelected ? Colors.black : Color(0xff717171),
-                                                      ),
-                                                    ),
-                                                    onTap: () {
-                                                      setState(() {
-                                                        dropdownValue = value;
-                                                      });
-                                                    },
+                                                bool isSelected = value == listValue;
+
+                                                return Container(
+                                                  decoration: BoxDecoration(
+                                                    color: isSelected ? Color.fromRGBO(255, 230, 187, 1.0) : null,
+                                                    borderRadius: BorderRadius.circular(2.0),
                                                   ),
-                                                ),
-                                              );
-                                            },
-                                          );
-                                        } else if (snapshot.hasError) {
-                                          return Text('Error: ${snapshot.error}');
-                                        } else {
-                                          return Text('No data available');
-                                        }
-                                      },
-                                    ),
+                                                  child: Padding(
+                                                    padding: EdgeInsets.only(left: 12 * fem),
+                                                    child: ListTile(
+                                                      title: Text(
+                                                        value,
+                                                        textAlign: TextAlign.center,
+                                                        style: TextStyle(
+                                                          fontSize: 14,
+                                                          fontWeight: FontWeight.w600,
+                                                          height: 1.495,
+                                                          color: isSelected ? Colors.black : Color(0xff717171),
+                                                        ),
+                                                      ),
+                                                      onTap: () {
+                                                        setState(() {
+                                                          listValue = value;
+                                                        });
+                                                      },
+                                                    ),
+                                                  ),
+                                                );
+                                              },
+                                            );
+                                          } else if (cycles.hasError) {
+                                            return Text('Error: ${cycles.error}');
+                                          } else {
+                                            return Text('No data available');
+                                          }
+                                        },
+                                      ),
+                                    )
                                   ],
                                 ),
                               )
-
                             ],
                           ),
                         ),
@@ -590,50 +596,221 @@ class _ReportPageState extends State<ReportPage> {
                           top: 39 * fem,
                           child: Container(
                             padding: EdgeInsets.fromLTRB(
-                                4 * fem, 82 * fem, 0 * fem, 4 * fem),
+                                4 * fem, 5 * fem, 0 * fem, 4 * fem),
                             width: 1452,
                             height: 821,
                             decoration: BoxDecoration(
-                              border: Border.all(color: Color(0xff717171)),
+                              border:
+                              Border.all(color: Color(0xff717171)),
                               color: Color(0xffffffff),
                             ),
                             child: ListView(
                               children: [
                                 Wrap(
-                                  //crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Container(
-                                      // autogroupwrffaQH (Q5RqixiN3S5Uq5zz17wRff)
                                       margin: EdgeInsets.fromLTRB(
-                                          0 * fem, 0 * fem, 0 * fem, 0 * fem),
+                                          10 * fem,
+                                          20 * fem,
+                                          0 * fem,
+                                          0 * fem),
                                       width: 1448 * fem,
-                                      height: 630 * fem,
-                                      child: FutureBuilder(
-                                        future: reportService.getReport(),
-                                        builder: (context, snapshot) {
-                                          if (snapshot.connectionState ==
-                                              ConnectionState.waiting) {
-                                            return Center(
-                                              child: SpinKitDualRing(
-                                                color: Colors.orange,
-                                                size: 60.0,
-                                              ),
-                                            );
-                                          } else if (snapshot.hasError) {
-                                            return Center(
-                                              child: Text(
-                                                  'เกิดข้อผิดพลาด: ${snapshot.error}'),
-                                            );
-                                          } else {
-                                            return Center(
-                                              child: Image.asset(
-                                                'assets/images/No_Data.png',
-                                                width: 251,
-                                                height: 283,
-                                              ),
-                                            );
-                                          }
-                                        },
+                                      height: 1150 * fem,
+                                      child: Column(
+                                        crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(
+                                                bottom: 14 * fem),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                              MainAxisAlignment
+                                                  .spaceBetween,
+                                              children: [
+                                                //SizedBox(width: 10), // เพิ่มส่วนนี้เพื่อเว้นระยะห่างระหว่างปุ่ม Filter และปุ่ม Search
+                                                Row(
+                                                  mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                                  children: [
+                                                    SizedBox(
+                                                      height: 5,
+                                                    ),
+                                                    Container(
+                                                      width: 104,
+                                                      height: 46,
+                                                      child:
+                                                      DropdownButtonFormField<
+                                                          String>(
+                                                        value:
+                                                        dropdownValue,
+                                                        onChanged: (String?
+                                                        newValue) {
+                                                          setState(() {
+                                                            dropdownValue =
+                                                                newValue;
+                                                          });
+                                                        },
+                                                        items: dropdownOptions
+                                                            .map((String
+                                                        value) {
+                                                          return DropdownMenuItem<
+                                                              String>(
+                                                            value: value,
+                                                            child: Text(
+                                                                value),
+                                                          );
+                                                        }).toList(),
+                                                        decoration:
+                                                        InputDecoration(
+                                                          labelText:
+                                                          'Dropdown',
+                                                          border:
+                                                          OutlineInputBorder(),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                    SizedBox(
+                                                      width: 24,
+                                                    ),
+                                                    Container(
+                                                      width: 349,
+                                                      height: 40,
+                                                      decoration:
+                                                      BoxDecoration(
+                                                        color:
+                                                        Colors.white,
+                                                        borderRadius:
+                                                        BorderRadius
+                                                            .circular(
+                                                            4),
+                                                        border:
+                                                        Border.all(
+                                                          color:
+                                                          Colors.grey,
+                                                          width: 1,
+                                                        ),
+                                                      ),
+                                                      child: TextField(
+                                                        controller:
+                                                        searchController,
+                                                        decoration:
+                                                        InputDecoration(
+                                                          hintText:
+                                                          'Search',
+                                                          border:
+                                                          InputBorder
+                                                              .none,
+                                                          contentPadding:
+                                                          EdgeInsets
+                                                              .fromLTRB(
+                                                              12,
+                                                              12,
+                                                              44,
+                                                              12),
+                                                          suffixIcon:
+                                                          IconButton(
+                                                            onPressed:
+                                                                () {
+                                                              // คำสั่งที่ต้องการเมื่อกดปุ่มค้นหา
+                                                              // ...
+                                                            },
+                                                            icon: Icon(
+                                                              Icons
+                                                                  .search,
+                                                              size: 24,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          FutureBuilder(
+                                            future: reportService.getReport(),
+                                            builder: (context, snapshot) {
+                                              if (snapshot.connectionState == ConnectionState.waiting) {
+                                                return Center(
+                                                  child: SpinKitDualRing(
+                                                    color: Colors.orange,
+                                                    size: 60.0,
+                                                  ),
+                                                );
+                                              } else if (snapshot.hasError) {
+                                                return Center(
+                                                  child: Text('เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                                );
+                                              } else if (snapshot.hasData) {
+                                                final reportData = snapshot.data;
+                                                return SingleChildScrollView(
+                                                  controller: _horizontalScrollController,
+                                                  child: PaginatedDataTable(
+                                                    columns: const [
+                                                      DataColumn(label: Text("Cycle")),
+                                                      DataColumn(label: Text("AuditID")),
+                                                      DataColumn(label: Text("AuditStatus")),
+                                                      DataColumn(label: Text("FoundStatus")),
+                                                      DataColumn(label: Text("DcID")),
+                                                      DataColumn(label: Text("DcName")),
+                                                      DataColumn(label: Text("ShopID")),
+                                                      DataColumn(label: Text("ShopName")),
+                                                      DataColumn(label: Text("ShopSegment")),
+                                                      DataColumn(label: Text("Region")),
+                                                      DataColumn(label: Text("Province")),
+                                                      DataColumn(label: Text("PageID")),
+                                                      DataColumn(label: Text("GroupID")),
+                                                      DataColumn(label: Text("QuestionID")),
+                                                      DataColumn(label: Text("Topic")),
+                                                      DataColumn(label: Text("Title")),
+                                                      DataColumn(label: Text("Module")),
+                                                      DataColumn(label: Text("Score")),
+                                                      //DataColumn(label: Text("OverallImageUrl")),
+                                                      DataColumn(label: Text("FinalAnswer")),
+                                                      DataColumn(label: Text("AutoAnswer")),
+                                                      DataColumn(label: Text("AnswerBy")),
+                                                      DataColumn(label: Text("AnswerDiff")),
+                                                      DataColumn(label: Text("ShelfShareDiff")),
+                                                      DataColumn(label: Text("PopDiff")),
+                                                      DataColumn(label: Text("ClusterDiff")),
+                                                      DataColumn(label: Text("ShelfLayoutDiff")),
+                                                      DataColumn(label: Text("IsAISkipped")),
+                                                      DataColumn(label: Text("ChallengeBy")),
+                                                      DataColumn(label: Text("AutoQuestion")),
+                                                      DataColumn(label: Text("DetectionStatus")),
+                                                      DataColumn(label: Text("SubmitByAuditorID")),
+                                                      DataColumn(label: Text("UpdateByAuditorID")),
+                                                      DataColumn(label: Text("CheckInDateTime")),
+                                                      DataColumn(label: Text("CheckOutDateTime")),
+                                                      DataColumn(label: Text("UpdateDateTime")),
+                                                      DataColumn(label: Text("QuestionTags")),
+                                                      DataColumn(label: Text("ScoreTags")),
+                                                      DataColumn(label: Text("QuestionRef1")),
+                                                      DataColumn(label: Text("QuestionRef2")),
+                                                      DataColumn(label: Text("ShopRef1")),
+                                                      DataColumn(label: Text("ShopRef2")),
+                                                      DataColumn(label: Text("BasketRef1")),
+                                                      DataColumn(label: Text("BasketRef2")),
+                                                      DataColumn(label: Text("AIAnswer")),
+                                                    ],
+                                                    source: dts,
+                                                    onRowsPerPageChanged: (r) {
+                                                      setState(() {
+                                                        _rowPerPage = r!;
+                                                      });
+                                                    },
+                                                    rowsPerPage: _rowPerPage,
+                                                  ),
+                                                );
+                                              } else {
+                                                return SizedBox();
+                                              }
+                                            },
+                                          ),
+                                        ],
                                       ),
                                     ),
                                   ],
@@ -650,175 +827,13 @@ class _ReportPageState extends State<ReportPage> {
                             width: 1232 * fem,
                             height: 40 * fem,
                             child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
+                              crossAxisAlignment:
+                              CrossAxisAlignment.center,
                               children: [
                                 InkWell(
                                   onTap: () {
                                     setState(() {
                                       _selectedReport = 'Audit Result';
-                                      if (_selectedReport == 'Audit Result') {
-                                        FutureBuilder(
-                                          future: reportService.getReport(),
-                                          builder: (context, snapshot) {
-                                            if (snapshot.connectionState ==
-                                                ConnectionState.waiting) {
-                                              return Center(
-                                                child: SpinKitDualRing(
-                                                  color: Colors.orange,
-                                                  size: 60.0,
-                                                ),
-                                              );
-                                            } else if (snapshot.hasError) {
-                                              return Center(
-                                                child: Text(
-                                                    'เกิดข้อผิดพลาด: ${snapshot.error}'),
-                                              );
-                                            } else if (snapshot.hasData) {
-                                              final reportData = snapshot.data;
-                                              return SingleChildScrollView(
-                                                controller:
-                                                    _horizontalScrollController,
-                                                child: PaginatedDataTable(
-                                                  columns: const [
-                                                    DataColumn(
-                                                        label: Text("Cycle")),
-                                                    DataColumn(
-                                                        label: Text("AuditID")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "AuditStatus")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "FoundStatus")),
-                                                    DataColumn(
-                                                        label: Text("DcID")),
-                                                    DataColumn(
-                                                        label: Text("DcName")),
-                                                    DataColumn(
-                                                        label: Text("ShopID")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("ShopName")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "ShopSegment")),
-                                                    DataColumn(
-                                                        label: Text("Region")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("Province")),
-                                                    DataColumn(
-                                                        label: Text("PageID")),
-                                                    DataColumn(
-                                                        label: Text("GroupID")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("QuestionID")),
-                                                    DataColumn(
-                                                        label: Text("Topic")),
-                                                    DataColumn(
-                                                        label: Text("Title")),
-                                                    DataColumn(
-                                                        label: Text("Module")),
-                                                    DataColumn(
-                                                        label: Text("Score")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "OverallImageUrl")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "FinalAnswer")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("AutoAnswer")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("AnswerBy")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("AnswerDiff")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "ShelfShareDiff")),
-                                                    DataColumn(
-                                                        label: Text("PopDiff")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "ClusterDiff")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "ShelfLayoutDiff")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "IsAISkipped")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "ChallengeBy")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "AutoQuestion")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "DetectionStatus")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "SubmitByAuditorID")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "UpdateByAuditorID")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "CheckInDateTime")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "CheckOutDateTime")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "UpdateDateTime")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "QuestionTags")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("ScoreTags")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "QuestionRef1")),
-                                                    DataColumn(
-                                                        label: Text(
-                                                            "QuestionRef2")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("ShopRef1")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("ShopRef2")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("BasketRef1")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("BasketRef2")),
-                                                    DataColumn(
-                                                        label:
-                                                            Text("AIAnswer")),
-                                                  ],
-                                                  source: dts,
-                                                  onRowsPerPageChanged: (r) {
-                                                    setState(() {
-                                                      _rowPerPage = r!;
-                                                    });
-                                                  },
-                                                  rowsPerPage: _rowPerPage,
-                                                ),
-                                              );
-                                            } else {
-                                              return SizedBox();
-                                            }
-                                          },
-                                        );
-                                      }
-                                      ;
                                     });
                                   },
                                   child: Container(
@@ -826,16 +841,19 @@ class _ReportPageState extends State<ReportPage> {
                                     height: double.infinity,
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                        color: _selectedReport == 'Audit Result'
+                                        color: _selectedReport ==
+                                            'Audit Result'
                                             ? selectedBorderColor
                                             : defaultBorderColor,
                                       ),
-                                      color: _selectedReport == 'Audit Result'
+                                      color: _selectedReport ==
+                                          'Audit Result'
                                           ? selectedBackgroundColor
                                           : defaultBackgroundColor,
                                       borderRadius: BorderRadius.only(
                                         topLeft: Radius.circular(5 * fem),
-                                        topRight: Radius.circular(5 * fem),
+                                        topRight:
+                                        Radius.circular(5 * fem),
                                       ),
                                     ),
                                     child: Center(
@@ -847,10 +865,10 @@ class _ReportPageState extends State<ReportPage> {
                                           fontSize: 16 * ffem,
                                           fontWeight: FontWeight.w600,
                                           height: 1.495 * ffem / fem,
-                                          color:
-                                              _selectedReport == 'Audit Result'
-                                                  ? selectedTextColor
-                                                  : defaultTextColor,
+                                          color: _selectedReport ==
+                                              'Audit Result'
+                                              ? selectedTextColor
+                                              : defaultTextColor,
                                         ),
                                       ),
                                     ),
@@ -862,12 +880,47 @@ class _ReportPageState extends State<ReportPage> {
                                   height: double.infinity,
                                   child: Row(
                                     crossAxisAlignment:
-                                        CrossAxisAlignment.start,
+                                    CrossAxisAlignment.start,
                                     children: [
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _selectedReport = 'Audit Overview';
+                                            _selectedReport =
+                                            'Audit Overview';
+                                            FutureBuilder(
+                                              future: reportService
+                                                  .getReport(),
+                                              builder:
+                                                  (context, snapshot) {
+                                                if (snapshot
+                                                    .connectionState ==
+                                                    ConnectionState
+                                                        .waiting) {
+                                                  return const Center(
+                                                    child:
+                                                    SpinKitDualRing(
+                                                      color:
+                                                      Colors.orange,
+                                                      size: 60.0,
+                                                    ),
+                                                  );
+                                                } else if (snapshot
+                                                    .hasError) {
+                                                  return Center(
+                                                    child: Text(
+                                                        'เกิดข้อผิดพลาด: ${snapshot.error}'),
+                                                  );
+                                                } else {
+                                                  return Center(
+                                                    child: Image.asset(
+                                                      'assets/images/zeenlogoen-1.png',
+                                                      width: 251,
+                                                      height: 283,
+                                                    ),
+                                                  );
+                                                }
+                                              },
+                                            );
                                           });
                                         },
                                         child: Container(
@@ -876,18 +929,20 @@ class _ReportPageState extends State<ReportPage> {
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                               color: _selectedReport ==
-                                                      'Audit Overview'
+                                                  'Audit Overview'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
                                             color: _selectedReport ==
-                                                    'Audit Overview'
+                                                'Audit Overview'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5 * fem),
-                                              topRight:
-                                                  Radius.circular(5 * fem),
+                                            borderRadius:
+                                            BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -897,10 +952,12 @@ class _ReportPageState extends State<ReportPage> {
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.495 * ffem / fem,
+                                                fontWeight:
+                                                FontWeight.w600,
+                                                height:
+                                                1.495 * ffem / fem,
                                                 color: _selectedReport ==
-                                                        'Audit Overview'
+                                                    'Audit Overview'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -912,7 +969,8 @@ class _ReportPageState extends State<ReportPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _selectedReport = 'Basket Overview';
+                                            _selectedReport =
+                                            'Basket Overview';
                                           });
                                         },
                                         child: Container(
@@ -921,18 +979,20 @@ class _ReportPageState extends State<ReportPage> {
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                               color: _selectedReport ==
-                                                      'Basket Overview'
+                                                  'Basket Overview'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
                                             color: _selectedReport ==
-                                                    'Basket Overview'
+                                                'Basket Overview'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5 * fem),
-                                              topRight:
-                                                  Radius.circular(5 * fem),
+                                            borderRadius:
+                                            BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -942,10 +1002,12 @@ class _ReportPageState extends State<ReportPage> {
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.495 * ffem / fem,
+                                                fontWeight:
+                                                FontWeight.w600,
+                                                height:
+                                                1.495 * ffem / fem,
                                                 color: _selectedReport ==
-                                                        'Basket Overview'
+                                                    'Basket Overview'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -957,7 +1019,8 @@ class _ReportPageState extends State<ReportPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _selectedReport = 'Shop Compliance';
+                                            _selectedReport =
+                                            'Shop Compliance';
                                           });
                                         },
                                         child: Container(
@@ -966,18 +1029,20 @@ class _ReportPageState extends State<ReportPage> {
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                               color: _selectedReport ==
-                                                      'Shop Compliance'
+                                                  'Shop Compliance'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
                                             color: _selectedReport ==
-                                                    'Shop Compliance'
+                                                'Shop Compliance'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5 * fem),
-                                              topRight:
-                                                  Radius.circular(5 * fem),
+                                            borderRadius:
+                                            BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -987,10 +1052,12 @@ class _ReportPageState extends State<ReportPage> {
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.495 * ffem / fem,
+                                                fontWeight:
+                                                FontWeight.w600,
+                                                height:
+                                                1.495 * ffem / fem,
                                                 color: _selectedReport ==
-                                                        'Shop Compliance'
+                                                    'Shop Compliance'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -1012,17 +1079,21 @@ class _ReportPageState extends State<ReportPage> {
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: _selectedReport == 'OOS'
+                                              color: _selectedReport ==
+                                                  'OOS'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
-                                            color: _selectedReport == 'OOS'
+                                            color: _selectedReport ==
+                                                'OOS'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5 * fem),
-                                              topRight:
-                                                  Radius.circular(5 * fem),
+                                            borderRadius:
+                                            BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -1032,9 +1103,12 @@ class _ReportPageState extends State<ReportPage> {
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.495 * ffem / fem,
-                                                color: _selectedReport == 'OOS'
+                                                fontWeight:
+                                                FontWeight.w600,
+                                                height:
+                                                1.495 * ffem / fem,
+                                                color: _selectedReport ==
+                                                    'OOS'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -1056,17 +1130,21 @@ class _ReportPageState extends State<ReportPage> {
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: _selectedReport == 'OSA'
+                                              color: _selectedReport ==
+                                                  'OSA'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
-                                            color: _selectedReport == 'OSA'
+                                            color: _selectedReport ==
+                                                'OSA'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5 * fem),
-                                              topRight:
-                                                  Radius.circular(5 * fem),
+                                            borderRadius:
+                                            BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -1076,9 +1154,12 @@ class _ReportPageState extends State<ReportPage> {
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.495 * ffem / fem,
-                                                color: _selectedReport == 'OSA'
+                                                fontWeight:
+                                                FontWeight.w600,
+                                                height:
+                                                1.495 * ffem / fem,
+                                                color: _selectedReport ==
+                                                    'OSA'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -1092,7 +1173,8 @@ class _ReportPageState extends State<ReportPage> {
                                       InkWell(
                                         onTap: () {
                                           setState(() {
-                                            _selectedReport = 'Share Of Shelf';
+                                            _selectedReport =
+                                            'Share Of Shelf';
                                           });
                                         },
                                         child: Container(
@@ -1101,18 +1183,20 @@ class _ReportPageState extends State<ReportPage> {
                                           decoration: BoxDecoration(
                                             border: Border.all(
                                               color: _selectedReport ==
-                                                      'Share Of Shelf'
+                                                  'Share Of Shelf'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
                                             color: _selectedReport ==
-                                                    'Share Of Shelf'
+                                                'Share Of Shelf'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5 * fem),
-                                              topRight:
-                                                  Radius.circular(5 * fem),
+                                            borderRadius:
+                                            BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -1122,10 +1206,12 @@ class _ReportPageState extends State<ReportPage> {
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.495 * ffem / fem,
+                                                fontWeight:
+                                                FontWeight.w600,
+                                                height:
+                                                1.495 * ffem / fem,
                                                 color: _selectedReport ==
-                                                        'Share Of Shelf'
+                                                    'Share Of Shelf'
                                                     ? selectedTextColor
                                                     : defaultTextColor,
                                               ),
@@ -1147,17 +1233,21 @@ class _ReportPageState extends State<ReportPage> {
                                           height: 39 * fem,
                                           decoration: BoxDecoration(
                                             border: Border.all(
-                                              color: _selectedReport == 'Score'
+                                              color: _selectedReport ==
+                                                  'Score'
                                                   ? selectedBorderColor
                                                   : defaultBorderColor,
                                             ),
-                                            color: _selectedReport == 'Score'
+                                            color: _selectedReport ==
+                                                'Score'
                                                 ? selectedBackgroundColor
                                                 : defaultBackgroundColor,
-                                            borderRadius: BorderRadius.only(
-                                              topLeft: Radius.circular(5 * fem),
-                                              topRight:
-                                                  Radius.circular(5 * fem),
+                                            borderRadius:
+                                            BorderRadius.only(
+                                              topLeft: Radius.circular(
+                                                  5 * fem),
+                                              topRight: Radius.circular(
+                                                  5 * fem),
                                             ),
                                           ),
                                           child: Center(
@@ -1167,12 +1257,14 @@ class _ReportPageState extends State<ReportPage> {
                                               style: SafeGoogleFont(
                                                 'Kanit',
                                                 fontSize: 16 * ffem,
-                                                fontWeight: FontWeight.w600,
-                                                height: 1.495 * ffem / fem,
-                                                color:
-                                                    _selectedReport == 'Score'
-                                                        ? selectedTextColor
-                                                        : defaultTextColor,
+                                                fontWeight:
+                                                FontWeight.w600,
+                                                height:
+                                                1.495 * ffem / fem,
+                                                color: _selectedReport ==
+                                                    'Score'
+                                                    ? selectedTextColor
+                                                    : defaultTextColor,
                                               ),
                                             ),
                                           ),
@@ -1188,6 +1280,7 @@ class _ReportPageState extends State<ReportPage> {
                       ],
                     ),
                   ),
+
                 ],
               ),
             ),
@@ -1197,6 +1290,8 @@ class _ReportPageState extends State<ReportPage> {
     );
   }
 }
+
+
 
 class DTS extends DataTableSource {
   List<Report> reports = [];
@@ -1208,57 +1303,87 @@ class DTS extends DataTableSource {
   }
 
   @override
-  DataRow? getRow(int index) {
+  DataRow getRow(int index) {
     // ตรวจสอบว่ามีข้อมูลในรายการ reports หรือไม่
     // if (index >= reports.length) return null;
-    final Report = reports[index];
+    final Report report = reports[index];
+    OverlayEntry? overlayEntry; // ประกาศตัวแปร overlayEntry แบบ nullable
+
     return DataRow(
       cells: [
-        DataCell(Text(Report.Cycle ?? '')),
-        DataCell(Text(Report.AuditID ?? '')),
-        DataCell(Text(Report.AuditStatus ?? '')),
-        DataCell(Text(Report.FoundStatus ?? '')),
-        DataCell(Text(Report.DcID ?? '')),
-        DataCell(Text(Report.DcName ?? '')),
-        DataCell(Text(Report.ShopID ?? '')),
-        DataCell(Text(Report.ShopName ?? '')),
-        DataCell(Text(Report.ShopSegment ?? '')),
-        DataCell(Text(Report.Region ?? '')),
-        DataCell(Text(Report.Province ?? '')),
-        DataCell(Text(Report.PageID ?? '')),
-        DataCell(Text(Report.GroupID ?? '')),
-        DataCell(Text(Report.QuestionID ?? '')),
-        DataCell(Text(Report.Topic ?? '')),
-        DataCell(Text(Report.Title ?? '')),
-        DataCell(Text(Report.Module ?? '')),
-        DataCell(Text(Report.Score != null ? Report.Score.toString() : '')),
-        DataCell(Text(Report.OverallImageUrl ?? '')),
-        DataCell(Text(Report.FinalAnswer ?? '')),
-        DataCell(Text(Report.AutoAnswer ?? '')),
-        DataCell(Text(Report.AnswerBy ?? '')),
-        DataCell(Text(Report.AnswerDiff ?? '')),
-        DataCell(Text(Report.ShelfShareDiff ?? '')),
-        DataCell(Text(Report.PopDiff ?? '')),
-        DataCell(Text(Report.ClusterDiff ?? '')),
-        DataCell(Text(Report.ShelfLayoutDiff ?? '')),
-        DataCell(Text(Report.IsAISkipped ?? '')),
-        DataCell(Text(Report.ChallengeBy ?? '')),
-        DataCell(Text(Report.AutoQuestion ?? '')),
-        DataCell(Text(Report.DetectionStatus ?? '')),
-        DataCell(Text(Report.SubmitByAuditorID ?? '')),
-        DataCell(Text(Report.UpdateByAuditorID ?? '')),
-        DataCell(Text(Report.CheckInDateTime ?? '')),
-        DataCell(Text(Report.CheckOutDateTime ?? '')),
-        DataCell(Text(Report.UpdateDateTime ?? '')),
-        DataCell(Text(Report.QuestionTags ?? '')),
-        DataCell(Text(Report.ScoreTags ?? '')),
-        DataCell(Text(Report.QuestionRef1 ?? '')),
-        DataCell(Text(Report.QuestionRef2 ?? '')),
-        DataCell(Text(Report.ShopRef1 ?? '')),
-        DataCell(Text(Report.ShopRef2 ?? '')),
-        DataCell(Text(Report.BasketRef1 ?? '')),
-        DataCell(Text(Report.BasketRef2 ?? '')),
-        DataCell(Text(Report.AIAnswer ?? '')),
+        DataCell(
+          Row(
+            children: [
+              report.OverallImageUrl != null
+                  ? Tooltip(
+                message: 'View Image',
+                child: GestureDetector(
+                  onTap: () {
+                    showDialog(
+                      context: context as BuildContext,
+                      builder: (BuildContext context) {
+                        return AlertDialog(
+                          content: Container(
+                            width: 300,
+                            height: 300,
+                            child: Image.network(report.OverallImageUrl!),
+                          ),
+                        );
+                      },
+                    );
+                  },
+                  child: Icon(Icons.image),
+                ),
+              )
+                  : SizedBox(),
+              Text(report.Cycle ?? ''),
+            ],
+          ),
+        ),
+        DataCell(Text(report.AuditID ?? '')),
+        DataCell(Text( report.AuditStatus ?? '')),
+        DataCell(Text( report.FoundStatus ?? '')),
+        DataCell(Text( report.DcID ?? '')),
+        DataCell(Text( report.DcName ?? '')),
+        DataCell(Text( report.ShopID ?? '')),
+        DataCell(Text( report.ShopName ?? '')),
+        DataCell(Text( report.ShopSegment ?? '')),
+        DataCell(Text( report.Region ?? '')),
+        DataCell(Text( report.Province ?? '')),
+        DataCell(Text( report.PageID ?? '')),
+        DataCell(Text( report.GroupID ?? '')),
+        DataCell(Text( report.QuestionID ?? '')),
+        DataCell(Text( report.Topic ?? '')),
+        DataCell(Text( report.Title ?? '')),
+        DataCell(Text( report.Module ?? '')),
+        DataCell(Text( report.Score != null ?  report.Score.toString() : '')),
+        //DataCell(Text(Report.OverallImageUrl ?? '')),
+        DataCell(Text( report.FinalAnswer ?? '')),
+        DataCell(Text( report.AutoAnswer ?? '')),
+        DataCell(Text( report.AnswerBy ?? '')),
+        DataCell(Text( report.AnswerDiff ?? '')),
+        DataCell(Text( report.ShelfShareDiff ?? '')),
+        DataCell(Text( report.PopDiff ?? '')),
+        DataCell(Text( report.ClusterDiff ?? '')),
+        DataCell(Text( report.ShelfLayoutDiff ?? '')),
+        DataCell(Text( report.IsAISkipped ?? '')),
+        DataCell(Text( report.ChallengeBy ?? '')),
+        DataCell(Text( report.AutoQuestion ?? '')),
+        DataCell(Text( report.DetectionStatus ?? '')),
+        DataCell(Text( report.SubmitByAuditorID ?? '')),
+        DataCell(Text( report.UpdateByAuditorID ?? '')),
+        DataCell(Text( report.CheckInDateTime ?? '')),
+        DataCell(Text( report.CheckOutDateTime ?? '')),
+        DataCell(Text( report.UpdateDateTime ?? '')),
+        DataCell(Text( report.QuestionTags ?? '')),
+        DataCell(Text( report.ScoreTags ?? '')),
+        DataCell(Text( report.QuestionRef1 ?? '')),
+        DataCell(Text( report.QuestionRef2 ?? '')),
+        DataCell(Text( report.ShopRef1 ?? '')),
+        DataCell(Text( report.ShopRef2 ?? '')),
+        DataCell(Text( report.BasketRef1 ?? '')),
+        DataCell(Text( report.BasketRef2 ?? '')),
+        DataCell(Text( report.AIAnswer ?? '')),
       ],
     );
   }
