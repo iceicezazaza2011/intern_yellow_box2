@@ -48,6 +48,12 @@ class _ReportScreenState extends State<ReportScreen> {
   void initState() {
     super.initState();
     futureCycle = cycleService.getCycleBlock();
+    reportf();
+  }
+
+  void reportf() async {
+    final reports = await ReportService().getReport();
+    dts.updateReports((reports));
   }
 
 //
@@ -250,7 +256,7 @@ class _ReportScreenState extends State<ReportScreen> {
                     padding:
                         EdgeInsets.fromLTRB(4 * fem, 5 * fem, 0 * fem, 4 * fem),
                     width: 1452,
-                    height: 821,
+                    height: 800,
                     decoration: BoxDecoration(
                       border: Border.all(color: Color(0xff717171)),
                       color: Color(0xffffffff),
@@ -890,59 +896,111 @@ class DTS extends DataTableSource {
     notifyListeners();
   }
 
+  // @override
+  // Widget build(BuildContext context) {
+  //   return InkWell(
+  //     onTap: () {
+  //       AlertDialog(
+  //         title: Text('Popup Image'),
+  //         content: Container(
+  //           width: 300,
+  //           height: 300,
+  //           color: Colors.red,
+  //           child: Image.network(
+  //             'https://cloudfront.image.prod.zeenapp.com/FMAD/AUDIT/20230701/FMAD_2023_07_01/A19/P003/G1/OVERALL_IMAGE_A19_P003_G1_220903.jpg?Expires=1720112400&Signature=bMgvqzCEJTI3NdJ9VQeJPPNPT8qJy32o0576ok0~dHJ2RoCfgECD4vzBKASmxQMtE7s5bjRdgpNAHTM9V~3nBrQC2NnUX5OPGZyWuBM3KPQk4y2Bm1noBgL38pugAs-hJGTwJ9q7YdgAZNdBHVRVJ4H22YNAR3LuVeI7414rMip40efdmIbyAv4jO7LtAl3so9i2RBXQ9Fti9Glvpe8dpavLbwv~W-N35LpK~yZjK5MeF5NO52DRJbgg-iFlwzWQAgd0w6BlaepZsfa6JP5aPJvpHjwihUx6MhO8X~ZFcj1r~lznhGJyAG-SYJrhX08XrTyG0eFOIrh0bi1mMwi4qw__&Key-Pair-Id=K2Z2S7OIY4WKHD', // ใส่ URL ของรูปภาพที่ต้องการแสดงใน pop-up
+  //             fit: BoxFit.contain,
+  //           ),
+  //         ),
+  //       );
+  //     },
+  //     child: Row(
+  //       children: [
+  //         Icon(Icons.image), // ไอคอนรูปภาพ
+  //         SizedBox(width: 8), // ระยะห่างระหว่างไอคอนและข้อความ
+  //         // ข้อความของ Cycle
+  //       ],
+  //     ),
+  //   );
+  // }
+
   @override
   DataRow getRow(int index) {
     // ตรวจสอบว่ามีข้อมูลในรายการ reports หรือไม่
     // if (index >= reports.length) return null;
-    final Report report = reports[index];
+    final Report = reports[index];
 
     return DataRow(
       cells: [
-        DataCell(Text(report.Cycle ?? '')),
-        DataCell(Text(report.AuditID ?? '')),
-        DataCell(Text(report.AuditStatus ?? '')),
-        DataCell(Text(report.FoundStatus ?? '')),
-        DataCell(Text(report.DcID ?? '')),
-        DataCell(Text(report.DcName ?? '')),
-        DataCell(Text(report.ShopID ?? '')),
-        DataCell(Text(report.ShopName ?? '')),
-        DataCell(Text(report.ShopSegment ?? '')),
-        DataCell(Text(report.Region ?? '')),
-        DataCell(Text(report.Province ?? '')),
-        DataCell(Text(report.PageID ?? '')),
-        DataCell(Text(report.GroupID ?? '')),
-        DataCell(Text(report.QuestionID ?? '')),
-        DataCell(Text(report.Topic ?? '')),
-        DataCell(Text(report.Title ?? '')),
-        DataCell(Text(report.Module ?? '')),
-        DataCell(Text(report.Score != null ? report.Score.toString() : '')),
-        //DataCell(Text(Report.OverallImageUrl ?? '')),
-        DataCell(Text(report.FinalAnswer ?? '')),
-        DataCell(Text(report.AutoAnswer ?? '')),
-        DataCell(Text(report.AnswerBy ?? '')),
-        DataCell(Text(report.AnswerDiff ?? '')),
-        DataCell(Text(report.ShelfShareDiff ?? '')),
-        DataCell(Text(report.PopDiff ?? '')),
-        DataCell(Text(report.ClusterDiff ?? '')),
-        DataCell(Text(report.ShelfLayoutDiff ?? '')),
-        DataCell(Text(report.IsAISkipped ?? '')),
-        DataCell(Text(report.ChallengeBy ?? '')),
-        DataCell(Text(report.AutoQuestion ?? '')),
-        DataCell(Text(report.DetectionStatus ?? '')),
-        DataCell(Text(report.SubmitByAuditorID ?? '')),
-        DataCell(Text(report.UpdateByAuditorID ?? '')),
-        DataCell(Text(report.CheckInDateTime ?? '')),
-        DataCell(Text(report.CheckOutDateTime ?? '')),
-        DataCell(Text(report.UpdateDateTime ?? '')),
-        DataCell(Text(report.QuestionTags ?? '')),
-        DataCell(Text(report.ScoreTags ?? '')),
-        DataCell(Text(report.QuestionRef1 ?? '')),
-        DataCell(Text(report.QuestionRef2 ?? '')),
-        DataCell(Text(report.ShopRef1 ?? '')),
-        DataCell(Text(report.ShopRef2 ?? '')),
-        DataCell(Text(report.BasketRef1 ?? '')),
-        DataCell(Text(report.BasketRef2 ?? '')),
-        DataCell(Text(report.AIAnswer ?? '')),
+        DataCell(
+          InkWell(
+            onTap: () {
+              AlertDialog(
+                title: Text('Popup Image'),
+                content: Container(
+                  width: 300,
+                  height: 300,
+                  color: Colors.red,
+                  child: Image.network(
+                    'https://cloudfront.image.prod.zeenapp.com/FMAD/AUDIT/20230701/FMAD_2023_07_01/A19/P003/G1/OVERALL_IMAGE_A19_P003_G1_220903.jpg?Expires=1720112400&Signature=bMgvqzCEJTI3NdJ9VQeJPPNPT8qJy32o0576ok0~dHJ2RoCfgECD4vzBKASmxQMtE7s5bjRdgpNAHTM9V~3nBrQC2NnUX5OPGZyWuBM3KPQk4y2Bm1noBgL38pugAs-hJGTwJ9q7YdgAZNdBHVRVJ4H22YNAR3LuVeI7414rMip40efdmIbyAv4jO7LtAl3so9i2RBXQ9Fti9Glvpe8dpavLbwv~W-N35LpK~yZjK5MeF5NO52DRJbgg-iFlwzWQAgd0w6BlaepZsfa6JP5aPJvpHjwihUx6MhO8X~ZFcj1r~lznhGJyAG-SYJrhX08XrTyG0eFOIrh0bi1mMwi4qw__&Key-Pair-Id=K2Z2S7OIY4WKHD', // ใส่ URL ของรูปภาพที่ต้องการแสดงใน pop-up
+                    fit: BoxFit.contain,
+                  ),
+                ),
+              );
+            },
+            child: Row(
+              children: [
+                Icon(Icons.image), // ไอคอนรูปภาพ
+                SizedBox(width: 8), // ระยะห่างระหว่างไอคอนและข้อความ
+                Text(Report.Cycle ?? ''), // ข้อความของ Cycle
+              ],
+            ),
+          ),
+        ),
+
+        DataCell(Text(Report.AuditID ?? '')),
+        DataCell(Text(Report.AuditStatus ?? '')),
+        DataCell(Text(Report.FoundStatus ?? '')),
+        DataCell(Text(Report.DcID ?? '')),
+        DataCell(Text(Report.DcName ?? '')),
+        DataCell(Text(Report.ShopID ?? '')),
+        DataCell(Text(Report.ShopName ?? '')),
+        DataCell(Text(Report.ShopSegment ?? '')),
+        DataCell(Text(Report.Region ?? '')),
+        DataCell(Text(Report.Province ?? '')),
+        DataCell(Text(Report.PageID ?? '')),
+        DataCell(Text(Report.GroupID ?? '')),
+        DataCell(Text(Report.QuestionID ?? '')),
+        DataCell(Text(Report.Topic ?? '')),
+        DataCell(Text(Report.Title ?? '')),
+        DataCell(Text(Report.Module ?? '')),
+        DataCell(Text(Report.Score != null ? Report.Score.toString() : '')),
+        //DataCell(Text(Report.OverallImageUrl?? '')),
+        DataCell(Text(Report.FinalAnswer ?? '')),
+        DataCell(Text(Report.AutoAnswer ?? '')),
+        DataCell(Text(Report.AnswerBy ?? '')),
+        DataCell(Text(Report.AnswerDiff ?? '')),
+        DataCell(Text(Report.ShelfShareDiff ?? '')),
+        DataCell(Text(Report.PopDiff ?? '')),
+        DataCell(Text(Report.ClusterDiff ?? '')),
+        DataCell(Text(Report.ShelfLayoutDiff ?? '')),
+        DataCell(Text(Report.IsAISkipped ?? '')),
+        DataCell(Text(Report.ChallengeBy ?? '')),
+        DataCell(Text(Report.AutoQuestion ?? '')),
+        DataCell(Text(Report.DetectionStatus ?? '')),
+        DataCell(Text(Report.SubmitByAuditorID ?? '')),
+        DataCell(Text(Report.UpdateByAuditorID ?? '')),
+        DataCell(Text(Report.CheckInDateTime ?? '')),
+        DataCell(Text(Report.CheckOutDateTime ?? '')),
+        DataCell(Text(Report.UpdateDateTime ?? '')),
+        DataCell(Text(Report.QuestionTags ?? '')),
+        DataCell(Text(Report.ScoreTags ?? '')),
+        DataCell(Text(Report.QuestionRef1 ?? '')),
+        DataCell(Text(Report.QuestionRef2 ?? '')),
+        DataCell(Text(Report.ShopRef1 ?? '')),
+        DataCell(Text(Report.ShopRef2 ?? '')),
+        DataCell(Text(Report.BasketRef1 ?? '')),
+        DataCell(Text(Report.BasketRef2 ?? '')),
+        DataCell(Text(Report.AIAnswer ?? '')),
       ],
     );
   }
