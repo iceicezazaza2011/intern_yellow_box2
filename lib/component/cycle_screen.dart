@@ -1,6 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:intern_yellow_box/Domain/vault/vaultAccount.dart';
+import 'package:intern_yellow_box/component/dropdown_filter_cycle.dart';
+import 'package:intern_yellow_box/utils/local_storage_utils.dart';
+import 'package:multiselect/multiselect.dart';
 
 import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
@@ -26,14 +30,14 @@ class _CycleScreenState extends State<CycleScreen> {
   late Future<List<CycleBlock>> futureCycle;
   final CycleService cycleService = CycleService();
   List<CycleBlock> cycleBlocks = []; // สร้างรายการข้อมูลสำหรับ CycleBlock
-
+  List<String> selectedCycleStatus = [];
 
   @override
   void initState() {
     super.initState();
     filteredCycleBlocks = [];
     futureCycle = cycleService.getCycleBlock();
-    cyclef();
+    // cyclef();
   }
 
   Future<void> cyclef() async {
@@ -483,34 +487,45 @@ class _CycleScreenState extends State<CycleScreen> {
                                 ),
                               ],
                             ),
-                            child: DropdownButton(
-                              isExpanded: true,
-                              hint: Text('Filter By Status'),
-                              items: _items.map((String item) {
-                                return DropdownMenuItem(
-                                  value: item,
-                                  child: Row(
-                                    children: [
-                                      Checkbox(
-                                        value: _selectedItems[_items.indexOf(item)],
-                                        onChanged: (bool? value) {
-                                          setState(() {
-                                            _selectedItems[_items.indexOf(item)] = value ?? false;
-                                          });
-                                        },
-                                      ),
-                                      Text(item),
-                                    ],
-                                  ),
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                // No action required when an item in the multiselect dropdown is selected
+                            // child: DropdownButton(
+                            //   isExpanded: true,
+                            //   hint: Text('Filter By Status'),
+                            //   items: _items.map((String item) {
+                            //     return DropdownMenuItem(
+                            //       value: item,
+                            //       child: Row(
+                            //         children: [
+                            //           Checkbox(
+                            //             value: _selectedItems[_items.indexOf(item)],
+                            //             onChanged: (bool? value) {
+                            //
+                            //             },
+                            //           ),
+                            //           Text(item),
+                            //         ],
+                            //       ),
+                            //     );
+                            //   }).toList(),
+                            //   onChanged: (value) {
+                            //     setState(() {
+                            //       _selectedItems[_items.indexOf(item)] = value ?? false;
+                            //     });
+                            //     // No action required when an item in the multiselect dropdown is selected
+                            //   },
+                            //   icon: Icon(Icons.arrow_drop_down),
+                            //   iconSize: 24,
+                            //   elevation: 16,
+                            //   style: TextStyle(color: Colors.black),
+                            // ),
+                            child:  DropDownMultiSelect(
+                              onChanged: (List<String> x) {
+                                setState(() {
+                                  selectedCycleStatus =x;
+                                });
                               },
-                              icon: Icon(Icons.arrow_drop_down),
-                              iconSize: 24,
-                              elevation: 16,
-                              style: TextStyle(color: Colors.black),
+                              options: _items,
+                              selectedValues: selectedCycleStatus,
+                              whenEmpty: 'Select Something',
                             ),
                           ),
 
@@ -530,52 +545,58 @@ class _CycleScreenState extends State<CycleScreen> {
                       //List<CycleBlock> filteredCycleBlocks = snapshot.data!;
                       var cycleBlockWithFilter = cycles.data;
 
-                      cycleBlockWithFilter = cycleBlockWithFilter!.where((cycle) {
-                        if (cycle.cycle != null ) {
-                          return cycle.cycle!.toUpperCase().contains(searchFilter.toUpperCase().trim());
-                        }
-                        return false;
-                      }).toList();
+                      // cycleBlockWithFilter = cycleBlockWithFilter!.where((cycle) {
+                      //   if (cycle.cycle != null ) {
+                      //     return cycle.cycle!.toUpperCase().contains(searchFilter.toUpperCase().trim());
+                      //   }
+                      //   return false;
+                      // }).toList();
+                      //
+                      //
+                      // cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
+                      //   if(selectedStartDate==null){return true;}
+                      //   else if (cycle.startDate != null ) {
+                      //     DateTime cycleStartDate = DateTime.parse(cycle.startDate!);
+                      //     return cycleStartDate.isAtSameMomentAs(selectedStartDate!);
+                      //   }
+                      //   return false;
+                      // }).toList();
+                      //
+                      //
+                      // cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
+                      //   if(selectedDateEnd==null){return true;}
+                      //   else if (cycle.endDate != null ) {
+                      //     DateTime cycleStartDate = DateTime.parse(cycle.endDate!);
+                      //     return cycleStartDate.isAtSameMomentAs(selectedDateEnd!);
+                      //   }
+                      //   return false;
+                      // }).toList();
 
+                      // for (int i = 0; i < _selectedItems.length; i++) {
+                      //   if (_selectedItems[i]) {
+                      //     filteredItems.add(_items[i]);
+                      //   }
+                      // }
 
-                      cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
-                        if(selectedStartDate==null){return true;}
-                        else if (cycle.startDate != null ) {
-                          DateTime cycleStartDate = DateTime.parse(cycle.startDate!);
-                          return cycleStartDate.isAtSameMomentAs(selectedStartDate!);
-                        }
-                        return false;
-                      }).toList();
-
-
-                      cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
-                        if(selectedDateEnd==null){return true;}
-                        else if (cycle.endDate != null ) {
-                          DateTime cycleStartDate = DateTime.parse(cycle.endDate!);
-                          return cycleStartDate.isAtSameMomentAs(selectedDateEnd!);
-                        }
-                        return false;
-                      }).toList();
-
-                      List<String> filteredItems = [];
-
-                      for (int i = 0; i < _selectedItems.length; i++) {
-                        if (_selectedItems[i]) {
-                          filteredItems.add(_items[i]);
-                        }
-                      }
-
-                      cycleBlockWithFilter = cycleBlockWithFilter.where((cycle) {
-                        if (filteredItems.isEmpty) {
+                      cycleBlockWithFilter = cycleBlockWithFilter?.where((cycle) {
+                        print(selectedCycleStatus);   print(cycle.status);                        print(selectedCycleStatus.isEmpty);   print(selectedCycleStatus.contains(cycle.status!));
+                        if (selectedCycleStatus.isEmpty) {
                           return true;
-                        } else if (cycle.status != null && filteredItems.contains(cycle.status!)) {
+                        } else if (selectedCycleStatus.contains(cycle.status!)) {
                           return true;
                         }
                         return false;
                       }).toList();
 
+                      print(cycleBlockWithFilter);
 
-
+                      // print(cycles.data!.length);
+                      //
+                      // cycleBlockWithFilter = cycles.data;
+                      // List<dynamic> list = _selectedItems;
+                      // if(list[0]){
+                      //
+                      // }
 
                       return SingleChildScrollView(
                         scrollDirection: Axis.horizontal,
@@ -676,7 +697,7 @@ class _CycleScreenState extends State<CycleScreen> {
                               ),
                             ),
                           ],
-                          rows: List<DataRow>.generate(cycleBlockWithFilter.length, (index) {
+                          rows: List<DataRow>.generate(cycleBlockWithFilter!.length, (index) {
                             CycleBlock cycleBlock = cycleBlockWithFilter![index];
                             int Number = index + 1;
                             return DataRow(

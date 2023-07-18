@@ -13,6 +13,8 @@ import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intern_yellow_box/utils.dart';
 
+String link = "https://cloudfront.image.prod.zeenapp.com/FMAD/AUDIT/20230701/FMAD_2023_07_01/A19/P003/G1/OVERALL_IMAGE_A19_P003_G1_220903.jpg?Expires=1720112400&Signature=bMgvqzCEJTI3NdJ9VQeJPPNPT8qJy32o0576ok0~dHJ2RoCfgECD4vzBKASmxQMtE7s5bjRdgpNAHTM9V~3nBrQC2NnUX5OPGZyWuBM3KPQk4y2Bm1noBgL38pugAs-hJGTwJ9q7YdgAZNdBHVRVJ4H22YNAR3LuVeI7414rMip40efdmIbyAv4jO7LtAl3so9i2RBXQ9Fti9Glvpe8dpavLbwv~W-N35LpK~yZjK5MeF5NO52DRJbgg-iFlwzWQAgd0w6BlaepZsfa6JP5aPJvpHjwihUx6MhO8X~ZFcj1r~lznhGJyAG-SYJrhX08XrTyG0eFOIrh0bi1mMwi4qw__&Key-Pair-Id=K2Z2S7OIY4WKHD";
+
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
 
@@ -68,7 +70,6 @@ class _LoginPageState extends State<LoginPage> {
     } else {
       account = await VaultService().login(name, password, org);
       LocalStorageUtils().setVaultAccount(account!);
-      var account2 = await LocalStorageUtils().getVaultAccount();
 
       Navigator.pushReplacement(
         context,

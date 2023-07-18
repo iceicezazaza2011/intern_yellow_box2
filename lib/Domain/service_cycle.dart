@@ -16,13 +16,10 @@ class CycleService{
     // print(uri);
     try{
       final response = await http.get(Uri.parse(url));
-      print("xxxx2");
-      print(response);
       if(response.statusCode == 200)
       {
         List list = jsonDecode(response.body)??[];
         List<CycleBlock> result = list.map((e) => CycleBlock.fromJson(e)).toList();
-        print(result);
         return result;
       }//
       else
