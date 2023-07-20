@@ -1,15 +1,10 @@
 import 'dart:html';
+import 'dart:html' as html;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/src/asset_manifest.dart';
-import 'package:intern_yellow_box/Menu/CycleMenu.dart';
-import 'package:intern_yellow_box/Menu/reportMenu.dart';
-import 'package:intern_yellow_box/test.dart';
-import 'Login.dart';
-import 'dart:html' as html;
-import 'Menu/Manu.dart';
 
+import 'Login.dart';
 
 final Storage storage = html.window.localStorage;
 void main() {
@@ -23,14 +18,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
-      designSize: const Size(1920,1080),
+      designSize: const Size(1920, 1080),
       builder: (context, _) => MaterialApp(
         debugShowCheckedModeBanner: false,
         title: 'Yellow Box',
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: LoginPage(),//
+        home: LoginPage(), //
         //home: MainMenuPage(),
         //home: CycleMenuPage('ZEEN','admin','1234'),
         // home: ReportPage(),

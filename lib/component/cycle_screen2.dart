@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multiselect/multiselect.dart';
 
@@ -6,16 +5,16 @@ import '../Domain/component_cycle.dart';
 import '../Domain/service_cycle.dart';
 import '../utils.dart';
 
-class CycleScreen2 extends StatefulWidget {
+class CycleScreen extends StatefulWidget {
   final List<CycleBlock> cycles;
 
-  const CycleScreen2(this.cycles);
+  const CycleScreen(this.cycles, {super.key});
 
   @override
-  State<CycleScreen2> createState() => _CycleScreen2State();
+  State<CycleScreen> createState() => _CycleScreenState();
 }
 
-class _CycleScreen2State extends State<CycleScreen2> {
+class _CycleScreenState extends State<CycleScreen> {
   TextEditingController _cycleController = TextEditingController();
   bool _issearchconTextNotEmpty = false;
   List<String> _items = ['DONE', 'IN_PROGRESS', 'NEW CYCLE', 'CANCEL'];
@@ -136,15 +135,14 @@ class _CycleScreen2State extends State<CycleScreen2> {
 
     return Expanded(
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.only(right: 10),
-                child: Text(
+        padding: const EdgeInsets.fromLTRB(10, 0, 0, 0),
+        child: ListView(
+          children: [
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 20),
+                Text(
                   'OVERVIEW',
                   style: SafeGoogleFont(
                     'Kanit',
@@ -154,15 +152,15 @@ class _CycleScreen2State extends State<CycleScreen2> {
                     color: Color(0xff717171),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
-              cycleCards(),
-              const SizedBox(height: 40),
-              cycleFilter(),
-              SizedBox(height: 20 * fem),
-              cycleTable(),
-            ],
-          ),
+                const SizedBox(height: 20),
+                cycleCards(),
+                const SizedBox(height: 40),
+                cycleFilter(),
+                SizedBox(height: 20 * fem),
+                cycleTable(),
+              ],
+            ),
+          ],
         ),
       ),
     );
@@ -311,7 +309,7 @@ class _CycleScreen2State extends State<CycleScreen2> {
                 SizedBox(
                   width: 200 * fem,
                   child: Text(
-                    cycleBlock.org!,
+                    cycleBlock.orgID!,
                     style: SafeGoogleFont(
                       'Kanit',
                       fontSize: 16 * ffem,

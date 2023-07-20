@@ -1,18 +1,11 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_spinkit/flutter_spinkit.dart';
-import 'package:intern_yellow_box/component/cycle_screen.dart';
 import 'package:intern_yellow_box/component/cycle_screen2.dart';
 import 'package:intern_yellow_box/component/header.dart';
 import 'package:intern_yellow_box/component/logout.dart';
 import 'package:intern_yellow_box/component/report_screen.dart';
 
 import '../Domain/component_cycle.dart';
-import '../Domain/service_cycle.dart';
 import '../Domain/vault/vaultAccount.dart';
-import '../Login.dart';
-import '../Menu/Manu.dart';
-import '../Menu/reportMenu.dart';
 import '../utils.dart';
 
 class BaseScreen extends StatefulWidget {
@@ -49,7 +42,7 @@ class _BaseScreenState extends State<BaseScreen> {
             ),
             if (_selectedMenu == 'cycle') ...[
               // CycleScreen(),
-              CycleScreen2(widget.cycles),
+              CycleScreen(widget.cycles),
             ] else if (_selectedMenu == 'report') ...[
               ReportScreen(),
             ],
@@ -133,14 +126,14 @@ class _BaseScreenState extends State<BaseScreen> {
             onTap: () {
               setState(() {
                 _selectedMenu = 'home';
-                if (_selectedMenu == 'dashboard') {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainMenuPage(),
-                    ),
-                  );
-                }
+                // if (_selectedMenu == 'dashboard') {
+                //   Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => MainMenuPage(),
+                //     ),
+                //   );
+                // }
               });
             },
             child: Container(
@@ -305,14 +298,14 @@ class _BaseScreenState extends State<BaseScreen> {
             onTap: () {
               setState(() {
                 _selectedMenu = 'dashboard';
-                if (_selectedMenu == 'dashboard') {
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => MainMenuPage(),
-                    ),
-                  );
-                }
+                // if (_selectedMenu == 'dashboard') {
+                //   Navigator.pushReplacement(
+                //     context,
+                //     MaterialPageRoute(
+                //       builder: (context) => MainMenuPage(),
+                //     ),
+                //   );
+                // }
               });
             },
             child: Container(

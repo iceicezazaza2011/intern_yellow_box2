@@ -6,7 +6,8 @@ import 'package:intern_yellow_box/Domain/component_cycle.dart';
 class CycleService {
   Future<List<CycleBlock>> getCycleBlock() async {
     String url =
-        "http://192.168.86.20:8083/training-ws/cycle/allCycles/ZEENDEMO2_BETA";
+        /*"http://192.168.86.20:8083/training-ws/cycle/allCycles/ZEENDEMO2_BETA"*/
+        "https://648b1e6917f1536d65ea68a8.mockapi.io/cycle";
     final queryParameters = {
       'org': '',
     };
